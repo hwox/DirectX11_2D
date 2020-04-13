@@ -1,0 +1,178 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="소스 파일">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="헤더 파일">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="리소스 파일">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="01. GameMode">
+      <UniqueIdentifier>{a99c68ee-ccb1-4a3a-849c-cb9a77f8469a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. Object">
+      <UniqueIdentifier>{b88aec31-b45c-4ec8-83a8-bc70ab984812}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. GameMode\Stage">
+      <UniqueIdentifier>{98d13899-4880-4275-9a34-ba733da67765}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. GameMode\Title">
+      <UniqueIdentifier>{22fbaf4a-9181-46ee-b498-cf908c411f9a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. Object\Player">
+      <UniqueIdentifier>{4e02fcd4-0ec8-42ca-85cf-fb6573e65680}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. Object\UI">
+      <UniqueIdentifier>{b53550f4-6058-4d00-8d91-886f762a2b6a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. Object\BGM">
+      <UniqueIdentifier>{027509a4-cd37-4219-afe6-6eba65bb2876}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. Object\Monster">
+      <UniqueIdentifier>{e4270927-5d36-4684-99a9-e5b3b531ba3f}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="main.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Object\MainMap.cpp">
+      <Filter>02. Object</Filter>
+    </ClCompile>
+    <ClCompile Include="Object\Minion.cpp">
+      <Filter>02. Object</Filter>
+    </ClCompile>
+    <ClCompile Include="Object\StartButton.cpp">
+      <Filter>02. Object</Filter>
+    </ClCompile>
+    <ClCompile Include="Object\TestBar.cpp">
+      <Filter>02. Object</Filter>
+    </ClCompile>
+    <ClCompile Include="Object\TestButton.cpp">
+      <Filter>02. Object</Filter>
+    </ClCompile>
+    <ClCompile Include="Object\TestObject.cpp">
+      <Filter>02. Object</Filter>
+    </ClCompile>
+    <ClCompile Include="Object\TestPixelCollision.cpp">
+      <Filter>02. Object</Filter>
+    </ClCompile>
+    <ClCompile Include="Object\Bullet.cpp">
+      <Filter>02. Object</Filter>
+    </ClCompile>
+    <ClCompile Include="Object\ChildObj.cpp">
+      <Filter>02. Object</Filter>
+    </ClCompile>
+    <ClCompile Include="Object\Title.cpp">
+      <Filter>02. Object</Filter>
+    </ClCompile>
+    <ClCompile Include="GameMode\MainGameMode.cpp">
+      <Filter>01. GameMode\Stage</Filter>
+    </ClCompile>
+    <ClCompile Include="GameMode\StartGameMode.cpp">
+      <Filter>01. GameMode\Title</Filter>
+    </ClCompile>
+    <ClCompile Include="Object\PlayerHPBar.cpp">
+      <Filter>02. Object\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Object\BGMObj.cpp">
+      <Filter>02. Object\BGM</Filter>
+    </ClCompile>
+    <ClCompile Include="Object\EffectSoundObj.cpp">
+      <Filter>02. Object\BGM</Filter>
+    </ClCompile>
+    <ClCompile Include="PhoneCallUI.cpp">
+      <Filter>02. Object\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Object\Player.cpp">
+      <Filter>02. Object\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="Object\PlayerLife.cpp">
+      <Filter>02. Object\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="Object\MonsterInfoUI.cpp">
+      <Filter>02. Object\Monster</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Client.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Object\MainMap.h">
+      <Filter>02. Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Object\Minion.h">
+      <Filter>02. Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Object\StartButton.h">
+      <Filter>02. Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Object\TestBar.h">
+      <Filter>02. Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Object\TestButton.h">
+      <Filter>02. Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Object\TestObject.h">
+      <Filter>02. Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Object\TestPixelCollision.h">
+      <Filter>02. Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Object\Bullet.h">
+      <Filter>02. Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Object\ChildObj.h">
+      <Filter>02. Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Object\Title.h">
+      <Filter>02. Object</Filter>
+    </ClInclude>
+    <ClInclude Include="GameMode\MainGameMode.h">
+      <Filter>01. GameMode\Stage</Filter>
+    </ClInclude>
+    <ClInclude Include="GameMode\StartGameMode.h">
+      <Filter>01. GameMode\Title</Filter>
+    </ClInclude>
+    <ClInclude Include="Object\PlayerHPBar.h">
+      <Filter>02. Object\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Object\BGMObj.h">
+      <Filter>02. Object\BGM</Filter>
+    </ClInclude>
+    <ClInclude Include="Object\EffectSoundObj.h">
+      <Filter>02. Object\BGM</Filter>
+    </ClInclude>
+    <ClInclude Include="Object\PhoneCallUI.h">
+      <Filter>02. Object\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Object\Player.h">
+      <Filter>02. Object\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="Object\PlayerLife.h">
+      <Filter>02. Object\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="Object\MonsterInfoUI.h">
+      <Filter>02. Object\Monster</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Client.rc">
+      <Filter>리소스 파일</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="icon1.ico">
+      <Filter>리소스 파일</Filter>
+    </Image>
+  </ItemGroup>
+</Project>
