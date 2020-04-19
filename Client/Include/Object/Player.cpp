@@ -15,6 +15,7 @@
 #include "Component/ColliderSphere2D.h"
 #include "Component/ColliderOBB2D.h"
 #include "EffectSoundObj.h"
+#include "Monster.h"
 
 
 CPlayer::CPlayer()
@@ -28,7 +29,7 @@ CPlayer::CPlayer()
 	m_pChild1Mesh = nullptr;
 	m_pMesh = nullptr;
 	m_pMovement = nullptr;
-
+	m_Zone = nullptr;
 
 	EatProcess = 0;
 	IsAirMouse = false;
@@ -50,7 +51,7 @@ CPlayer::~CPlayer()
 	SAFE_RELEASE(m_pRotPivot);
 	SAFE_RELEASE(m_pChild1Mesh);
 	SAFE_RELEASE(m_pMesh);
-	SAFE_RELEASE(m_pMovement);
+	SAFE_RELEASE(m_Zone);
 }
 
 bool CPlayer::Init()
@@ -86,7 +87,7 @@ bool CPlayer::Init()
 
 	m_pBody->AddBlockCallback<CPlayer>(this, &CPlayer::OnBlock);
 	m_pBody->SetCollisionProfile("Player");
-
+	//m_pBody->SetDebugMesh()
 
 	CStaticMesh*	pMesh = (CStaticMesh*)GET_SINGLE(CResourceManager)->FindMesh("TexRect");
 
@@ -342,19 +343,26 @@ void CPlayer::AttackBufEnd()
 void CPlayer::DownKey(float fScale, float fTime)
 {
 	static bool	bMove = false;
-
-	if (fScale != 0.f)
+	if (!HasMonster)
 	{
-		bMove = true;
-		m_pAnimation->ChangeAnimation("KirbyIdleDown");
+		if (fScale != 0.f)
+		{
+			bMove = true;
+			m_pAnimation->ChangeAnimation("KirbyIdleDown");
+		}
+		else
+		{
+			if (bMove)
+			{
+				m_pAnimation->ChangeAnimation("KirbyIdle");
+				bMove = false;
+			}
+		}
 	}
 	else
 	{
-		if (bMove)
-		{
-			m_pAnimation->ChangeAnimation("KirbyIdle");
-			bMove = false;
-		}
+		// 스킬 변화 
+		// ChangeSkill(m_KirbyState);
 	}
 }
 
@@ -398,6 +406,8 @@ void CPlayer::EatSomething(float fTime)
 				m_pAnimation->CreateNotify("KirbyEatOver", "ReturnToIdle", 3);
 				m_pAnimation->AddNotifyFunction<CPlayer>("KirbyEatOver", "ReturnToIdle", this, &CPlayer::ReturnToIdle);
 
+				m_Zone->Enable(false);
+				SAFE_RELEASE(m_Zone);
 			}
 			break;
 		default:
@@ -432,6 +442,18 @@ void CPlayer::EatIng()
 	// 충돌체 하나 앞에 붙여놓기
 	//그 충돌체랑 몬스터랑 부딪히면 나한테 오고 (몇 초 동안)
 	// 그 초 끝나면 나 돼지 되는거임 다시 air
+
+	if (m_Zone == nullptr)
+	{
+		m_Zone = CreateComponent<CColliderRect>("AirZone");
+		m_Zone->AddBlockCallback<CPlayer>(this, &CPlayer::HitAirZone);
+		m_Zone->SetCollisionProfile("PlayerAirZone");
+		m_pMesh->AddChild(m_Zone, TR_POS);
+		m_Zone->SetRelativePos(200.f, 0.f, 0.f);
+		m_Zone->SetExtent(250.f, 300.f);
+		m_Zone->SetPivot(0.5f, 0.f, 0.f);
+	}
+
 
 }
 
@@ -571,23 +593,58 @@ void CPlayer::Up(float fTime)
 
 void CPlayer::SpitAir(float fTime)
 {
-	IsAirMouse = false;
-	m_pJumpEnable = false;
+	if (!HasMonster)
 
-	// 공기 뱉기 애니메이션
-	// !!! 공기 뱉기 이거 아닌데 그냥 써도 될거같음 귀찮으니까 
-	m_pAnimation->ChangeAnimation("KirbyJumpEnd");
-	m_pAnimation->SetReturnSequenceName("KirbyJumpEnd", "KirbyIdle");
+	{
+		IsAirMouse = false;
+		m_pJumpEnable = false;
 
-	// 무게 원상복구 
-	m_pMass = 100.f;
-	m_pMesh->SetRelativeScale(150.f, 150.f, 1.f);
-	// 추가해야 될 것 !
-	// 공기 내뱉는거 이펙트 
+		// 공기 뱉기 애니메이션
+		// !!! 공기 뱉기 이거 아닌데 그냥 써도 될거같음 귀찮으니까 
+		m_pAnimation->ChangeAnimation("KirbyJumpEnd");
+		m_pAnimation->SetReturnSequenceName("KirbyJumpEnd", "KirbyIdle");
 
+		// 무게 원상복구 
+		m_pMass = 100.f;
+		m_pMesh->SetRelativeScale(150.f, 150.f, 1.f);
+		// 추가해야 될 것 !
+		// 공기 내뱉는거 이펙트 
+	}
+	else
+	{
+		HasMonster = false; 
+		// 몬스터 있던거 날리는거니까
+
+		// 뱉는거 별 날아가야 함 
+
+
+		m_pAnimation->ChangeAnimation("KirbyEatOver");
+		m_pAnimation->SetReturnSequenceName("KirbyEatOver", "KirbyIdle");
+	}
 }
 
 void CPlayer::OnBlock(CColliderBase * pSrc, CColliderBase * pDest, float fTime)
 {
-	OutputDebugString(TEXT("Block\n"));
+	//OutputDebugString(TEXT("Block\n"));
+}
+
+void CPlayer::StruckedByMonster(CColliderBase * pSrc, CColliderBase * pDest, float fTime)
+{
+	// life 감소 
+}
+
+void CPlayer::HitAirZone(CColliderBase * pSrc, CColliderBase * pDest, float fTime)
+{
+	// 몬스터 정보 받아오기
+	if (!HasMonster)
+	{
+		HasMonster = true; 
+		
+		// 애니메이션 바꾸고 
+		m_pAnimation->ChangeAnimation("KirbyJumpIng");
+
+		// 
+
+		
+	}
 }

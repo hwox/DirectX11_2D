@@ -27,6 +27,7 @@ private:
 	CUIImage*	m_NumberCount;
 	CUIImage*	m_NumberCount_zero;
 	CUIImage*	m_ImageX;
+	class CPlayer* m_Player;
 
 	int lifeCount;
 	int KirbyState;

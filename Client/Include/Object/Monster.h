@@ -19,6 +19,7 @@ public:
 protected:
 	bool		IsChasePlayer;
 	class CGameObject*			m_Player;
+	int			Skill_Type;
 private:
 	int			ColliderMode;
 	int			m_Hp;
@@ -34,6 +35,7 @@ public:
 	virtual void SetPlayer(CGameObject *pObj);
 	virtual void SetColliderMode(int mode);
 	virtual int LookAt2D(Vector3 pPos);
+	virtual int GetSkillType();
 public:
 	void OnBlock(class CColliderBase* pSrc, class CColliderBase* pDest, float fTime);
 	void SetHP(int hp);

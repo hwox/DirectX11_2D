@@ -23,9 +23,12 @@ public:
 private:
 	bool m_pJumpEnable; // press_time MAX 도달 또는 키 입력 중이면 true 아니면 false
 	bool IsAirMouse; // 입안에 공기 머금고 있는지 아닌지
+	bool HasMonster; // 입 안에 몬스터 갖고있는지 아닌지
 
 	bool EatAirIng;
 	int m_KirbyState;
+
+
 	int EatProcess;
 	bool JumpIng = false;  // 지금 공중에 떠있는지 아닌지
 	bool FirstJump;
@@ -51,6 +54,8 @@ private:
 	class CColliderSphere2D*	m_pBodySphere;
 	class CColliderOBB2D*		m_pBodyOBB2D;
 
+
+	CColliderRect*		m_Zone;
 public:
 	virtual bool Init();
 	virtual void Begin();
@@ -85,5 +90,7 @@ public:
 
 public:
 	void OnBlock(class CColliderBase* pSrc, class CColliderBase* pDest, float fTime);
+	void StruckedByMonster(class CColliderBase* pSrc, class CColliderBase* pDest, float fTime);
+	void HitAirZone(class CColliderBase* pSrc, class CColliderBase* pDest, float fTime);
 };
 

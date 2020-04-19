@@ -1,7 +1,7 @@
 #include "PlayerLife.h"
 #include "Component/UIImage.h"
 #include "EngineGlobals.h"
-
+#include "Player.h"
 
 
 CPlayerLife::CPlayerLife()

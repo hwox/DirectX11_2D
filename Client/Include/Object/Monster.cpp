@@ -106,18 +106,20 @@ int CMonster::LookAt2D(Vector3 pPos)
 	//m_vRelative
 	if (vRotAxis.z > 0)
 	{
-		OutputDebugString(TEXT("왼쪽"));
 		return 1;
 	}
 	else if (vRotAxis.z < 0)
 	{
-		OutputDebugString(TEXT("오른쪽"));
 		return 2;
 	}
 	else {
-		OutputDebugString(TEXT("DEFAULT"));
 		return 0;
 	}
+}
+
+int CMonster::GetSkillType()
+{
+	return Skill_Type;
 }
 
 void CMonster::OnBlock(class CColliderBase* pSrc, class CColliderBase* pDest, float fTime)

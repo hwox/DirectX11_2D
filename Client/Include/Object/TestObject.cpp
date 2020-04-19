@@ -368,5 +368,6 @@ void CTestObject::AttackBufEnd()
 
 void CTestObject::OnBlock(CColliderBase * pSrc, CColliderBase * pDest, float fTime)
 {
+
 	OutputDebugString(TEXT("Block\n"));
 }

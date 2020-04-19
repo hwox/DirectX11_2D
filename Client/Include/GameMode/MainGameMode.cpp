@@ -38,6 +38,7 @@ bool CMainGameMode::Init()
 	GET_SINGLE(CCollisionManager)->CreateChannel("Monster", CT_BLOCK);
 	GET_SINGLE(CCollisionManager)->CreateChannel("PlayerProjectile", CT_BLOCK);
 	GET_SINGLE(CCollisionManager)->CreateChannel("MonsterProjectile", CT_BLOCK);
+	GET_SINGLE(CCollisionManager)->CreateChannel("PlayerAirZone", CT_BLOCK);
 
 	GET_SINGLE(CCollisionManager)->CreateProfile("Player", "Player");
 	GET_SINGLE(CCollisionManager)->UpdateProfileChannel("Player", "Player", CT_IGNORE);
@@ -58,6 +59,12 @@ bool CMainGameMode::Init()
 	GET_SINGLE(CCollisionManager)->UpdateProfileChannel("MonsterProjectile", "Monster", CT_IGNORE);
 	GET_SINGLE(CCollisionManager)->UpdateProfileChannel("MonsterProjectile", "PlayerProjectile", CT_IGNORE);
 	GET_SINGLE(CCollisionManager)->UpdateProfileChannel("MonsterProjectile", "MonsterProjectile", CT_IGNORE);
+
+	GET_SINGLE(CCollisionManager)->CreateProfile("PlayerAirZone", "PlayerAirZone");
+	GET_SINGLE(CCollisionManager)->UpdateProfileChannel("PlayerAirZone", "Player", CT_IGNORE);
+	GET_SINGLE(CCollisionManager)->UpdateProfileChannel("PlayerAirZone", "PlayerProjectile", CT_IGNORE);
+	GET_SINGLE(CCollisionManager)->UpdateProfileChannel("PlayerAirZone", "MonsterProjectile", CT_IGNORE);
+
 
 	CreateMaterial();
 
