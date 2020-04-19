@@ -73,11 +73,11 @@ bool CTestObject::Init()
 
 	m_pAnimation = CAnimation2D::CreateAnimation2D<CAnimation2D>();
 
-	m_pAnimation->AddAnimation2DSequence("MinionIdle");
-	m_pAnimation->AddAnimation2DSequence("MinionWalk");
-	m_pAnimation->AddAnimation2DSequence("MinionKick");
+	m_pAnimation->AddAnimation2DSequence("WaddleDeeIdle");
+	//m_pAnimation->AddAnimation2DSequence("MinionWalk");
+	//m_pAnimation->AddAnimation2DSequence("MinionKick");
 
-	m_pAnimation->SetReturnSequenceName("MinionKick", "MinionIdle");
+	//m_pAnimation->SetReturnSequenceName("MinionKick", "MinionIdle");
 
 	m_pMesh->SetAnimation2D(m_pAnimation);
 

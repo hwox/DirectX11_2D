@@ -37,36 +37,18 @@
     <Filter Include="02. Object\Monster">
       <UniqueIdentifier>{e4270927-5d36-4684-99a9-e5b3b531ba3f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02. Object\Effect">
+      <UniqueIdentifier>{aefdbb24-9ce1-4de3-9d86-62327c82040d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. Object\Test">
+      <UniqueIdentifier>{2e5a7727-4121-43a6-8f93-851e823e95a2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="Object\MainMap.cpp">
-      <Filter>02. Object</Filter>
-    </ClCompile>
-    <ClCompile Include="Object\Minion.cpp">
-      <Filter>02. Object</Filter>
-    </ClCompile>
-    <ClCompile Include="Object\StartButton.cpp">
-      <Filter>02. Object</Filter>
-    </ClCompile>
-    <ClCompile Include="Object\TestBar.cpp">
-      <Filter>02. Object</Filter>
-    </ClCompile>
-    <ClCompile Include="Object\TestButton.cpp">
-      <Filter>02. Object</Filter>
-    </ClCompile>
-    <ClCompile Include="Object\TestObject.cpp">
-      <Filter>02. Object</Filter>
-    </ClCompile>
-    <ClCompile Include="Object\TestPixelCollision.cpp">
-      <Filter>02. Object</Filter>
-    </ClCompile>
-    <ClCompile Include="Object\Bullet.cpp">
-      <Filter>02. Object</Filter>
-    </ClCompile>
-    <ClCompile Include="Object\ChildObj.cpp">
       <Filter>02. Object</Filter>
     </ClCompile>
     <ClCompile Include="Object\Title.cpp">
@@ -99,6 +81,39 @@
     <ClCompile Include="Object\MonsterInfoUI.cpp">
       <Filter>02. Object\Monster</Filter>
     </ClCompile>
+    <ClCompile Include="Object\Monster.cpp">
+      <Filter>02. Object\Monster</Filter>
+    </ClCompile>
+    <ClCompile Include="Object\Effect.cpp">
+      <Filter>02. Object\Effect</Filter>
+    </ClCompile>
+    <ClCompile Include="Object\Bullet.cpp">
+      <Filter>02. Object\Effect</Filter>
+    </ClCompile>
+    <ClCompile Include="Object\StartButton.cpp">
+      <Filter>02. Object\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Object\TestBar.cpp">
+      <Filter>02. Object\Test</Filter>
+    </ClCompile>
+    <ClCompile Include="Object\TestButton.cpp">
+      <Filter>02. Object\Test</Filter>
+    </ClCompile>
+    <ClCompile Include="Object\TestObject.cpp">
+      <Filter>02. Object\Test</Filter>
+    </ClCompile>
+    <ClCompile Include="Object\TestPixelCollision.cpp">
+      <Filter>02. Object\Test</Filter>
+    </ClCompile>
+    <ClCompile Include="Object\ChildObj.cpp">
+      <Filter>02. Object\Test</Filter>
+    </ClCompile>
+    <ClCompile Include="Object\Minion.cpp">
+      <Filter>02. Object\Test</Filter>
+    </ClCompile>
+    <ClCompile Include="Object\WaddleDee.cpp">
+      <Filter>02. Object\Monster</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -108,30 +123,6 @@
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="Object\MainMap.h">
-      <Filter>02. Object</Filter>
-    </ClInclude>
-    <ClInclude Include="Object\Minion.h">
-      <Filter>02. Object</Filter>
-    </ClInclude>
-    <ClInclude Include="Object\StartButton.h">
-      <Filter>02. Object</Filter>
-    </ClInclude>
-    <ClInclude Include="Object\TestBar.h">
-      <Filter>02. Object</Filter>
-    </ClInclude>
-    <ClInclude Include="Object\TestButton.h">
-      <Filter>02. Object</Filter>
-    </ClInclude>
-    <ClInclude Include="Object\TestObject.h">
-      <Filter>02. Object</Filter>
-    </ClInclude>
-    <ClInclude Include="Object\TestPixelCollision.h">
-      <Filter>02. Object</Filter>
-    </ClInclude>
-    <ClInclude Include="Object\Bullet.h">
-      <Filter>02. Object</Filter>
-    </ClInclude>
-    <ClInclude Include="Object\ChildObj.h">
       <Filter>02. Object</Filter>
     </ClInclude>
     <ClInclude Include="Object\Title.h">
@@ -162,6 +153,39 @@
       <Filter>02. Object\Player</Filter>
     </ClInclude>
     <ClInclude Include="Object\MonsterInfoUI.h">
+      <Filter>02. Object\Monster</Filter>
+    </ClInclude>
+    <ClInclude Include="Object\Monster.h">
+      <Filter>02. Object\Monster</Filter>
+    </ClInclude>
+    <ClInclude Include="Object\Effect.h">
+      <Filter>02. Object\Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="Object\Bullet.h">
+      <Filter>02. Object\Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="Object\StartButton.h">
+      <Filter>02. Object\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Object\TestBar.h">
+      <Filter>02. Object\Test</Filter>
+    </ClInclude>
+    <ClInclude Include="Object\TestButton.h">
+      <Filter>02. Object\Test</Filter>
+    </ClInclude>
+    <ClInclude Include="Object\TestObject.h">
+      <Filter>02. Object\Test</Filter>
+    </ClInclude>
+    <ClInclude Include="Object\TestPixelCollision.h">
+      <Filter>02. Object\Test</Filter>
+    </ClInclude>
+    <ClInclude Include="Object\ChildObj.h">
+      <Filter>02. Object\Test</Filter>
+    </ClInclude>
+    <ClInclude Include="Object\Minion.h">
+      <Filter>02. Object\Test</Filter>
+    </ClInclude>
+    <ClInclude Include="Object\WaddleDee.h">
       <Filter>02. Object\Monster</Filter>
     </ClInclude>
   </ItemGroup>

@@ -62,8 +62,6 @@ bool CPlayer::Init()
 	m_pRotPivot = CreateComponent<CSceneComponent>("RotPivot");
 	m_pCamera = CreateComponent<CCameraComponent>("Camera");
 	m_pBody = CreateComponent<CColliderRect>("PlayerBody");
-	//m_pBodySphere = CreateComponent<CColliderSphere2D>("PlayerBodySphere");
-	//m_pBodyOBB2D = CreateComponent<CColliderOBB2D>("PlayerBodyOBB2D");
 
 	m_pAnimation = CAnimation2D::CreateAnimation2D<CAnimation2D>();
 
@@ -82,8 +80,6 @@ bool CPlayer::Init()
 	m_pMesh->SetAnimation2D(m_pAnimation);
 
 	m_pMesh->AddChild(m_pBody, TR_POS);
-	//m_pMesh->AddChild(m_pBodySphere, TR_POS);
-	//m_pMesh->AddChild(m_pBodyOBB2D, TR_ROT | TR_POS);
 
 	m_pBody->SetExtent(200.f, 200.f);
 	m_pBody->SetPivot(0.5f, 0.f, 0.f);
@@ -91,15 +87,6 @@ bool CPlayer::Init()
 	m_pBody->AddBlockCallback<CPlayer>(this, &CPlayer::OnBlock);
 	m_pBody->SetCollisionProfile("Player");
 
-	/*m_pBodySphere->SetSphere(Vector3(200.f, 0.f, 0.f), 100.f);
-
-	m_pBodySphere->AddBlockCallback<CTestObject>(this, &CTestObject::OnBlock);
-	m_pBodySphere->SetCollisionProfile("Player");
-
-	m_pBodyOBB2D->SetOBB2D(Vector3(0.f, 0.f, 0.f), 100.f, 100.f);
-
-	m_pBodyOBB2D->AddBlockCallback<CTestObject>(this, &CTestObject::OnBlock);
-	m_pBodyOBB2D->SetCollisionProfile("Player");*/
 
 	CStaticMesh*	pMesh = (CStaticMesh*)GET_SINGLE(CResourceManager)->FindMesh("TexRect");
 
@@ -132,7 +119,7 @@ bool CPlayer::Init()
 	m_pMovement = CGameObject::CreateComponent<CCharacterMovementComponent>("Movement");
 	m_pMovement->SetUpdateComponent(m_pMesh);
 
-	m_pMesh->SetRelativePos(50.f, 50.f, 0.f);
+	m_pMesh->SetRelativePos(50.f, 130.f, 0.f);
 	m_pMesh->SetRelativeScale(150.f, 150.f, 1.f);
 	m_pMesh->SetPivot(0.5f, 0.f, 0.f);
 

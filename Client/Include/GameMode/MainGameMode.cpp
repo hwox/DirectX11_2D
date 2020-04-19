@@ -20,6 +20,7 @@
 #include "..\Object\PlayerLife.h"
 #include "..\Object\MonsterInfoUI.h"
 
+#include "..\Object\WaddleDee.h"
 
 CMainGameMode::CMainGameMode()
 {
@@ -80,11 +81,10 @@ bool CMainGameMode::Init()
 
 	SAFE_RELEASE(pObj);
 
-	CMinion*	pMinion = m_pScene->SpawnObject<CMinion>(Vector3(1300.f, 400.f, 0.f));
 
-	SAFE_RELEASE(pMinion);
+	CWaddleDee*	pMinion2 = m_pScene->SpawnObject<CWaddleDee>(Vector3(800.f, 130.f, 0.f));
 
-
+	SAFE_RELEASE(pMinion2);
 
 	CPhoneCallUI*	pPlayerPhone = m_pScene->SpawnObject<CPhoneCallUI>();
 
@@ -108,6 +108,8 @@ bool CMainGameMode::Init()
 	CMainMap*	pMap = m_pScene->SpawnObject<CMainMap>();
 
 	SAFE_RELEASE(pMap);
+
+
 
 	return true;
 }
