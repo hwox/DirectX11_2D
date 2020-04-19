@@ -9,6 +9,8 @@ enum Kirby_State
 
 };
 
+#define JUMP_AMOUNT 1.5f
+
 class CPlayer :
 	public CGameObject
 {
@@ -19,20 +21,25 @@ public:
 	~CPlayer();
 
 private:
-	bool m_pJumpEnable;
+	bool m_pJumpEnable; // press_time MAX 도달 또는 키 입력 중이면 true 아니면 false
 	bool IsAirMouse; // 입안에 공기 머금고 있는지 아닌지
+
 	bool EatAirIng;
 	int m_KirbyState;
-	int EatProcess = 0;
+	int EatProcess;
+	bool JumpIng = false;  // 지금 공중에 떠있는지 아닌지
+	bool FirstJump;
 
-	float press_time = 0.f;
-	float jump_time = 0.f;
-
+	float press_time;
+	float jump_time;
 
 	bool IsJump = false;
-	int JumpCount = 0; // 2중점프
 
+	float m_pMass; // 무게 (입에 뭐 있을 때랑 없을 때 구분용 무게임)
 
+	float g; // 중력가속도 값 
+
+	Vector3 PrevPos;
 private:
 	class CStaticMeshComponent*	m_pMesh;
 	class CSceneComponent*		m_pRotPivot;
@@ -52,8 +59,6 @@ public:
 
 public:
 
-
-	void MoveUpDown(float fScale, float fTime);
 	void MoveSide(float fScale, float fTime);
 	void RotationZ(float fScale, float fTime);
 	void Fire(float fTime);
@@ -69,6 +74,13 @@ public:
 	void EatSomething(float fTime);
 	void EatSomethingEnd(float fTime);
 
+	void JumpInput(float fTime);
+	void JumpInputEnd(float fTime);
+	void JumpUpdate(float fTime);
+
+	void Up(float fTime);
+
+	void SpitAir(float fTime);
 public:
 	void OnBlock(class CColliderBase* pSrc, class CColliderBase* pDest, float fTime);
 };

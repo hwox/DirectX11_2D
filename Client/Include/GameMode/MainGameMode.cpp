@@ -20,7 +20,6 @@
 #include "..\Object\PlayerLife.h"
 #include "..\Object\MonsterInfoUI.h"
 
-void Player_Jump_Texture_Create();
 
 CMainGameMode::CMainGameMode()
 {
@@ -212,58 +211,58 @@ bool CMainGameMode::CreateMaterial()
 
 bool CMainGameMode::CreateAnimation2DSequence()
 {
-	GET_SINGLE(CResourceManager)->CreateAnimation2DSequence("MinionIdle", true, 1.f, 7);
-	GET_SINGLE(CResourceManager)->AddAnimation2DSequenceTexture("MinionIdle", "MinionAtlas",
-		TEXT("Monster/MinionAtlas.png"));
+	//GET_SINGLE(CResourceManager)->CreateAnimation2DSequence("MinionIdle", true, 1.f, 7);
+	//GET_SINGLE(CResourceManager)->AddAnimation2DSequenceTexture("MinionIdle", "MinionAtlas",
+	//	TEXT("Monster/MinionAtlas.png"));
 
-	for (int i = 0; i < 7; ++i)
-	{
-		GET_SINGLE(CResourceManager)->AddAnimation2DSequenceFrameInfo("MinionIdle", Vector2(50.f * i, 0.f),
-			Vector2(50.f * (i + 1), 37.f));
-	}
+	//for (int i = 0; i < 7; ++i)
+	//{
+	//	GET_SINGLE(CResourceManager)->AddAnimation2DSequenceFrameInfo("MinionIdle", Vector2(50.f * i, 0.f),
+	//		Vector2(50.f * (i + 1), 37.f));
+	//}
 
-	GET_SINGLE(CResourceManager)->CreateAnimation2DSequence("MinionWalk", true, 1.f, 6);
+	//GET_SINGLE(CResourceManager)->CreateAnimation2DSequence("MinionWalk", true, 1.f, 6);
 
-	for (int i = 0; i <= 5; ++i)
-	{
-		TCHAR	strFileName[MAX_PATH] = {};
+	//for (int i = 0; i <= 5; ++i)
+	//{
+	//	TCHAR	strFileName[MAX_PATH] = {};
 
-		wsprintf(strFileName, TEXT("Monster/MinionFrame/adventurer-run2-0%d.png"), i);
+	//	wsprintf(strFileName, TEXT("Monster/MinionFrame/adventurer-run2-0%d.png"), i);
 
-		char	strKey[256] = {};
-		sprintf_s(strKey, "MinionWalk%d", i);
+	//	char	strKey[256] = {};
+	//	sprintf_s(strKey, "MinionWalk%d", i);
 
-		GET_SINGLE(CResourceManager)->AddAnimation2DSequenceTexture("MinionWalk", strKey, strFileName);
-	}
+	//	GET_SINGLE(CResourceManager)->AddAnimation2DSequenceTexture("MinionWalk", strKey, strFileName);
+	//}
 
-	GET_SINGLE(CResourceManager)->SetAnimation2DSequenceFrameInfoAll("MinionWalk", Vector2(0.f, 0.f),
-		Vector2(50.f, 37.f));
+	//GET_SINGLE(CResourceManager)->SetAnimation2DSequenceFrameInfoAll("MinionWalk", Vector2(0.f, 0.f),
+	//	Vector2(50.f, 37.f));
 
-	GET_SINGLE(CResourceManager)->CreateAnimation2DSequence("MinionKick", false, 1.f, 8);
+	//GET_SINGLE(CResourceManager)->CreateAnimation2DSequence("MinionKick", false, 1.f, 8);
 
-	for (int i = 0; i <= 7; ++i)
-	{
-		TCHAR	strFileName[MAX_PATH] = {};
+	//for (int i = 0; i <= 7; ++i)
+	//{
+	//	TCHAR	strFileName[MAX_PATH] = {};
 
-		wsprintf(strFileName, TEXT("Monster/MinionFrame/adventurer-kick-0%d.png"), i);
+	//	wsprintf(strFileName, TEXT("Monster/MinionFrame/adventurer-kick-0%d.png"), i);
 
-		char	strKey[256] = {};
-		sprintf_s(strKey, "MinionKick%d", i);
+	//	char	strKey[256] = {};
+	//	sprintf_s(strKey, "MinionKick%d", i);
 
-		GET_SINGLE(CResourceManager)->AddAnimation2DSequenceTexture("MinionKick", strKey, strFileName);
-	}
+	//	GET_SINGLE(CResourceManager)->AddAnimation2DSequenceTexture("MinionKick", strKey, strFileName);
+	//}
 
-	GET_SINGLE(CResourceManager)->SetAnimation2DSequenceFrameInfoAll("MinionKick", Vector2(0.f, 0.f),
-		Vector2(50.f, 37.f));
+	//GET_SINGLE(CResourceManager)->SetAnimation2DSequenceFrameInfoAll("MinionKick", Vector2(0.f, 0.f),
+	//	Vector2(50.f, 37.f));
 
 
 	Player_Jump_Texture_Create();
-
+	Monster_Texture_Create();
 
 	return true;
 }
 
-void Player_Jump_Texture_Create()
+void CMainGameMode::Player_Jump_Texture_Create()
 {
 	////////////////////     Kirby Idle      ///////////////////////
 
@@ -309,7 +308,7 @@ void Player_Jump_Texture_Create()
 
 	////////////////////     Kirby Jump      ///////////////////////
 
-	GET_SINGLE(CResourceManager)->CreateAnimation2DSequence("KirbyJump", false, 1.f, 5);
+	GET_SINGLE(CResourceManager)->CreateAnimation2DSequence("KirbyJump", false, 0.4f, 5);
 
 	for (int i = 0; i <= 4; ++i)
 	{
@@ -330,7 +329,7 @@ void Player_Jump_Texture_Create()
 
 	////////////////////     Kirby Jump ING     ///////////////////////
 
-	GET_SINGLE(CResourceManager)->CreateAnimation2DSequence("KirbyJumpIng", false, 1.f, 6);
+	GET_SINGLE(CResourceManager)->CreateAnimation2DSequence("KirbyJumpIng", true, 1.f, 6);
 
 	for (int i = 0; i <= 5; ++i)
 	{
@@ -353,7 +352,7 @@ void Player_Jump_Texture_Create()
 
 	////////////////////     Kirby Jump End     ///////////////////////
 
-	GET_SINGLE(CResourceManager)->CreateAnimation2DSequence("KirbyJumpEnd", false, 1.f, 5);
+	GET_SINGLE(CResourceManager)->CreateAnimation2DSequence("KirbyJumpEnd", false, 0.4f, 5);
 
 	for (int i = 0; i <= 4; ++i)
 	{
@@ -458,3 +457,71 @@ void Player_Jump_Texture_Create()
 	///////////////////////////////////////////////////////////////
 
 }
+
+void CMainGameMode::Monster_Texture_Create()
+{
+
+	////////////////////    Monster Idle      ///////////////////////
+
+	GET_SINGLE(CResourceManager)->CreateAnimation2DSequence("WaddleDeeIdle", true, 1.f, 4);
+
+	for (int i = 0; i <= 3; ++i)
+	{
+		TCHAR	strFileName[MAX_PATH] = {};
+
+		wsprintf(strFileName, TEXT("Monster/WaddleDee_Idle/WaddleDee_Idle_%d.png"), i);
+
+		char	strKey[256] = {};
+		sprintf_s(strKey, "WaddleDeeIdle%d", i);
+
+		GET_SINGLE(CResourceManager)->AddAnimation2DSequenceTexture("WaddleDeeIdle", strKey, strFileName);
+	}
+
+	GET_SINGLE(CResourceManager)->SetAnimation2DSequenceFrameInfoAll("WaddleDeeIdle", Vector2(0.f, 0.f),
+		Vector2(25.f, 25.f));
+
+	///////////////////////////////////////////////////////////////
+
+	////////////////////    Monster Damage      ///////////////////////
+
+	GET_SINGLE(CResourceManager)->CreateAnimation2DSequence("WaddleDeeDamage", true, 1.f, 4);
+
+	for (int i = 0; i <= 3; ++i)
+	{
+		TCHAR	strFileName[MAX_PATH] = {};
+
+		wsprintf(strFileName, TEXT("Monster/WaddleDee_Damage/WaddleDee_Damage_%d.png"), i);
+
+		char	strKey[256] = {};
+		sprintf_s(strKey, "WaddleDeeDamage%d", i);
+
+		GET_SINGLE(CResourceManager)->AddAnimation2DSequenceTexture("WaddleDeeDamage", strKey, strFileName);
+	}
+
+	GET_SINGLE(CResourceManager)->SetAnimation2DSequenceFrameInfoAll("WaddleDeeDamage", Vector2(0.f, 0.f),
+		Vector2(25.f, 25.f));
+
+	///////////////////////////////////////////////////////////////
+
+		////////////////////    Monster Move      ///////////////////////
+
+	GET_SINGLE(CResourceManager)->CreateAnimation2DSequence("WaddleDeeMove", true, 1.f, 8);
+
+	for (int i = 0; i <= 7; ++i)
+	{
+		TCHAR	strFileName[MAX_PATH] = {};
+
+		wsprintf(strFileName, TEXT("Monster/WaddleDee_Move/WaddleDee_Move_%d.png"), i);
+
+		char	strKey[256] = {};
+		sprintf_s(strKey, "WaddleDeeMove%d", i);
+
+		GET_SINGLE(CResourceManager)->AddAnimation2DSequenceTexture("WaddleDeeMove", strKey, strFileName);
+	}
+
+	GET_SINGLE(CResourceManager)->SetAnimation2DSequenceFrameInfoAll("WaddleDeeMove", Vector2(0.f, 0.f),
+		Vector2(25.f, 25.f));
+
+	///////////////////////////////////////////////////////////////
+}
+

@@ -15,5 +15,7 @@ public:
 private:
 	bool CreateMaterial();
 	bool CreateAnimation2DSequence();
+	void Player_Jump_Texture_Create();
+	void Monster_Texture_Create();
 };
 
