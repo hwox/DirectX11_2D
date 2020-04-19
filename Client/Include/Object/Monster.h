@@ -33,7 +33,7 @@ public:
 	virtual void NearPlayerCheck(Vector3 pPos);
 	virtual void SetPlayer(CGameObject *pObj);
 	virtual void SetColliderMode(int mode);
-	virtual void LookAt2D(Vector3 pPos);
+	virtual int LookAt2D(Vector3 pPos);
 public:
 	void OnBlock(class CColliderBase* pSrc, class CColliderBase* pDest, float fTime);
 	void SetHP(int hp);

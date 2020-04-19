@@ -386,7 +386,7 @@ void CPlayer::EatSomething(float fTime)
 			// 먹는중 
 			if (EatAirIng)
 			{
-
+				EatIng();
 			}
 			break;
 		case 2:
@@ -423,6 +423,16 @@ void CPlayer::EatSomethingEnd(float fTime)
 		EatProcess = 2;
 		EatSomething(fTime);
 	}
+}
+
+void CPlayer::EatIng()
+{
+	// 여기가 몬스터 빨아들이는 부분
+
+	// 충돌체 하나 앞에 붙여놓기
+	//그 충돌체랑 몬스터랑 부딪히면 나한테 오고 (몇 초 동안)
+	// 그 초 끝나면 나 돼지 되는거임 다시 air
+
 }
 
 void CPlayer::JumpInput(float fTime)

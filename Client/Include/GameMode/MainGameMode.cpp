@@ -82,7 +82,7 @@ bool CMainGameMode::Init()
 	SAFE_RELEASE(pObj);
 
 
-	CWaddleDee*	pMinion2 = m_pScene->SpawnObject<CWaddleDee>(Vector3(800.f, 130.f, 0.f));
+	CWaddleDee*	pMinion2 = m_pScene->SpawnObject<CWaddleDee>(Vector3(1200.f, 130.f, 0.f));
 
 	SAFE_RELEASE(pMinion2);
 

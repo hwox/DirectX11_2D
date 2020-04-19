@@ -73,6 +73,7 @@ public:
 
 	void EatSomething(float fTime);
 	void EatSomethingEnd(float fTime);
+	void EatIng();
 
 	void JumpInput(float fTime);
 	void JumpInputEnd(float fTime);
@@ -81,6 +82,7 @@ public:
 	void Up(float fTime);
 
 	void SpitAir(float fTime);
+
 public:
 	void OnBlock(class CColliderBase* pSrc, class CColliderBase* pDest, float fTime);
 };

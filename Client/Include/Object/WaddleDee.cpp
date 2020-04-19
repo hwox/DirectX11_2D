@@ -53,8 +53,10 @@ bool CWaddleDee::Init()
 
 	m_pMesh->AddChild(m_pBody, TR_POS);
 
+	//m_pBody->SetRect
 	m_pBody->SetExtent(100.f, 100.f);
-	//m_pBody->SetPivot(0.5f, 0.f, 0.f);
+	m_pBody->SetPivot(0.5f, 0.f, 0.f);
+	//m_pBody->SetPosition(0.5f, 0.f, 0.f);
 
 	m_pBody->AddBlockCallback<CMonster>(this, &CMonster::OnBlock);
 	m_pBody->SetCollisionProfile("Monster");
@@ -102,13 +104,14 @@ void CWaddleDee::Update(float fTime)
 {
 	CMonster::Update(fTime);
 
-	Vector3 pPos = GetScene()->GetGameMode()->GetPlayer()->GetWorldPos();
-	NearPlayerCheck(pPos);
 
 	if (m_Player == nullptr)
-		return;
+		m_Player = GetScene()->GetGameMode()->GetPlayer();/*->GetWorldPos();*/
 
-// 기본으로 움직이기 
+	Vector3 pPos = m_Player->GetWorldPos();
+	NearPlayerCheck(pPos);
+
+	// 기본으로 움직이기 
 	if (!IsChasePlayer)
 	{
 
@@ -117,14 +120,21 @@ void CWaddleDee::Update(float fTime)
 	}
 	else
 	{
-		m_pAnimation->ChangeAnimation("WaddleMove");
-		if (fScale < 0.f)
-			m_pMesh->SetRelativeRotationY(180.f);
+		m_pAnimation->ChangeAnimation("WaddleDeeMove");
 
-		else
+		int turn = LookAt2D(pPos);
+		switch (turn)
+		{
+		case 1:
+			//왼쪽
 			m_pMesh->SetRelativeRotationY(0.f);
-
-		LookAt(pPos);
+			break;
+		case 2:
+			// 오른쪽
+			m_pMesh->SetRelativeRotationY(180.f);
+			break;
+		}
+		m_pMovement->AddMovement(GetWorldAxis(AXIS_X)*-1);
 	}
 }
 
