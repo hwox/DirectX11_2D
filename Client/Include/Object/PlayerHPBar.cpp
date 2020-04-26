@@ -1,19 +1,20 @@
-#include "PlayerHPBar.h"
+#include "PlayerHpBar.h"
 #include "Component/UIBar.h"
 #include "Component/UIImage.h"
 #include "EngineGlobals.h"
 
-CPlayerHPBar::CPlayerHPBar()
+CPlayerHpBar::CPlayerHpBar()
 {
+	m_pBack = nullptr;
 	m_pBar = nullptr;
 }
-CPlayerHPBar::~CPlayerHPBar()
+CPlayerHpBar::~CPlayerHpBar()
 {
 	SAFE_RELEASE(m_pBack);
 	SAFE_RELEASE(m_pBar);
 }
 
-bool CPlayerHPBar::Init()
+bool CPlayerHpBar::Init()
 {
 	if (!CGameObject::Init())
 		return false;
@@ -43,12 +44,12 @@ bool CPlayerHPBar::Init()
 
 }
 
-void CPlayerHPBar::Begin()
+void CPlayerHpBar::Begin()
 {
 	CGameObject::Begin();
 }
 
-void CPlayerHPBar::Update(float fTime)
+void CPlayerHpBar::Update(float fTime)
 {
 	CGameObject::Update(fTime);
 
@@ -73,7 +74,12 @@ void CPlayerHPBar::Update(float fTime)
 	}
 }
 
-void CPlayerHPBar::Render(float fTime)
+void CPlayerHpBar::Render(float fTime)
 {
 	CGameObject::Render(fTime);
+}
+
+void CPlayerHpBar::SetPercentHPBar(float percent)
+{
+	m_pBar->SetPercent(percent);
 }

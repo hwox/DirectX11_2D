@@ -3,8 +3,8 @@
 #include "Engine.h"
 #include "Scene/SceneManager.h"
 #include "Scene/Scene.h"
-#include "GameMode/MainGameMode.h"
 #include "GameMode/StartGameMode.h"
+#include "..\Include\GameMode\Stage1Mode.h"
 
 int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	_In_opt_ HINSTANCE hPrevInstance,
@@ -20,7 +20,6 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
 	CScene*	pScene = GET_SINGLE(CSceneManager)->GetScene();
 
-	//pScene->SetGameMode<CMainGameMode>();
 	pScene->SetGameMode<CStartGameMode>();
 
 	pScene->Begin();

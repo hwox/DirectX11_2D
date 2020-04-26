@@ -9,12 +9,13 @@
 #include "Component/ColliderOBB2D.h"
 #include "..\Object\Monster.h"
 
+
+#define MW_STAND_SCALE	170.f
+
 CWaddleDee::CWaddleDee()
 {
 	m_pMesh = nullptr;
 	m_pAnimation = nullptr;
-	m_pBodyOBB2D = nullptr;
-	m_pBodySphere = nullptr;
 	m_pBody = nullptr;
 	m_pMovement = nullptr;
 }
@@ -25,10 +26,7 @@ CWaddleDee::~CWaddleDee()
 	SAFE_RELEASE(m_pMesh);
 	SAFE_RELEASE(m_pAnimation);
 	SAFE_RELEASE(m_pMovement);
-	SAFE_RELEASE(m_pBodyOBB2D);
-	SAFE_RELEASE(m_pBodySphere);
 	SAFE_RELEASE(m_pBody);
-
 
 }
 
@@ -46,6 +44,7 @@ bool CWaddleDee::Init()
 	m_pAnimation->AddAnimation2DSequence("WaddleDeeIdle");
 	m_pAnimation->AddAnimation2DSequence("WaddleDeeMove");
 	m_pAnimation->AddAnimation2DSequence("WaddleDeeDamage");
+	m_pAnimation->AddAnimation2DSequence("WaddleDeeBlackhole");
 
 	m_pMesh->SetAnimation2D(m_pAnimation);
 
@@ -54,9 +53,9 @@ bool CWaddleDee::Init()
 	m_pMesh->AddChild(m_pBody, TR_POS);
 
 	//m_pBody->SetRect
-	m_pBody->SetExtent(100.f, 100.f);
-	m_pBody->SetPivot(0.5f, 0.f, 0.f);
-	//m_pBody->SetPosition(0.5f, 0.f, 0.f);
+	m_pBody->SetExtent(MW_STAND_SCALE, MW_STAND_SCALE);
+	m_pBody->SetPivot(0.0f, 0.f, 0.f);
+
 
 	m_pBody->AddBlockCallback<CMonster>(this, &CMonster::OnBlock);
 	m_pBody->SetCollisionProfile("Monster");
@@ -67,11 +66,9 @@ bool CWaddleDee::Init()
 	SAFE_RELEASE(pMesh);
 	//////////////////////////////////////////////////////////////////
 
-	CMaterial*	pMaterial = GET_SINGLE(CResourceManager)->FindMaterial("PlayerMtrl");
 
-	SAFE_RELEASE(pMaterial);
 
-	pMaterial = GET_SINGLE(CResourceManager)->FindMaterial("PlayerAnimOutLineMtrl");
+	CMaterial* pMaterial = GET_SINGLE(CResourceManager)->FindMaterial("MonsterAnimMtrl");
 	m_pMesh->SetMaterial(pMaterial);
 
 	SAFE_RELEASE(pMaterial);
@@ -83,14 +80,16 @@ bool CWaddleDee::Init()
 	m_pMovement = CGameObject::CreateComponent<CCharacterMovementComponent>("MonsterMovement");
 	m_pMovement->SetUpdateComponent(m_pMesh);
 
-	m_pMesh->SetRelativeScale(120.f, 120.f, 1.f);
+	m_pMesh->SetRelativeScale(MW_STAND_SCALE, MW_STAND_SCALE, 1.f);
 
 	m_pMovement->SetMoveSpeed(100.f);
 
 	//////////////////////////////////////////////////////////////////
 
-	SetName("WaddleDee");
+	SetMonsterName("WaddleDee");
 	SetHP(100);
+
+
 
 	return true;
 }
@@ -106,7 +105,7 @@ void CWaddleDee::Update(float fTime)
 
 
 	if (m_Player == nullptr)
-		m_Player = GetScene()->GetGameMode()->GetPlayer();/*->GetWorldPos();*/
+		m_Player = GetScene()->GetGameMode()->GetPlayer();
 
 	Vector3 pPos = m_Player->GetWorldPos();
 	NearPlayerCheck(pPos);
@@ -114,27 +113,28 @@ void CWaddleDee::Update(float fTime)
 	// 기본으로 움직이기 
 	if (!IsChasePlayer)
 	{
-
 		m_pAnimation->ChangeAnimation("WaddleDeeIdle");
-		//NearPlayerCheck()
 	}
 	else
 	{
-		m_pAnimation->ChangeAnimation("WaddleDeeMove");
-
-		int turn = LookAt2D(pPos);
-		switch (turn)
+		if (!IsBackStep)
 		{
-		case 1:
-			//왼쪽
-			m_pMesh->SetRelativeRotationY(0.f);
-			break;
-		case 2:
-			// 오른쪽
-			m_pMesh->SetRelativeRotationY(180.f);
-			break;
+			m_pAnimation->ChangeAnimation("WaddleDeeMove");
+
+			int turn = LookAt2D(pPos);
+			switch (turn)
+			{
+			case 1:
+				//왼쪽
+				m_pMesh->SetRelativeRotationY(0.f);
+				break;
+			case 2:
+				// 오른쪽
+				m_pMesh->SetRelativeRotationY(180.f);
+				break;
+			}
+			m_pMovement->AddMovement(GetWorldAxis(AXIS_X)*-1);
 		}
-		m_pMovement->AddMovement(GetWorldAxis(AXIS_X)*-1);
 	}
 }
 
@@ -148,13 +148,48 @@ void CWaddleDee::NearPlayerCheck(Vector3 pPos)
 	CMonster::NearPlayerCheck(pPos);
 }
 
-void CWaddleDee::SetPlayer(CGameObject * pObj)
+void CWaddleDee::SetPlayerInfo(CGameObject * pObj)
 {
-	CMonster::SetPlayer(pObj);
+	CMonster::SetPlayerInfo(pObj);
 }
 
 void CWaddleDee::SetColliderMode(int mode)
 {
 	CMonster::SetColliderMode(mode);
+}
+
+void CWaddleDee::OnBlock(class CColliderBase* pSrc, class CColliderBase* pDest, float fTime)
+{
+	CMonster::OnBlock(pSrc, pDest, fTime);
+
+	//if (pDest->GetCollisionProfile()->strName == "PlayerAirZone")
+	//{
+	//	// airzone이랑 충돌하면 빨려들어가야 함 
+	//	m_pAnimation->ChangeAnimation("WaddleDeeBlackhole");
+
+	//	GET_SINGLE(CScheduler)->AddSchedule<CWaddleDee>("BackEnd", false, 1.5f, this, &CWaddleDee::AfterCollisionWithAirZone);
+	//}
+	//else if (pDest->GetCollisionProfile()->strName == "Player")
+	//{
+	//	m_pAnimation->ChangeAnimation("WaddleDeeDamage");
+
+	//	IsBackStep = true;
+
+	//	m_pMovement->BackStep(GetWorldAxis(AXIS_X)*-1);
+	//	GET_SINGLE(CScheduler)->AddSchedule<CWaddleDee>("BackEnd", false, 0.5f, this, &CWaddleDee::AfterCollisionWithPlayer);
+	//}
+}
+
+void CWaddleDee::AfterCollisionWithPlayer()
+{
+	m_pMovement->BackStepEnd();
+	m_pAnimation->ChangeAnimation("WaddleIdle");
+	IsBackStep = false;
+}
+
+void CWaddleDee::AfterCollisionWithAirZone()
+{
+	Enable(false);
+	//Kill();
 }
 

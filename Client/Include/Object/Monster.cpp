@@ -13,14 +13,12 @@
 CMonster::CMonster()
 {
 	m_Player = nullptr;
-
 	IsChasePlayer = false;
 	ColliderMode = CM_RECT;
 }
 
 CMonster::~CMonster()
 {
-
 	SAFE_RELEASE(m_Player);
 }
 
@@ -29,7 +27,6 @@ bool CMonster::Init()
 	if (!CGameObject::Init())
 		return false;
 
-
 	//GET_SINGLE(CScheduler)->AddSchedule<CMinion>("MinionFire", true, 1.f, this, &CMinion::Fire);
 	return true;
 }
@@ -37,13 +34,12 @@ bool CMonster::Init()
 void CMonster::Begin()
 {
 	CGameObject::Begin();
+	InitPos = GetWorldPos();
 }
 
 void CMonster::Update(float fTime)
 {
 	CGameObject::Update(fTime);
-
-
 
 }
 
@@ -52,10 +48,16 @@ void CMonster::Render(float fTime)
 	CGameObject::Render(fTime);
 }
 
+void CMonster::Respawn()
+{
+	SetWorldPos(InitPos);
+	Enable(true);
+}
+
 void CMonster::NearPlayerCheck(Vector3 pPos)
 {
 
-	Vector3 MyPos = GetWorldPos(); 
+	Vector3 MyPos = GetWorldPos();
 	float dist = MyPos.Distance(MyPos, pPos);
 
 
@@ -63,14 +65,14 @@ void CMonster::NearPlayerCheck(Vector3 pPos)
 	{
 		IsChasePlayer = true;
 	}
-	else 
+	else
 	{
 		IsChasePlayer = false;
 	}
 
 }
 
-void CMonster::SetPlayer(CGameObject * pObj)
+void CMonster::SetPlayerInfo(CGameObject * pObj)
 {
 	if (m_Player)
 	{
@@ -100,7 +102,7 @@ int CMonster::LookAt2D(Vector3 pPos)
 	float fDot = vOriginAxis.Dot(vDir);
 
 	if (fDot >= 0.9999f || fDot <= -0.9999f)
-		return 0 ;
+		return 0;
 
 	Vector3 vRotAxis = vOriginAxis.Cross(vDir);
 	//m_vRelative
@@ -112,7 +114,8 @@ int CMonster::LookAt2D(Vector3 pPos)
 	{
 		return 2;
 	}
-	else {
+	else
+	{
 		return 0;
 	}
 }
@@ -122,8 +125,32 @@ int CMonster::GetSkillType()
 	return Skill_Type;
 }
 
+bool CMonster::GetIsUIShow()
+{
+	return IsUIShow;
+}
+
+void CMonster::SetIsUIShow(bool enable)
+{
+	IsUIShow = enable;
+}
+
+void CMonster::SetMonsterName(const char * name)
+{
+	strcpy_s(m_MonsterName, name);
+}
+
+void CMonster::AfterCollisionWithPlayer()
+{
+
+}
+
+
+
 void CMonster::OnBlock(class CColliderBase* pSrc, class CColliderBase* pDest, float fTime)
 {
+
+	SetMonsterName(m_MonsterName);
 
 }
 
@@ -131,4 +158,3 @@ void CMonster::SetHP(int hp)
 {
 	m_Hp = hp;
 }
-

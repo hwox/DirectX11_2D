@@ -2,7 +2,8 @@
 #include "SceneComponent.h"
 #include "../Scene/Navigation2D.h"
 #include "../Scene/Scene.h"
-
+#define GA	900.f   // 중력 가속도
+#define FALLSPEED	0 // 떨어지는 속도
 CMovementComponent::CMovementComponent() :
 	m_pUpdateComponent(nullptr),
 	m_fMoveSpeed(500.f),
@@ -183,3 +184,10 @@ void CMovementComponent::MoveNav(const Vector3 & vTarget)
 		}
 	}
 }
+
+void CMovementComponent::SetGravityUse(Vector3 & _MinYPos)
+{
+	m_UseGravity = true;
+	MinYPos = _MinYPos;
+}
+

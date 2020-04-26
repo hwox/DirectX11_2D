@@ -78,7 +78,7 @@ BOOL CMainFrame::PreCreateWindow(CREATESTRUCT& cs)
 	//  Window 클래스 또는 스타일을 수정합니다.
 	cs.cx = 1600;
 	cs.cy = 800;
-	cs.x = 1;
+	cs.x = 1921;
 	cs.y = 100;
 
 	return TRUE;

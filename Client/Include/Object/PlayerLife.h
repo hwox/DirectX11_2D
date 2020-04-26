@@ -1,5 +1,6 @@
 #pragma once
-#include "Object/GameObject.h"
+#include "E:\200425_ver\Engine\Include\Object\GameObject.h"
+#include "..\Object\PlayerHPBar.h"
 
 //enum Kirby_State
 //{
@@ -10,8 +11,6 @@
 
 
 #define LIFEMAX 5
-
-
 class CPlayerLife :
 	public CGameObject
 {
@@ -27,18 +26,26 @@ private:
 	CUIImage*	m_NumberCount;
 	CUIImage*	m_NumberCount_zero;
 	CUIImage*	m_ImageX;
-	class CPlayer* m_Player;
+
+	class CPlayerHpBar*	m_pHPBar;
 
 	int lifeCount;
 	int KirbyState;
 
+	float m_pHP;
 public:
 	virtual bool Init();
 	virtual void Begin();
 	virtual void Update(float fTime);
 	virtual void Render(float fTime);
 
+
+public:
+
 	void SetLifeCount(int count);
 	void SetKirbyState(int state);
+	void SetHP(float hp);
+	float GetHP();
+
 };
 

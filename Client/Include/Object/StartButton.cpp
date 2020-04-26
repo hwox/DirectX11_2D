@@ -4,7 +4,8 @@
 #include "Input.h"
 #include "Scene/SceneManager.h"
 #include "Scene/Scene.h"
-#include "../GameMode/MainGameMode.h"
+#include "..\GameMode\Stage1Mode.h"
+
 
 CStartButton::CStartButton()
 {
@@ -21,17 +22,20 @@ bool CStartButton::Init()
 	if (!CGameObject::Init())
 		return false;
 
-	m_pButton = CGameObject::CreateComponent<CUIButton>("Button");
+	m_pButton = CGameObject::CreateComponent<CUIButton>("StartButton");
 
 	SetRoot(m_pButton);
 
-	m_pButton->SetRelativeScale(200.f, 200.f, 1.f);
-	m_pButton->SetRelativePos(800.f, 500.f, 0.f);
 
-	m_pButton->SetButtonStyleTexture(BS_NORMAL, "StartButton", TEXT("Start.png"));
-	m_pButton->SetButtonStyleTexture(BS_MOUSEON, "StartButton", TEXT("Start.png"));
-	m_pButton->SetButtonStyleTexture(BS_CLICK, "StartButton", TEXT("Start.png"));
-	m_pButton->SetButtonStyleTexture(BS_DISABLE, "StartButton", TEXT("Start.png"));
+	m_pButton->SetRelativeScale(300.f, 100.f, 1.f);
+	m_pButton->SetRelativePos(800.f, 100.f, 0.f);
+
+
+
+	m_pButton->SetButtonStyleTexture(BS_NORMAL, "StartButton", TEXT("START.png"));
+	m_pButton->SetButtonStyleTexture(BS_MOUSEON, "StartButton2", TEXT("START_2.png"));
+	m_pButton->SetButtonStyleTexture(BS_CLICK, "StartButton", TEXT("START.png"));
+	m_pButton->SetButtonStyleTexture(BS_DISABLE, "StartButton2", TEXT("START_2.png"));
 
 	m_pButton->SetButtonStyleColor(BS_NORMAL, Vector4(0.8f, 0.8f, 0.8f, 1.f));
 	m_pButton->SetButtonStyleColor(BS_MOUSEON, Vector4(1.f, 1.f, 1.f, 1.f));
@@ -62,5 +66,5 @@ void CStartButton::ClickCallback(float fTime)
 {
 	CScene*	pNextScene = GET_SINGLE(CSceneManager)->CreateNextScene();
 
-	pNextScene->SetGameMode<CMainGameMode>();
+	pNextScene->SetGameMode<CStage1Mode>();
 }

@@ -29,10 +29,10 @@ void CEditMapObject::CreateTileMap(TILE_TYPE eType, int iCountX, int iCountY, in
 
 		SetRoot(m_pTileMap);
 	}
-	for (int i = 0; i <= TILE_COUNT; ++i)
+	for (int i = 0; i <= 379; ++i)
 	{
 		m_pTileMap->AddFrame(Vector2(0.f, 0.f),
-			Vector2(16.f, 16.f), Vector2(16.f, 16.f),
+			Vector2(160.f, 80.f), Vector2(160.f, 80.f),
 			IT_ARRAY);
 	}
 	m_pTileMap->CreateTile(eType, iCountX, iCountY, Vector3(iSizeX, iSizeY, 1.f));

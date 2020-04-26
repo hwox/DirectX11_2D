@@ -20,6 +20,9 @@ bool CCharacterMovementComponent::Init()
 	if (!CMovementComponent::Init())
 		return false;
 
+	IsBackStep = false;
+	m_UseGravity = false;
+
 	return true;
 }
 
@@ -59,5 +62,34 @@ void CCharacterMovementComponent::PostUpdate(float fTime)
 		}
 	}
 
+	if (IsBackStep)
+	{
+		AddMovement(Axis * -0.8f);
+	}
+
 	CMovementComponent::PostUpdate(fTime);
+}
+
+void CCharacterMovementComponent::BackStep(const Vector3 & _Axis)
+{
+	Axis = _Axis;
+
+	IsBackStep = true;
+}
+
+void CCharacterMovementComponent::BackStepEnd()
+{
+	IsBackStep = false;
+}
+
+bool CCharacterMovementComponent::GetIsBackStep()
+{
+	return IsBackStep;
+}
+
+void CCharacterMovementComponent::SetGravityUse(Vector3 & _MinYPos)
+{
+	CMovementComponent::SetGravityUse(_MinYPos);
+	MinYPos = _MinYPos;
+
 }

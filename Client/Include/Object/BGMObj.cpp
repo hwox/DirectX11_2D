@@ -18,7 +18,7 @@ bool CBGMObj::Init()
 
 	m_pAudio = CGameObject::CreateComponent<CAudio>("BGM");
 
-	m_pAudio->SetSound("Stage1BGM", true, "Bgm/Stage/bgm_stage_1.mp3");
+	m_pAudio->SetSound("TeemoBGM", true, "TeemoSongAndroid.mp3");
 	m_pAudio->Play();
 
 	SetRoot(m_pAudio);

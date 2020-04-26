@@ -227,7 +227,6 @@
     <ClInclude Include="Object\GameObject.h" />
     <ClInclude Include="PathManager.h" />
     <ClInclude Include="Ref.h" />
-    <ClInclude Include="Render\CustomRenderTarget.h" />
     <ClInclude Include="Render\RenderManager.h" />
     <ClInclude Include="Resource\Animation2DSequence.h" />
     <ClInclude Include="Resource\AnimationMesh.h" />
@@ -297,7 +296,6 @@
     <ClCompile Include="Object\GameObject.cpp" />
     <ClCompile Include="PathManager.cpp" />
     <ClCompile Include="Ref.cpp" />
-    <ClCompile Include="Render\CustomRenderTarget.cpp" />
     <ClCompile Include="Render\RenderManager.cpp" />
     <ClCompile Include="Resource\Animation2DSequence.cpp" />
     <ClCompile Include="Resource\AnimationMesh.cpp" />

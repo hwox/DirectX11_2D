@@ -493,11 +493,11 @@ void CMaterialDlg::OnBnClickedButtonMaterialTextureLoad()
 
 		CString strFolder = dlg.GetFolderPath();
 
-		for (int i = 0; i <= TILE_COUNT; ++i)
+		for (int i = 0; i <= 379; ++i)
 		{
 			TCHAR* pPath = new TCHAR[MAX_PATH];
 
-			wsprintf(pPath, TEXT("%s\\Tile_Test_%d.png"), strFolder, i);
+			wsprintf(pPath, TEXT("%s\\Diablos_Lair_Floor_%d.png"), strFolder, i);
 
 			vecPath.push_back(pPath);
 		}

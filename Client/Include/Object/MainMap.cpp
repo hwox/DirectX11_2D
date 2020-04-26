@@ -24,7 +24,7 @@ bool CMainMap::Init()
 
 	//m_pTileMap->LoadPath("TileMap/Tile.tmp");
 	//m_pTileMap->SetTileMaterial("MainMapTileMaterial");
-	m_pTileMap->LoadPath("TileMap/stage_1.tmp");
+	m_pTileMap->LoadPath("TileMap/IsoTile.tmp");
 	m_pTileMap->SetTileMaterial("MainMapIsoTileMaterial");
 
 	/*for (int i = 0; i < 5; ++i)

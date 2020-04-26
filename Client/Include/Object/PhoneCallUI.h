@@ -1,7 +1,5 @@
 #pragma once
-#include "Object/GameObject.h"
-
-
+#include "E:\200425_ver\Engine\Include\Object\GameObject.h"
 class CPhoneCallUI :
 	public CGameObject
 {

@@ -132,15 +132,6 @@ bool CShaderManager::Init()
 	if (!LoadShader(STANDARD_ANIM2D_INSTANCING_SHADER, pFileName, pEntry))
 		return false;
 
-	pFileName[ST_VERTEX] = TEXT("Share.fx");
-	pFileName[ST_PIXEL] = TEXT("Standard.fx");
-
-	pEntry[ST_VERTEX] = "FullScreenVS";
-	pEntry[ST_PIXEL] = "StandardTexPS";
-
-	if (!LoadShader(FULLSCREEN_SHADER, pFileName, pEntry))
-		return false;
-
 	// Vertex Color InputLayout
 	AddInputDesc("POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT,
 		0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0);

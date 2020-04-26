@@ -13,9 +13,9 @@ CDevice::CDevice()	:
 {
 	memset(m_fClearColor, 0, sizeof(float) * 4);
 
-	m_fClearColor[0] = 228.f / 255.f;
-	m_fClearColor[1] = 247.f / 255.f;
-	m_fClearColor[2] = 186.f / 255.f;
+	m_fClearColor[0] = 20.f / 255.f;
+	m_fClearColor[1] = 5.f / 255.f;
+	m_fClearColor[2] = 0.f / 255.f;
 }
 
 CDevice::~CDevice()

@@ -4,7 +4,7 @@
 #include "Input.h"
 #include "Scene/SceneManager.h"
 #include "Scene/Scene.h"
-#include "../GameMode/MainGameMode.h"
+
 
 CTitle::CTitle()
 {

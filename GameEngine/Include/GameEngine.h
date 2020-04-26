@@ -19,7 +19,6 @@
 #define	STANDARD_ANIM2D_OUTLINE_SHADER		"StandardAnim2DOutLineShader"
 #define	STANDARD_STATIC_INSTANCING_SHADER	"StandardStaticInstancingShader"
 #define	STANDARD_ANIM2D_INSTANCING_SHADER	"StandardAnim2DInstancingShader"
-#define	FULLSCREEN_SHADER			"FullScreenShader"
 #define	UI_SHADER					"UIShader"
 #define	UI_ANIM2D_SHADER			"UIAnim2DShader"
 #define	UI_BAR_SHADER				"UIBarShader"
@@ -48,6 +47,7 @@
 #define	RENDERSTATE_CULLNONE	"CullNone"
 
 
+#define MAX_HP		1000
 
 template <typename T>
 size_t GetTypeID()

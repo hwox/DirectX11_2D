@@ -14,7 +14,6 @@
 #include "Component/ColliderRect.h"
 #include "Component/ColliderSphere2D.h"
 #include "Component/ColliderOBB2D.h"
-#include "EffectSoundObj.h"
 
 
 CTestObject::CTestObject()
@@ -73,11 +72,11 @@ bool CTestObject::Init()
 
 	m_pAnimation = CAnimation2D::CreateAnimation2D<CAnimation2D>();
 
-	m_pAnimation->AddAnimation2DSequence("WaddleDeeIdle");
-	//m_pAnimation->AddAnimation2DSequence("MinionWalk");
-	//m_pAnimation->AddAnimation2DSequence("MinionKick");
+	m_pAnimation->AddAnimation2DSequence("MinionIdle");
+	m_pAnimation->AddAnimation2DSequence("MinionWalk");
+	m_pAnimation->AddAnimation2DSequence("MinionKick");
 
-	//m_pAnimation->SetReturnSequenceName("MinionKick", "MinionIdle");
+	m_pAnimation->SetReturnSequenceName("MinionKick", "MinionIdle");
 
 	m_pMesh->SetAnimation2D(m_pAnimation);
 
@@ -173,7 +172,7 @@ bool CTestObject::Init()
 	GET_SINGLE(CInput)->BindAxis<CTestObject>("RotationZ", this, &CTestObject::MoveSide);
 
 	GET_SINGLE(CInput)->AddActionKey("Fire", DIK_SPACE);
-	GET_SINGLE(CInput)->BindAction<CTestObject>("Fire", AKS_PRESS, this, &CTestObject::Fire);
+	GET_SINGLE(CInput)->BindAction<CTestObject>("Fire", AKS_PUSH, this, &CTestObject::Fire);
 
 	GET_SINGLE(CInput)->AddActionKey("DeleteChild", DIK_RETURN);
 	GET_SINGLE(CInput)->BindAction<CTestObject>("DeleteChild", AKS_PRESS, this, &CTestObject::Delete);
@@ -305,13 +304,6 @@ void CTestObject::Fire(float fTime)
 	pBody->SetCollisionProfile("PlayerProjectile");
 
 	SAFE_RELEASE(pBullet);
-
-	CEffectSoundObj*	pFireSound	= m_pScene->SpawnObject<CEffectSoundObj>(GetWorldPos() + GetWorldAxis(AXIS_Y) * 200.f,
-		Vector3(0.f, 0.f, GetRelativeRot().z));
-
-	pFireSound->SetSound("Demasia", "Demasia.mp3");
-
-	SAFE_RELEASE(pFireSound);
 }
 
 void CTestObject::Delete(float fTime)
@@ -368,6 +360,5 @@ void CTestObject::AttackBufEnd()
 
 void CTestObject::OnBlock(CColliderBase * pSrc, CColliderBase * pDest, float fTime)
 {
-
 	OutputDebugString(TEXT("Block\n"));
 }

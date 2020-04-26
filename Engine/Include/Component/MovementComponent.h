@@ -19,6 +19,8 @@ protected:
 	Vector3	m_vRotation;
 	Vector3	m_vTarget;
 	list<Vector3>	m_PathList;
+	bool m_UseGravity;
+	Vector3 MinYPos;
 
 public:
 	float GetVelocity()	const;
@@ -47,5 +49,6 @@ public:
 	virtual void TeleportMovementTarget(const Vector3& vTarget);
 	virtual void MoveNav(const Vector3& vTarget);
 
+	virtual void SetGravityUse(Vector3 & _MinYPos);
 };
 

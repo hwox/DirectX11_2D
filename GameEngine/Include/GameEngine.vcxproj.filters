@@ -127,12 +127,6 @@
     <Filter Include="05. Component\01. Scene\08. Audio">
       <UniqueIdentifier>{08ab760a-ffd2-41af-86ed-c9aab1b5af4b}</UniqueIdentifier>
     </Filter>
-    <Filter Include="05. Component\01. Scene\09. Particle">
-      <UniqueIdentifier>{4eec53a2-6774-4ea4-9a38-674c18d8a516}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="06. Render\01. Target">
-      <UniqueIdentifier>{6d2b0573-5afb-4f00-ab16-25e124ac3baa}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Types.h">
@@ -375,9 +369,6 @@
     <ClInclude Include="Component\Audio.h">
       <Filter>05. Component\01. Scene\08. Audio</Filter>
     </ClInclude>
-    <ClInclude Include="Render\CustomRenderTarget.h">
-      <Filter>06. Render\01. Target</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine.cpp">
@@ -574,9 +565,6 @@
     </ClCompile>
     <ClCompile Include="Component\Audio.cpp">
       <Filter>05. Component\01. Scene\08. Audio</Filter>
-    </ClCompile>
-    <ClCompile Include="Render\CustomRenderTarget.cpp">
-      <Filter>06. Render\01. Target</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

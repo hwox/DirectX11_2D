@@ -20,7 +20,6 @@
 #include "../Engine.h"
 #include "../Component/Text.h"
 #include "../Component/UI.h"
-#include "CustomRenderTarget.h"
 
 DEFINITION_SINGLE(CRenderManager)
 
@@ -39,7 +38,6 @@ CRenderManager::CRenderManager()
 
 	m_pCullNone	= nullptr;
 	m_pNoneDepth	= nullptr;
-	m_p2DMainTarget	= nullptr;
 
 	m_vecInstancing.resize(10);
 	m_vecStaticData.resize(10);
@@ -111,8 +109,6 @@ CRenderManager::~CRenderManager()
 		SAFE_DELETE(m_vecAnim2DInstancing[i].pBuffer)
 	}
 
-	SAFE_DELETE_NORMAL_MAP(m_mapRenderTarget);
-
 	SAFE_RELEASE(m_pCullNone);
 	SAFE_RELEASE(m_pNoneDepth);
 }
@@ -127,55 +123,10 @@ RENDER_MODE CRenderManager::GetRenderMode() const
 	return m_eRenderMode;
 }
 
-bool CRenderManager::CreateRenderTarget(const string & strName, DXGI_FORMAT eTargetFmt, const Vector3 & vPos,
-	const Vector3 & vScale, const Resolution & tRS, bool bOnDebug, const Vector4 & vClearColor,
-	DXGI_FORMAT eDepthFmt)
-{
-	CCustomRenderTarget*	pTarget = FindRenderTarget(strName);
-
-	if (pTarget)
-		return false;
-
-	pTarget = new CCustomRenderTarget;
-
-	if (!pTarget->CreateRenderTarget(strName, eTargetFmt,
-		vPos, vScale, tRS, eDepthFmt))
-	{
-		SAFE_DELETE(pTarget);
-		return false;
-	}
-
-	pTarget->SetClearColor(vClearColor);
-	pTarget->ONDebug(bOnDebug);
-
-	hash<string>	h;
-
-	m_mapRenderTarget.insert(make_pair(h(strName), pTarget));
-
-	return true;
-}
-
-CCustomRenderTarget * CRenderManager::FindRenderTarget(const string & strName)
-{
-	hash<string>	h;
-
-	auto	iter = m_mapRenderTarget.find(h(strName));
-
-	if (iter == m_mapRenderTarget.end())
-		return nullptr;
-
-	return iter->second;
-}
-
 bool CRenderManager::Init()
 {
 	m_pNoneDepth = (CDepthStencilState*)GET_SINGLE(CResourceManager)->FindRenderState(RENDERSTATE_NONEDEPTH);
 	m_pCullNone	= (CRasterizerState*)GET_SINGLE(CResourceManager)->FindRenderState(RENDERSTATE_CULLNONE);
-
-	CreateRenderTarget("2DMain", DXGI_FORMAT_R8G8B8A8_UNORM, Vector3(0.f, 0.f, 0.f), Vector3(100.f, 100.f, 1.f),
-		_RESOLUTION, true);
-
-	m_p2DMainTarget	= FindRenderTarget("2DMain");
 
 	return true;
 }
@@ -443,9 +394,6 @@ void CRenderManager::Render(float fTime)
 
 		if (m_vecRender[RG_UI].size() >= 2)
 			sort(m_vecRender[RG_UI].begin(), m_vecRender[RG_UI].begin() + m_iAddCount[RG_UI], CRenderManager::SortZOrder);
-
-		// 2D용 Main RenderTarget 지정
-		//m_p2DMainTarget->SetTarget();
 	}
 
 	else
@@ -465,24 +413,19 @@ void CRenderManager::Render(float fTime)
 		m_iAddCount[i]	= 0;
 	}
 	
+	GET_SINGLE(CInput)->Render(fTime);
+
 	m_iTotalRenderCount	= 0;
 
 	if (m_eRenderMode == RM_2D)
 	{
-		//m_p2DMainTarget->ResetTarget();
-
-		// 2D 타겟을 최종 백버퍼에 출력한다.
-		//m_p2DMainTarget->RenderFullScreen();
-
-		GET_SINGLE(CInput)->Render(fTime);
-
 		m_pNoneDepth->ResetState();
 		m_pCullNone->ResetState();
 	}
 
 	else
 	{
-		GET_SINGLE(CInput)->Render(fTime);
+
 	}
 }
 

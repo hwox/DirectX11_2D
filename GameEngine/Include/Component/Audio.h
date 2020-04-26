@@ -17,10 +17,6 @@ private:
 	string	m_strChannelGroup;
 	bool	m_bPlay;
 	int		m_iVolume;
-	function<void()>	m_FinishCallback;
-
-public:
-	bool IsPlay()	const;
 
 public:
 	void SetSound(const string& strName);

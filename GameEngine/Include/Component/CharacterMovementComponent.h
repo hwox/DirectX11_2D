@@ -5,6 +5,9 @@ class ENGINE_DLL CCharacterMovementComponent :
 {
 	friend class CGameObject;
 
+	bool IsBackStep;
+	Vector3 Axis;
+
 protected:
 	CCharacterMovementComponent();
 	CCharacterMovementComponent(const CCharacterMovementComponent& com);
@@ -15,5 +18,10 @@ public:
 	virtual void Begin();
 	virtual void Update(float fTime);
 	virtual void PostUpdate(float fTime);
+
+	void BackStep(const Vector3 & vVelocity);
+	void BackStepEnd();
+	bool GetIsBackStep();
+	void SetGravityUse(Vector3 & _MinYPos);
 };
 

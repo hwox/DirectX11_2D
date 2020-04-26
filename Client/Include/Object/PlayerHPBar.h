@@ -1,14 +1,14 @@
 #pragma once
-#include "Object/GameObject.h"
+#include "E:\200425_ver\Engine\Include\Object\GameObject.h"
 
-class CPlayerHPBar :
+class CPlayerHpBar :
 	public CGameObject
 {
 	GAMEOBJECT_DEFAULT()
 
 public:
-	CPlayerHPBar();
-	~CPlayerHPBar();
+	CPlayerHpBar();
+	~CPlayerHpBar();
 
 private:
 	class CUIBar*	m_pBar;
@@ -22,5 +22,7 @@ public:
 	virtual void Update(float fTime);
 	virtual void Render(float fTime);
 
+public:
+	void SetPercentHPBar(float percent);
 };
 

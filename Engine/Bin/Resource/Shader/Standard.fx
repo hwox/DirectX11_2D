@@ -61,6 +61,18 @@ PS_OUTPUT_SINGLE StandardColorPS(VS_OUTPUT_COLOR input)
 }
 
 
+struct VS_INPUT_TEX
+{
+	float3	vPos	: POSITION;
+	float2	vUV		: TEXCOORD;
+};
+
+struct VS_OUTPUT_TEX
+{
+	float4	vPos	: SV_POSITION;
+	float2	vUV		: TEXCOORD;
+};
+
 VS_OUTPUT_TEX StandardTexVS(VS_INPUT_TEX input)
 {
 	VS_OUTPUT_TEX	output = (VS_OUTPUT_TEX)0;

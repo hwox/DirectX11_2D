@@ -26,21 +26,10 @@ private:
 	size_t		m_iAnim2DInstancingAddCount;
 	vector<PAnim2DInstancingData>	m_vecAnim2DData;
 	int			m_iTotalRenderCount;
-	unordered_map<size_t, class CCustomRenderTarget*>	m_mapRenderTarget;
-	class CCustomRenderTarget*		m_p2DMainTarget;
 
 public:
 	void SetRenderMode(RENDER_MODE eMode);
 	RENDER_MODE GetRenderMode()	const;
-
-public:
-	bool CreateRenderTarget(const string& strName, DXGI_FORMAT eTargetFmt,
-		const Vector3& vPos, const Vector3& vScale,
-		const Resolution& tRS, bool bOnDebug = true,
-		const Vector4& vClearColor = Vector4(0.f, 0.f, 0.f, 0.f),
-		DXGI_FORMAT eDepthFmt = DXGI_FORMAT_UNKNOWN);
-
-	class CCustomRenderTarget* FindRenderTarget(const string& strName);
 
 public:
 	bool Init();

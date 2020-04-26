@@ -22,6 +22,13 @@ public:
 	Matrix GetViewMatrix()	const;
 	Matrix GetProjMatrix()	const;
 
+	float minX;
+	float maxX;
+	float minY;
+	float maxY;
+
+	void SetCameraPosLimit(float _minX, float _maxX, float _minY, float _maxY);
+
 private:
 	void ComputeMatrix();
 

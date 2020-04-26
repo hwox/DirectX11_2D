@@ -19,29 +19,32 @@
     <Filter Include="02. Object">
       <UniqueIdentifier>{b88aec31-b45c-4ec8-83a8-bc70ab984812}</UniqueIdentifier>
     </Filter>
-    <Filter Include="01. GameMode\Stage">
-      <UniqueIdentifier>{98d13899-4880-4275-9a34-ba733da67765}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="01. GameMode\Title">
-      <UniqueIdentifier>{22fbaf4a-9181-46ee-b498-cf908c411f9a}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02. Object\Player">
-      <UniqueIdentifier>{4e02fcd4-0ec8-42ca-85cf-fb6573e65680}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02. Object\UI">
-      <UniqueIdentifier>{b53550f4-6058-4d00-8d91-886f762a2b6a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02. Object\BGM">
-      <UniqueIdentifier>{027509a4-cd37-4219-afe6-6eba65bb2876}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02. Object\Monster">
-      <UniqueIdentifier>{e4270927-5d36-4684-99a9-e5b3b531ba3f}</UniqueIdentifier>
+      <UniqueIdentifier>{ce13953e-44e6-4785-8a20-782142d2b406}</UniqueIdentifier>
     </Filter>
     <Filter Include="02. Object\Effect">
-      <UniqueIdentifier>{aefdbb24-9ce1-4de3-9d86-62327c82040d}</UniqueIdentifier>
+      <UniqueIdentifier>{8cf972a0-d582-4e2a-bd10-cf8b6d1f2c3e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. Object\Map">
+      <UniqueIdentifier>{c6dba994-95a0-40a5-8536-21eaabfa73b5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. Object\Monster">
+      <UniqueIdentifier>{a6ff376f-b80e-4bd0-b885-f1ec61dcdde4}</UniqueIdentifier>
     </Filter>
     <Filter Include="02. Object\Test">
-      <UniqueIdentifier>{2e5a7727-4121-43a6-8f93-851e823e95a2}</UniqueIdentifier>
+      <UniqueIdentifier>{ba1b0cd8-e8a7-47c9-b99a-84084ec9eb09}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. Object\UI">
+      <UniqueIdentifier>{814bf397-c5c4-40cf-a9c9-a3777462f9d3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. Manager">
+      <UniqueIdentifier>{cb385ac1-79f6-40cb-a98f-ae51db420739}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. GameMode\Stage">
+      <UniqueIdentifier>{47ee6db4-5d0d-4e72-8abc-4b45a944f8a4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. GameMode\Title">
+      <UniqueIdentifier>{743d82d4-2df2-4e67-9498-36405cdf23b0}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -54,50 +57,8 @@
     <ClCompile Include="Object\Title.cpp">
       <Filter>02. Object</Filter>
     </ClCompile>
-    <ClCompile Include="GameMode\MainGameMode.cpp">
-      <Filter>01. GameMode\Stage</Filter>
-    </ClCompile>
-    <ClCompile Include="GameMode\StartGameMode.cpp">
-      <Filter>01. GameMode\Title</Filter>
-    </ClCompile>
-    <ClCompile Include="Object\PlayerHPBar.cpp">
-      <Filter>02. Object\UI</Filter>
-    </ClCompile>
     <ClCompile Include="Object\BGMObj.cpp">
-      <Filter>02. Object\BGM</Filter>
-    </ClCompile>
-    <ClCompile Include="Object\EffectSoundObj.cpp">
-      <Filter>02. Object\BGM</Filter>
-    </ClCompile>
-    <ClCompile Include="PhoneCallUI.cpp">
-      <Filter>02. Object\UI</Filter>
-    </ClCompile>
-    <ClCompile Include="Object\Player.cpp">
-      <Filter>02. Object\Player</Filter>
-    </ClCompile>
-    <ClCompile Include="Object\PlayerLife.cpp">
-      <Filter>02. Object\Player</Filter>
-    </ClCompile>
-    <ClCompile Include="Object\MonsterInfoUI.cpp">
-      <Filter>02. Object\Monster</Filter>
-    </ClCompile>
-    <ClCompile Include="Object\Monster.cpp">
-      <Filter>02. Object\Monster</Filter>
-    </ClCompile>
-    <ClCompile Include="Object\Effect.cpp">
-      <Filter>02. Object\Effect</Filter>
-    </ClCompile>
-    <ClCompile Include="Object\Bullet.cpp">
-      <Filter>02. Object\Effect</Filter>
-    </ClCompile>
-    <ClCompile Include="Object\StartButton.cpp">
-      <Filter>02. Object\UI</Filter>
-    </ClCompile>
-    <ClCompile Include="Object\TestBar.cpp">
-      <Filter>02. Object\Test</Filter>
-    </ClCompile>
-    <ClCompile Include="Object\TestButton.cpp">
-      <Filter>02. Object\Test</Filter>
+      <Filter>02. Object</Filter>
     </ClCompile>
     <ClCompile Include="Object\TestObject.cpp">
       <Filter>02. Object\Test</Filter>
@@ -108,11 +69,53 @@
     <ClCompile Include="Object\ChildObj.cpp">
       <Filter>02. Object\Test</Filter>
     </ClCompile>
+    <ClCompile Include="Object\Bullet.cpp">
+      <Filter>02. Object\Effect</Filter>
+    </ClCompile>
     <ClCompile Include="Object\Minion.cpp">
       <Filter>02. Object\Test</Filter>
     </ClCompile>
+    <ClCompile Include="Object\Player.cpp">
+      <Filter>02. Object\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="Object\PlayerLife.cpp">
+      <Filter>02. Object\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="Object\Monster.cpp">
+      <Filter>02. Object\Monster</Filter>
+    </ClCompile>
     <ClCompile Include="Object\WaddleDee.cpp">
       <Filter>02. Object\Monster</Filter>
+    </ClCompile>
+    <ClCompile Include="Object\StartButton.cpp">
+      <Filter>02. Object\Test</Filter>
+    </ClCompile>
+    <ClCompile Include="Object\TestBar.cpp">
+      <Filter>02. Object\Test</Filter>
+    </ClCompile>
+    <ClCompile Include="Object\TestButton.cpp">
+      <Filter>02. Object\Test</Filter>
+    </ClCompile>
+    <ClCompile Include="Object\PlayerHpBar.cpp">
+      <Filter>02. Object\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Object\PhoneCallUI.cpp">
+      <Filter>02. Object\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="EffectList.cpp">
+      <Filter>03. Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="GameMode\StartGameMode.cpp">
+      <Filter>01. GameMode\Title</Filter>
+    </ClCompile>
+    <ClCompile Include="Object\Stage1Map.cpp">
+      <Filter>02. Object\Map</Filter>
+    </ClCompile>
+    <ClCompile Include="Object\StartMap.cpp">
+      <Filter>02. Object\Map</Filter>
+    </ClCompile>
+    <ClCompile Include="GameMode\Stage1Mode.cpp">
+      <Filter>01. GameMode\Stage</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -128,23 +131,23 @@
     <ClInclude Include="Object\Title.h">
       <Filter>02. Object</Filter>
     </ClInclude>
-    <ClInclude Include="GameMode\MainGameMode.h">
-      <Filter>01. GameMode\Stage</Filter>
-    </ClInclude>
-    <ClInclude Include="GameMode\StartGameMode.h">
-      <Filter>01. GameMode\Title</Filter>
-    </ClInclude>
-    <ClInclude Include="Object\PlayerHPBar.h">
-      <Filter>02. Object\UI</Filter>
-    </ClInclude>
     <ClInclude Include="Object\BGMObj.h">
-      <Filter>02. Object\BGM</Filter>
+      <Filter>02. Object</Filter>
     </ClInclude>
-    <ClInclude Include="Object\EffectSoundObj.h">
-      <Filter>02. Object\BGM</Filter>
+    <ClInclude Include="Object\TestPixelCollision.h">
+      <Filter>02. Object\Test</Filter>
     </ClInclude>
-    <ClInclude Include="Object\PhoneCallUI.h">
-      <Filter>02. Object\UI</Filter>
+    <ClInclude Include="Object\TestObject.h">
+      <Filter>02. Object\Test</Filter>
+    </ClInclude>
+    <ClInclude Include="Object\ChildObj.h">
+      <Filter>02. Object\Test</Filter>
+    </ClInclude>
+    <ClInclude Include="Object\Bullet.h">
+      <Filter>02. Object\Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="Object\Minion.h">
+      <Filter>02. Object\Test</Filter>
     </ClInclude>
     <ClInclude Include="Object\Player.h">
       <Filter>02. Object\Player</Filter>
@@ -152,20 +155,14 @@
     <ClInclude Include="Object\PlayerLife.h">
       <Filter>02. Object\Player</Filter>
     </ClInclude>
-    <ClInclude Include="Object\MonsterInfoUI.h">
-      <Filter>02. Object\Monster</Filter>
-    </ClInclude>
     <ClInclude Include="Object\Monster.h">
       <Filter>02. Object\Monster</Filter>
     </ClInclude>
-    <ClInclude Include="Object\Effect.h">
-      <Filter>02. Object\Effect</Filter>
-    </ClInclude>
-    <ClInclude Include="Object\Bullet.h">
-      <Filter>02. Object\Effect</Filter>
+    <ClInclude Include="Object\WaddleDee.h">
+      <Filter>02. Object\Monster</Filter>
     </ClInclude>
     <ClInclude Include="Object\StartButton.h">
-      <Filter>02. Object\UI</Filter>
+      <Filter>02. Object\Test</Filter>
     </ClInclude>
     <ClInclude Include="Object\TestBar.h">
       <Filter>02. Object\Test</Filter>
@@ -173,20 +170,26 @@
     <ClInclude Include="Object\TestButton.h">
       <Filter>02. Object\Test</Filter>
     </ClInclude>
-    <ClInclude Include="Object\TestObject.h">
-      <Filter>02. Object\Test</Filter>
+    <ClInclude Include="Object\PlayerHpBar.h">
+      <Filter>02. Object\UI</Filter>
     </ClInclude>
-    <ClInclude Include="Object\TestPixelCollision.h">
-      <Filter>02. Object\Test</Filter>
+    <ClInclude Include="Object\PhoneCallUI.h">
+      <Filter>02. Object\UI</Filter>
     </ClInclude>
-    <ClInclude Include="Object\ChildObj.h">
-      <Filter>02. Object\Test</Filter>
+    <ClInclude Include="Manager\EffectList.h">
+      <Filter>03. Manager</Filter>
     </ClInclude>
-    <ClInclude Include="Object\Minion.h">
-      <Filter>02. Object\Test</Filter>
+    <ClInclude Include="GameMode\StartGameMode.h">
+      <Filter>01. GameMode\Title</Filter>
     </ClInclude>
-    <ClInclude Include="Object\WaddleDee.h">
-      <Filter>02. Object\Monster</Filter>
+    <ClInclude Include="Object\Stage1Map.h">
+      <Filter>02. Object\Map</Filter>
+    </ClInclude>
+    <ClInclude Include="Object\StartMap.h">
+      <Filter>02. Object\Map</Filter>
+    </ClInclude>
+    <ClInclude Include="GameMode\Stage1Mode.h">
+      <Filter>01. GameMode\Stage</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

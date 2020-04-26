@@ -1,8 +1,7 @@
 #include "PlayerLife.h"
 #include "Component/UIImage.h"
 #include "EngineGlobals.h"
-#include "Player.h"
-
+#include "..\Object\PlayerHpBar.h"
 
 CPlayerLife::CPlayerLife()
 {
@@ -10,16 +9,18 @@ CPlayerLife::CPlayerLife()
 	m_ImageX = nullptr;
 	m_NumberCount = nullptr;
 	m_NumberCount_zero = nullptr;
+	m_pHPBar = nullptr;
+
+	m_pHP = MAX_HP;
 }
 
 CPlayerLife::~CPlayerLife()
 {
-
-	SAFE_RELEASE(m_Image);
+	SAFE_RELEASE(m_pHPBar);
 	SAFE_RELEASE(m_ImageX);
-	SAFE_RELEASE(m_NumberCount);
 	SAFE_RELEASE(m_NumberCount_zero);
-
+	SAFE_RELEASE(m_NumberCount);
+	SAFE_RELEASE(m_Image);
 }
 
 bool CPlayerLife::Init()
@@ -34,8 +35,13 @@ bool CPlayerLife::Init()
 	m_ImageX = CGameObject::CreateComponent<CUIImage>("PlayerInfo_UIImageX");
 	m_NumberCount_zero = CGameObject::CreateComponent<CUIImage>("PlayerInfo_NumberCount_zero");
 
+	m_pHPBar = m_pScene->SpawnObject<CPlayerHpBar>();
+	//SAFE_RELEASE(m_pHPBar);
+	// ¾êµµ 
 
 	SetRoot(m_ImageX);
+
+	//m_ImageX->AddChild(m_pHPBar, TR_POS);
 
 	m_ImageX->AddChild(m_Image, TR_POS);
 	m_ImageX->AddChild(m_NumberCount, TR_POS);
@@ -81,10 +87,12 @@ void CPlayerLife::Begin()
 void CPlayerLife::Update(float fTime)
 {
 	CGameObject::Update(fTime);
-	if (GetAsyncKeyState(VK_F4) & 0x8000)
+
+	if (m_pHP < 0)
 	{
-		SetLifeCount(2);
+		SetLifeCount(lifeCount--);
 	}
+	m_pHPBar->SetPercentHPBar(m_pHP / MAX_HP);
 
 }
 
@@ -96,7 +104,6 @@ void CPlayerLife::Render(float fTime)
 void CPlayerLife::SetLifeCount(int count)
 {
 	lifeCount = count;
-
 	TCHAR	strTempImagePath[MAX_PATH] = {};
 	wsprintf(strTempImagePath, TEXT("UI/PlayerInfo/life/kirby_life_ui_count/kirby_life_ui_count_%d.png"), count);
 
@@ -105,7 +112,6 @@ void CPlayerLife::SetLifeCount(int count)
 	sprintf_s(strKey, "PlayerInfo_NumberCount%d", count);
 
 	m_NumberCount->SetTexture(strKey, strTempImagePath);
-
 }
 
 void CPlayerLife::SetKirbyState(int state)
@@ -117,4 +123,15 @@ void CPlayerLife::SetKirbyState(int state)
 
 	//m_Image->SetTexture("PlayerInfo_UIImage", strImageFileName);
 }
+
+void CPlayerLife::SetHP(float hp)
+{
+	m_pHP = hp;
+}
+
+float CPlayerLife::GetHP()
+{
+	return m_pHP;
+}
+
 

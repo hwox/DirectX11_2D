@@ -22,14 +22,7 @@ CGameObject::~CGameObject()
 
 	for (size_t i = 0; i < iSize; ++i)
 	{
-		CSceneComponent*	pParent = m_vecChild[i]->m_pRootComponent->m_pParent;
-
-		if (!pParent)
-			return;
-
-		pParent->DeleteChild(m_vecChild[i]->m_pRootComponent);
-
-		m_vecChild[i]->Release();
+		DeleteChild(m_vecChild[i]);
 	}
 
 	SAFE_RELEASE_VECLIST(m_BeginList);

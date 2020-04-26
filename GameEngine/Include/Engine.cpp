@@ -138,8 +138,6 @@ void CEngine::Logic()
 {
 	m_pTimer->Update();
 
-	GET_SINGLE(CResourceManager)->UpdateSound();
-
 	float	fTime = m_pTimer->GetDeltaTime();
 
 	GET_SINGLE(CInput)->Update(fTime);
@@ -212,7 +210,7 @@ BOOL CEngine::Create(const TCHAR * pClass, const TCHAR * pTitle)
 
 #ifdef LECTURE
 	x = 0;
-	y = 100;
+	y = 0;
 #endif // LECTURE
 
 

@@ -27,6 +27,18 @@ cbuffer	Bar	: register(b11)
 #define	BAR_TOPFROMBOTTOM	2
 #define	BAR_BOTTOMFROMTOP	3
 
+struct VS_INPUT_TEX
+{
+	float3	vPos	: POSITION;
+	float2	vUV		: TEXCOORD;
+};
+
+struct VS_OUTPUT_TEX
+{
+	float4	vPos	: SV_POSITION;
+	float2	vUV		: TEXCOORD;
+};
+
 struct PS_OUTPUT_SINGLE
 {
 	float4	vColor	: SV_TARGET;
