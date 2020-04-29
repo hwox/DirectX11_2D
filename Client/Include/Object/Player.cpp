@@ -18,13 +18,15 @@
 #include "..\Object\PlayerLife.h"
 
 
+#define STAND_SCALE				130.f
+#define JUMP_SCALE				200.f
+#define EAT_SCALE				180.f
+#define EATMONSTER_SCALE		160.f
+#define INIT_YPOS				 250.f
+#define STAND_MASS				1.f
+#define FAT_MASS				10.f
 
-#define STAND_SCALE		170.f
-#define JUMP_SCALE		210.f
-#define EAT_SCALE		190.f
-#define INIT_YPOS		 250.f
-#define STAND_MASS		1.f
-#define FAT_MASS		10.f
+#define STAND_SPEED				500.f
 
 CPlayer::CPlayer()
 {
@@ -35,16 +37,12 @@ CPlayer::CPlayer()
 	m_pChild1Mesh = nullptr;
 	m_pMesh = nullptr;
 	m_pMovement = nullptr;
-	m_Zone = nullptr;
 	m_pLifeBar = nullptr;
 	BackImage = nullptr;
 	m_pMapBody = nullptr;
 	//m_pEffect = nullptr;
-
-	EatProcess = 0;
-	IsAirMouse = false;
 	m_KirbyState = 0;
-
+	m_pEatMonster = nullptr;
 
 	m_IsMove = true;
 
@@ -53,12 +51,11 @@ CPlayer::CPlayer()
 	m_pLifeCount = 3;
 
 	/////////////////   JUMP   /////////////////
-	m_pJumpEnable = true;
+
 	m_pMass = STAND_MASS;
-	g = 1.f;
 	jump_time = 0.1f;
 	press_time = 0.f;
-	jump_temp = 0.f;
+
 
 
 	m_pHasMonster = false;
@@ -66,12 +63,13 @@ CPlayer::CPlayer()
 	m_pIsJumping = false;
 	m_pNowEating = false;
 
+	JumpAnimationChangeOnce = false;
 }
 
 CPlayer::~CPlayer()
 {
-	SAFE_RELEASE(m_Zone);
 	//SAFE_RELEASE(m_pEffect);
+	SAFE_RELEASE(m_pEatMonster);
 	SAFE_RELEASE(BackImage);
 	SAFE_RELEASE(m_pLifeBar);
 	SAFE_RELEASE(m_pMapBody);
@@ -82,6 +80,7 @@ CPlayer::~CPlayer()
 	SAFE_RELEASE(m_pRotPivot);
 	SAFE_RELEASE(m_pChild1Mesh);
 	SAFE_RELEASE(m_pMesh);
+
 }
 
 bool CPlayer::Init()
@@ -107,7 +106,7 @@ bool CPlayer::Init()
 	m_pMesh->SetAnimation2D(m_pAnimation);
 	m_pMesh->AddChild(m_pBody, TR_POS);
 
-	m_pBody->SetExtent(200.f, 200.f);
+	m_pBody->SetExtent(STAND_SCALE, STAND_SCALE);
 	m_pBody->SetPivot(0.5f, 0.f, 0.f);
 	m_pBody->AddBlockCallback<CPlayer>(this, &CPlayer::StruckedByMonster);
 	m_pBody->SetCollisionProfile("Player");
@@ -139,9 +138,7 @@ bool CPlayer::Init()
 	m_pCamera->SetCameraType(CT_ORTHOGONAL);
 
 	m_pCamera->SetRelativePos(_RESOLUTION.iWidth / -2.f, _RESOLUTION.iHeight / -6.f, -20.f);
-	//	m_pCamera->SetRelativePos(0.f,0.f, -20.f);
-
-
+	m_pCamera->SetCameraPosLimit(StageMinX, StageMaxX, StageMinY, StageMaxY);
 	m_pMesh->AddChild(m_pRotPivot, TR_POS | TR_ROT);
 
 
@@ -149,7 +146,7 @@ bool CPlayer::Init()
 	m_pMovement->SetUpdateComponent(m_pMesh);
 
 
-	m_pMesh->SetRelativePos(1000.f, 250.f, 0.f);
+	m_pMesh->SetRelativePos(1000.f, INIT_YPOS, 0.f);
 	m_pMesh->SetRelativeScale(STAND_SCALE, STAND_SCALE, 1.f);
 	m_pMesh->SetPivot(0.5f, 0.f, 0.f);
 
@@ -158,6 +155,7 @@ bool CPlayer::Init()
 
 	PlayerKeySetting();
 
+	m_pMovement->SetMoveSpeed(STAND_SPEED);
 
 	return true;
 }
@@ -192,19 +190,19 @@ void CPlayer::Update(float fTime)
 		m_pMovement->MoveNav(vTarget);
 	}
 
-	if (m_pNowEating)
-	{
-		// 먹고 있는 상태라서 지금 그 구간 만들어야 하는 상태
-		MakeAirZone(fTime);
-	}
-
-	if (m_pIsJumping)
-	{
-		ComputeJump(fTime);
-	}
 
 
-	//CamLimit(fTime);
+	//if (m_pNowEating)
+	//{
+	//	// 먹고 있는 상태라서 지금 그 구간 만들어야 하는 상태
+	//	MakeAirZone(fTime);
+	//}
+
+
+	ComputeJump(fTime);
+
+
+	CamLimit(fTime);
 }
 
 void CPlayer::Render(float fTime)
@@ -288,6 +286,12 @@ void CPlayer::SetPlayerAnimation()
 	m_pAnimation->AddAnimation2DSequence("KirbyDigestMonster");
 	m_pAnimation->AddAnimation2DSequence("KirbyDigest");
 	m_pAnimation->AddAnimation2DSequence("KirbySplitStar");
+	m_pAnimation->AddAnimation2DSequence("KirbyJumpUp");
+	m_pAnimation->AddAnimation2DSequence("KirbyJumpDown");
+	m_pAnimation->AddAnimation2DSequence("KirbyMonsterWalk");
+	m_pAnimation->AddAnimation2DSequence("KirbyMonsterJump");
+	m_pAnimation->AddAnimation2DSequence("KirbyMonsterJumpUp");
+	m_pAnimation->AddAnimation2DSequence("KirbyMonsterIdle");
 }
 
 void CPlayer::MoveSide(float fScale, float fTime)
@@ -296,10 +300,18 @@ void CPlayer::MoveSide(float fScale, float fTime)
 	if (m_IsMove) {
 		if (fScale != 0.f)
 		{
-			if (!m_pHasAir /*&& !m_pNowEating*/)
+			if (!m_pHasAir /*&& !m_pNowEating*/ && !JumpUp && !JumpDown && !m_pHasMonster)
 			{
 				m_pAnimation->ChangeAnimation("KirbyWalk");
+				m_pMesh->SetRelativeScale(STAND_SCALE, STAND_SCALE, 1.f);
+				m_pBody->SetRelativeScale(STAND_SCALE, STAND_SCALE, 1.f);
 
+			}
+			else if (m_pHasMonster)
+			{
+				m_pAnimation->ChangeAnimation("KirbyMonsterWalk");
+				m_pMesh->SetRelativeScale(EATMONSTER_SCALE, EATMONSTER_SCALE, 1.f);
+				m_pBody->SetRelativeScale(EATMONSTER_SCALE, EATMONSTER_SCALE, 1.f);
 			}
 			if (fScale < 0.f)
 				m_pMesh->SetRelativeRotationY(180.f);
@@ -312,11 +324,14 @@ void CPlayer::MoveSide(float fScale, float fTime)
 
 		else
 		{
-			if (!m_pHasAir && !m_pNowEating)
+			if (!m_pHasAir && !m_pNowEating && !JumpUp && !JumpDown && !m_pHasMonster)
 			{
 				m_pAnimation->ChangeAnimation("KirbyIdle");
 			}
-
+			else if (m_pHasMonster)
+			{
+				m_pAnimation->ChangeAnimation("KirbyMonsterIdle");
+			}
 		}
 	}
 
@@ -371,7 +386,7 @@ void CPlayer::AnimAttackNotify(float fTime)
 
 	CProjectileMovementComponent*	pMovement = pBullet->FindObjectComponent<CProjectileMovementComponent>();
 
-	pMovement->SetDistance(500.f);
+	pMovement->SetDistance(STAND_SPEED);
 
 	SAFE_RELEASE(pMovement);
 
@@ -410,12 +425,12 @@ void CPlayer::DownKey(float fScale, float fTime)
 {
 	static bool	bMove = false;
 
-	if (!HasMonster)
+	if (!m_pHasMonster)
 	{
 		if (fScale != 0.f)
 		{
 			bMove = true;
-			if (!IsAirMouse)
+			if (!m_pHasAir)
 			{
 				m_pAnimation->ChangeAnimation("KirbyIdleDown");
 			}
@@ -423,7 +438,7 @@ void CPlayer::DownKey(float fScale, float fTime)
 			{
 				m_pAnimation->ChangeAnimation("KirbyDigest");
 				m_pAnimation->SetReturnSequenceName("KirbyDigest", "KirbyIdle");
-				IsAirMouse = false;
+				m_pHasAir = false;
 				m_pMass = STAND_MASS;
 			}
 		}
@@ -460,143 +475,6 @@ void CPlayer::DisableMove(float fTime)
 	m_IsMove = false;
 }
 
-
-void CPlayer::EatIng()
-{
-	// 여기가 몬스터 빨아들이는 부분
-
-	// 충돌체 하나 앞에 붙여놓기
-	//그 충돌체랑 몬스터랑 부딪히면 나한테 오고 (몇 초 동안)
-	// 그 초 끝나면 나 돼지 되는거임 다시 air
-
-	if (m_Zone == nullptr)
-	{
-		m_Zone = CreateComponent<CColliderRect>("AirZone");
-		m_Zone->AddBlockCallback<CPlayer>(this, &CPlayer::HitAirZone);
-		m_Zone->SetCollisionProfile("PlayerAirZone");
-		m_pMesh->AddChild(m_Zone, TR_POS);
-
-		if (GetRelativeRot().y == 0)
-			m_Zone->SetRelativePos(200.f, 0.f, 0.f);
-		else
-			m_Zone->SetRelativePos(-200.f, 0.f, 0.f);
-
-		m_Zone->SetExtent(250.f, 300.f);
-		m_Zone->SetPivot(0.5f, 0.f, 0.f);
-
-		m_pBody->AddBlockCallback<CPlayer>(this, &CPlayer::HitAirZone);
-	}
-
-
-}
-
-void CPlayer::AKey(float fTime)
-{
-	if (!JumpIng)
-	{
-		// 이게 처음들어온거
-		// 그니까 아예 점프아니고 아예 아무것도 안한상태
-		JumpIng = true;
-		m_pJumpEnable = false;
-		FirstJump = true;
-	}
-
-	if (!FirstJump && JumpIng)
-	{
-		// jump는 하고 있지만 enable 은 true(손을 한번 뗀 상태면 두번째 입력이라고 봐도 무방하겠징?) 
-
-		// 점프하고 있는 상태에서 Jump 키 한번 더  누르기
-		if (!HasMonster)
-		{
-			m_pAnimation->ChangeAnimation("KirbyJump");
-			m_pAnimation->SetReturnSequenceName("KirbyJump", "KirbyJumpIng");
-		}
-		else
-		{
-			// 여기는 monster 먹고 있는데 jump 리소스로 바꿔야 함
-			m_pAnimation->ChangeAnimation("KirbyJump");
-			m_pAnimation->SetReturnSequenceName("KirbyJump", "KirbyJumpIng");
-		}
-
-		m_pMass = STAND_MASS;
-		IsAirMouse = true;
-		m_pJumpEnable = false; // 점프 못해 이제 띄워야 하니까 
-	}
-
-
-	// press time 입력은 계속 press로 받고 
-	if (press_time < JUMP_AMOUNT)
-	{
-		press_time += (fTime)*10.f;
-		jump_time = press_time;
-	}
-
-
-	/*char buff[100];
-	sprintf_s(buff, "press_time : %f \n", press_time);
-	OutputDebugStringA(buff);*/
-}
-
-void CPlayer::JumpUpdate(float fTime)
-{
-
-	if (/*jump_time > 0.f*/ JumpIng)
-	{
-		if (!IsAirMouse)
-		{
-			//if (!m_pJumpEnable) {
-			if (jump_time > 0 && jump_time <= JUMP_AMOUNT)
-			{
-				float tempY = jump_time + (g / m_pMass);
-				m_pMovement->SetMoveSpeed(700.f);
-				m_pMovement->AddMovement(GetWorldAxis(AXIS_Y) * tempY);
-
-				jump_time -= 0.1f;
-				jump_temp += 0.1f;
-
-
-				m_pAnimation->ChangeAnimation("KirbyJump");
-
-				//char buff[100];
-				//sprintf_s(buff, " Press 1  : %f \n", jump_time);
-				//OutputDebugStringA(buff);
-			}
-			//}
-			//else {
-			else if (jump_time < 0 && jump_time >((-1)*jump_temp))
-			{
-				float tempY = jump_time + (g / m_pMass);
-				m_pMovement->SetMoveSpeed(700.f);
-				m_pMovement->AddMovement(GetWorldAxis(AXIS_Y) * tempY);
-
-				jump_time -= 0.1f;
-
-
-			}
-			else if (jump_time <= ((-1)*jump_temp) || pPos.y <= 130.f)
-			{
-				JumpIng = false;
-				m_pMovement->SetMoveSpeed(500.f);
-				//JumpInputEnd(fTime);
-				pPos.y = 130.f;
-				jump_time = 0.1f;
-				press_time = 0.f;
-				jump_temp = 0.f;
-			}
-			// 올라가다가 내려와야함  
-		//}
-		}
-		else
-		{
-			// 내려올 필요 없음
-			float tempY = jump_time + (g / m_pMass);
-			m_pMovement->AddMovement(GetWorldAxis(AXIS_Y) * tempY);
-			jump_time -= 0.05f;
-		}
-
-	}
-}
-
 void CPlayer::SKeyDown(float fTime)
 {
 	if (!m_pIsJumping && !m_pHasAir && !m_pHasMonster)
@@ -609,6 +487,8 @@ void CPlayer::SKeyDown(float fTime)
 			m_pAnimation->AddNotifyFunction<CPlayer>("KirbyEat", "EatOver", this, &CPlayer::SKeyUp);
 			m_pNowEating = true;
 			m_pMesh->SetRelativeScale(EAT_SCALE, EAT_SCALE, 1.f);
+
+			m_pBody->SetExtent(800.f, STAND_SCALE);
 		}
 	}
 	else
@@ -641,13 +521,19 @@ void CPlayer::SKeyDown(float fTime)
 
 void CPlayer::SKeyUp(float fTime)
 {
-	if (m_pNowEating) {
+	if (m_pHasMonster) {
 
-		if (m_Zone != nullptr)
-		{
-			m_Zone->Enable(false);
-			SAFE_RELEASE(m_Zone);
-		}
+	}
+	else if (m_pHasAir)
+	{
+		m_pAnimation->ChangeAnimation("KirbyEatOver");
+		m_pAnimation->SetReturnSequenceName("KirbyEatOver", "KirbyIdle");
+	}
+	else if (m_pNowEating)
+	{
+
+		m_pBody->SetExtent(STAND_SCALE, STAND_SCALE);
+
 
 		m_pMesh->SetRelativeScale(STAND_SCALE, STAND_SCALE, 1.f);
 		m_pAnimation->ChangeAnimation("KirbyEatOver");
@@ -660,17 +546,51 @@ void CPlayer::SKeyUp(float fTime)
 void CPlayer::AKeyDown(float fTime)
 {
 
+	if (press_time < JUMP_AMOUNT + 10.f)
+	{
+
+		m_pMovement->SetMoveSpeed(700.f);
+		m_pMovement->AddMovement(GetWorldAxis(AXIS_Y) * m_pMass);
+		press_time += (fTime)*20.f;
+		JumpUp = true;
+		if (!JumpAnimationChangeOnce) {
+			if (!m_pHasMonster && !m_pHasAir)
+			{
+				m_pAnimation->ChangeAnimation("KirbyJumpUp");
+				JumpAnimationChangeOnce = true;
+			}
+			else if (m_pHasMonster)
+			{
+				m_pMesh->SetRelativeScale(EAT_SCALE, EAT_SCALE*1.5, 1.f);
+				m_pAnimation->ChangeAnimation("KirbyMonsterJumpUp");
+				JumpAnimationChangeOnce = true;
+
+			}
+		}
+	}
+	else
+	{
+		// 하다가 그 뭐야 거기 
+		// 발판같은거 충돌 만드는 그 코드에다가 
+		// 이거 다 초기화 시키는 부분 추가해
+		// 함수로 모듈화 해가지고 붙여넣게
+		m_pMovement->SetMoveSpeed(STAND_SPEED);
+		JumpUp = false;
+		JumpDown = true;
+	}
+
+
 	if (!m_pIsJumping)
 	{
 		m_pIsJumping = true;
 	}
 	else if (m_pIsJumping)
 	{
-		if (press_time < JUMP_AMOUNT)
-		{
-			press_time += (fTime)*10.f;
-			jump_time = press_time;
-		}
+		//if (press_time < JUMP_AMOUNT)
+		//{
+		//	press_time += (fTime)*10.f;
+		//	jump_time = press_time;
+		//}
 
 		if (m_pHasAir)
 		{
@@ -684,14 +604,12 @@ void CPlayer::AKeyDown(float fTime)
 		}
 
 	}
-	// 그리고 이거 jump 중인거는 그 바닥에 안 닿아 있으면 m_pIsJumping = true하는 걸로
-
 
 }
 
 void CPlayer::AKeyUp(float fTime)
 {
-
+	JumpDown = true;
 }
 
 void CPlayer::UpKeyDown(float fTime)
@@ -705,8 +623,11 @@ void CPlayer::UpKeyDown(float fTime)
 	// 여기는 그냥 air 상태거나 그럴 때 위로 가는  용도로만
 	if (m_pIsJumping || m_pHasAir)
 	{
-		m_pMovement->AddMovement(GetWorldAxis(AXIS_Y) * m_pMass);
+		//	m_pMovement->AddMovement(GetWorldAxis(AXIS_Y) * m_pMass);
+		//	press_time += (fTime)*20.f;
 	}
+
+	JumpDown = true;
 
 
 }
@@ -723,49 +644,23 @@ void CPlayer::UpKeyDoubleDown(float fTime)
 }
 
 
-void CPlayer::AKeyEnd(float fTime)
-{
-	// 여기 End는 Jump가 끝난 End가 아니라 JumpKeyInput이 끝난 상ㅌㅐ임
-	// 그러니까 JumpIng 여기서 초기화하는거 아님
-	m_pJumpEnable = true;
-
-	//press_time = 0.f;
-	FirstJump = false;
-	//jump_time = 0.f;
-}
-
-void CPlayer::Up(float fTime)
-{
-	// 이 Mass는 공기 안먹은 상태면 다시 1로 ㅂㅏ꿔 줘야 함
-	m_pMass = FAT_MASS;
-	if (!IsAirMouse)
-	{
-		//  공기 먹은 상태 아니면 
-		m_pAnimation->ChangeAnimation("KirbyJump");
-		m_pAnimation->SetReturnSequenceName("KirbyJump", "KirbyJumpIng");
-		IsAirMouse = true;
-	}
-	else
-	{
-		// 그냥 up up up up 
-
-		// 이거 근데 풍선같이 해야 함
-
-		// y만 따로 생각해서 풍선같이 하는거 하면 X로는 그냥 += 값만 넣어주면 됨 
-	}
-}
-
 void CPlayer::ToEatAirState(float fTime)
 {
 }
 
 void CPlayer::SpitAir(float fTime)
 {
+	if (m_pIsJumping) {
+		m_pAnimation->ChangeAnimation("KirbyJumpEnd");
+		m_pAnimation->SetReturnSequenceName("KirbyJumpEnd", "KirbyIdle");
+	}
+	else if (m_pHasAir) {
+		m_pAnimation->ChangeAnimation("KirbyEatOver");
+		m_pAnimation->SetReturnSequenceName("KirbyEatOver", "KirbyIdle");
+	}
+
 	m_pHasAir = false;
 	m_pIsJumping = false;
-
-	m_pAnimation->ChangeAnimation("KirbyJumpEnd");
-	m_pAnimation->SetReturnSequenceName("KirbyJumpEnd", "KirbyIdle");
 
 	m_pMass = STAND_MASS;
 	m_pMesh->SetRelativeScale(STAND_SCALE, STAND_SCALE, 1.f);
@@ -773,9 +668,9 @@ void CPlayer::SpitAir(float fTime)
 
 void CPlayer::SplitStar(float fTime)
 {
-	if (HasMonster)
+	if (m_pHasMonster)
 	{
-		HasMonster = false;
+		m_pHasMonster = false;
 		// 몬스터 있던거 날리는거니까
 
 		// 뱉는거 별 날아가야 함 
@@ -788,7 +683,7 @@ void CPlayer::SplitStar(float fTime)
 
 void CPlayer::Yup(float fTime)
 {
-	m_pMovement->AddMovement(GetWorldAxis(AXIS_Y));
+	//m_pMovement->AddMovement(GetWorldAxis(AXIS_Y));
 }
 
 void CPlayer::EatAirFail(float fTime)
@@ -797,46 +692,49 @@ void CPlayer::EatAirFail(float fTime)
 	m_pNowEating = false;
 	m_IsMove = true; // 이거 하는동안에 움직이지 말라고 
 
-	if (m_Zone != nullptr)
-	{
-		m_Zone->Enable(false);
-		SAFE_RELEASE(m_Zone);
-	}
 }
 
-void CPlayer::EatMonsterSuccess(float fTime)
+void CPlayer::EatMonsterSuccess(int _type)
 {
+	m_pFishingMonster = true;
+
 }
 
 void CPlayer::ComputeJump(float fTime)
 {
-	if (jump_time > 0 && jump_time <= JUMP_AMOUNT)
+
+	if (!JumpDown)
+		return;
+
+	//if (pPos.y >= INIT_YPOS ) // 나중에 땅바닥에 뭐 밟고 있는지로 체크해
+	if (press_time >= 0.f)
 	{
-		float tempY = jump_time + (g / m_pMass);
 		m_pMovement->SetMoveSpeed(700.f);
-		m_pMovement->AddMovement(GetWorldAxis(AXIS_Y) * tempY);
-
-		jump_time -= 0.1f;
-		jump_temp += 0.1f;
-
-		m_pAnimation->ChangeAnimation("KirbyJump");
+		m_pMovement->AddMovement(GetWorldAxis(AXIS_Y) * -m_pMass);
+		press_time -= (fTime)*20.f;
+		if (JumpAnimationChangeOnce) {
+			if (!m_pHasMonster && !m_pHasAir)
+			{
+				m_pAnimation->ChangeAnimation("KirbyJumpDown");
+				m_pAnimation->SetReturnSequenceName("KirbyJumpDown", "KirbyIdle");
+				JumpAnimationChangeOnce = false;
+			}
+			else if (m_pHasMonster)
+			{
+				m_pAnimation->ChangeAnimation("KirbyMonsterJump");
+				m_pAnimation->SetReturnSequenceName("KirbyMonsterJump", "KirbyMonsterIdle");
+				JumpAnimationChangeOnce = false;
+				m_pMesh->SetRelativeScale(EAT_SCALE, EAT_SCALE, 1.f);
+			}
+		}
 	}
-	else if (jump_time < 0 && jump_time >((-1)*jump_temp))
+	else
 	{
-		float tempY = jump_time + (g / m_pMass);
-		m_pMovement->SetMoveSpeed(700.f);
-		m_pMovement->AddMovement(GetWorldAxis(AXIS_Y) * tempY);
-
-		jump_time -= 0.1f;
-	}
-	else if (jump_time <= ((-1)*jump_temp) || pPos.y <= 130.f)
-	{
-		JumpIng = false;
-		m_pMovement->SetMoveSpeed(500.f);
-		pPos.y = 130.f;
-		jump_time = 0.1f;
-		press_time = 0.f;
-		jump_temp = 0.f;
+		JumpDown = false;
+		JumpUp = false;
+		press_time = 0;
+		SetWorldPos(pPos.x, INIT_YPOS, pPos.z);
+		m_pMovement->SetMoveSpeed(STAND_SPEED);
 	}
 }
 
@@ -852,58 +750,47 @@ void CPlayer::JumpEnd()
 
 void CPlayer::CamLimit(float fTime)
 {
-	//Vector3 camPos = m_pCamera->GetWorldPos();
-	//Vector3 playerPos = GetWorldPos();
 
-	//float tx = 0.f;
-	//float ty = 0.f;
-
-	//if (camPos.x - playerPos.x >= StageMinX /*+ _RESOLUTION.iWidth / 2*/)
-	//{
-	//	tx = camPos.x - playerPos.x;
-	//}
-	//else if (playerPos.x + camPos.x <= StageMaxX)
-	//{
-	//	tx = -(camPos.x - playerPos.x);
-	//}
-	//else
-	//{
-	//	tx = _RESOLUTION.iWidth / 2;
-	//}
-
-	//if (camPos.y - playerPos.y >= StageMinY /*+ _RESOLUTION.iHeight / -6.f*/)
-	//{
-	//	ty = -(playerPos.y - camPos.y);
-	//}
-	//else if (playerPos.y + camPos.y <= StageMaxY)
-	//{
-	//	ty = (playerPos.y - camPos.y);
-	//}
-	//else
-	//{
-	//	ty = _RESOLUTION.iHeight / -6.f;
-	//}
-
-	//m_pCamera->SetRelativePos(tx, ty, -20.f);
-
-
+	//흠 끝에 X 막는건 왜 안되는지 
 
 	Vector3 camPos = m_pCamera->GetWorldPos();
 	Vector3 playerPos = GetWorldPos();
 
-	float tx = 0.f;
-	float ty = 0.f;
-
-	if (camPos.x <= StageMinX)
+	if (playerPos.y + _RESOLUTION.iHeight / 1.5f >= StageMaxY /*+ _RESOLUTION.iHeight / -6.f*/)
 	{
-		tx = camPos.x;
+
+		float temp = _RESOLUTION.iHeight / 1.5f;
+		temp += playerPos.y;
+		m_pCamera->SetDontComputeCamY(true);
+
+		temp = playerPos.x + _RESOLUTION.iWidth / 2.f;
+		if (playerPos.x + _RESOLUTION.iWidth / 2.f >= StageMaxX ||
+			playerPos.x - _RESOLUTION.iWidth / 2.f <= StageMinX)
+		{
+			m_pCamera->SetDontComputeCamX(true);
+		}
+		else
+		{
+			m_pCamera->SetDontComputeCamX(false);
+		}
+
+
 	}
-	else if (camPos.x >= StageMaxX)
+	else
 	{
-		tx =  camPos.x - StageMaxX;
+		m_pCamera->SetDontComputeCamY(false);
+		if (playerPos.x + _RESOLUTION.iWidth / 2.f >= StageMaxX ||
+			playerPos.x - _RESOLUTION.iWidth / 2.f <= StageMinX)
+		{
+			m_pCamera->SetDontComputeCamX(true);
+		}
+		else
+		{
+			m_pCamera->SetDontComputeCamX(false);
+		}
+
 	}
 
-	m_pCamera->SetRelativePos(_RESOLUTION.iWidth / 2 - tx, _RESOLUTION.iHeight / -6.f + ty, -20.f);
 }
 
 void CPlayer::SetStageMinMax(float minx, float maxx, float miny, float maxy)
@@ -912,38 +799,6 @@ void CPlayer::SetStageMinMax(float minx, float maxx, float miny, float maxy)
 	StageMaxX = maxx;
 	StageMinY = miny;
 	StageMaxY = maxy;
-}
-
-void CPlayer::MakeAirZone(float fTime)
-{
-	// 여기서 zone을 만드는데
-	// 만약에 몬스터를 먹었으면
-	// noweating= false;하고 
-	// 캐릭터 애니메이션 바꾸고 (입에 뭐 들은 상태로)
-	// m_pHasMonster = true; 
-
-	if (m_Zone == nullptr)
-	{
-		m_Zone = CreateComponent<CColliderRect>("AirZone");
-		m_Zone->AddBlockCallback<CPlayer>(this, &CPlayer::HitAirZone);
-		m_Zone->SetCollisionProfile("PlayerAirZone");
-
-		m_pMesh->AddChild(m_Zone, TR_POS);
-		m_Zone->SetRelativePos(200.f, 0.f, 0.f);
-		m_Zone->SetExtent(250.f, 300.f);
-		m_Zone->SetPivot(0.5f, 0.f, 0.f);
-	}
-
-	if (m_pHasMonster)
-	{
-		// ㅇ만약에 m_Zone이 몬스터랑부딪히면 밑에 콜백함수로 들어오고
-		// 그러면 거기서 hasmonster 가 true가 되니까 
-		// 이제 이거 그만 체크하라고 makeairzone 을 돌리는 조건인 noweating을 false시키는거임
-		m_pNowEating = false;
-
-
-		// 
-	}
 }
 
 void CPlayer::OnBlock(CColliderBase * pSrc, CColliderBase * pDest, float fTime)
@@ -957,50 +812,57 @@ void CPlayer::OnBlock(CColliderBase * pSrc, CColliderBase * pDest, float fTime)
 
 void CPlayer::StruckedByMonster(CColliderBase * pSrc, CColliderBase * pDest, float fTime)
 {
-	m_pHP -= 100;
 
-	if (m_pHP > 0) {
-		m_pLifeBar->SetHP(m_pHP);
-	}
-	else
+	if (m_pNowEating)
 	{
-		m_pHP = MAX_HP;
-		m_pLifeBar->SetHP(m_pHP);
-		m_pLifeBar->SetLifeCount(m_pLifeCount--);
-	}
-	DisableMove(fTime);
 
+		m_pBody->SetExtent(STAND_SCALE, STAND_SCALE);
+		// 그리고 그 함수에서 animation 실행
 
-	m_pAnimation->ChangeAnimation("KirbyDamage");
-	m_pAnimation->SetReturnSequenceName("KirbyDamage", "KirbyIdle");
-
-	m_pAnimation->CreateNotify("KirbyDamage", "DamageEnd", 7);
-	m_pAnimation->AddNotifyFunction<CPlayer>("KirbyDamage", "DamageEnd", this, &CPlayer::EnableMove);
-
-	m_pMovement->BackStep(GetWorldAxis(AXIS_X));
-}
-
-void CPlayer::HitAirZone(CColliderBase * pSrc, CColliderBase * pDest, float fTime)
-{
-	// 몬스터 정보 받아오기
-	if (!m_pHasMonster)
-	{
-		m_pHasMonster = true;
-
-		// 애니메이션 바꾸고 
-		//m_pAnimation->ChangeAnimation("KirbyJumpIng");
-		//pDest->Enable(false);
-		//pDest->Kill();
-		m_IsMove = false;
-		m_pNowEating = false;
-
-		if (m_Zone != nullptr)
+		//SAFE_RELEASE(m_pEat);
+		if (m_pFishingMonster)
 		{
-			m_Zone->Enable(false);
-			SAFE_RELEASE(m_Zone);
-		}
+			// 들어와서 충돌됨 
+			m_pEatMonster->Enable(false);
+			m_pHasMonster = true;
+			m_pMesh->SetRelativeScale(STAND_SCALE * 2.5f, STAND_SCALE, 1.f);
 
-		//흠 여기서 뭘 해야 하나?
+			m_pAnimation->ChangeAnimation("KirbyDigestMonster");
+			m_pAnimation->SetReturnSequenceName("KirbyDigestMonster", "KirbyMonsterIdle");
+
+			return;
+		}
+		m_pEatMonster = (CMonster*)(pDest->GetOwner());
+		m_pEatMonster->SetIsEating(true);
+
+		int Eat_Skill = m_pEatMonster->GetSkillType();
+		// 함수 호출 !빨아들이는!
+		EatMonsterSuccess(Eat_Skill);
+		// eat_skill 전달
+	}
+	else if (!m_pNowEating)
+	{
+		m_pHP -= 100;
+
+		if (m_pHP > 0) {
+			m_pLifeBar->SetHP(m_pHP);
+		}
+		else
+		{
+			m_pHP = MAX_HP;
+			m_pLifeBar->SetHP(m_pHP);
+			m_pLifeBar->SetLifeCount(m_pLifeCount--);
+		}
+		DisableMove(fTime);
+
+
+		m_pAnimation->ChangeAnimation("KirbyDamage");
+		m_pAnimation->SetReturnSequenceName("KirbyDamage", "KirbyIdle");
+
+		m_pAnimation->CreateNotify("KirbyDamage", "DamageEnd", 7);
+		m_pAnimation->AddNotifyFunction<CPlayer>("KirbyDamage", "DamageEnd", this, &CPlayer::EnableMove);
+
+		m_pMovement->BackStep(GetWorldAxis(AXIS_X));
 	}
 }
 

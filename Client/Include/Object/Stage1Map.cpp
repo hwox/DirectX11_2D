@@ -8,8 +8,8 @@ CStage1Map::CStage1Map()
 {
 	m_pMesh = nullptr;
 	m_BackImage = nullptr;
-	FloorCollider = nullptr;
-	FloorPivot = nullptr;
+	//FloorCollider = nullptr;
+	//FloorPivot = nullptr;
 }
 
 CStage1Map::~CStage1Map()
@@ -17,8 +17,8 @@ CStage1Map::~CStage1Map()
 	//	SAFE_RELEASE(m_pTileMap);
 	SAFE_RELEASE(m_pMesh);
 	SAFE_RELEASE(m_BackImage);
-	SAFE_RELEASE(FloorCollider);
-	SAFE_RELEASE(FloorPivot);
+	//SAFE_RELEASE(FloorCollider);
+	//SAFE_RELEASE(FloorPivot);
 }
 
 bool CStage1Map::Init()
@@ -54,9 +54,9 @@ bool CStage1Map::Init()
 
 
 	m_BackImage->AddChild(m_pMesh, TR_POS);
-	MakeFloorCollider();
+	//MakeFloorCollider();
 
-	m_pMesh->SetRelativePos(0.f, 50.f, 0.f);
+	m_pMesh->SetRelativePos(0.f, 10.f, 0.f);
 	m_pMesh->SetRelativeScale(10000.f, 1200.f, 1.f);
 
 	m_BackImage->SetRelativePos(0.f, 0.f, 0.f);
@@ -75,7 +75,7 @@ void CStage1Map::Begin()
 void CStage1Map::Update(float fTime)
 {
 	CGameObject::Update(fTime);
-	FloorCollider;
+	//FloorCollider;
 }
 
 void CStage1Map::Render(float fTime)
@@ -85,7 +85,7 @@ void CStage1Map::Render(float fTime)
 
 void CStage1Map::MakeFloorCollider()
 {
-	FloorPivot = CreateComponent<CStaticMeshComponent>("FloorPivot");
+	/*FloorPivot = CreateComponent<CStaticMeshComponent>("FloorPivot");
 
 	m_pMesh->AddChild(FloorPivot, TR_POS);
 	FloorPivot->SetRelativePos(1000.f, 4000.f, 0.f);
@@ -95,6 +95,6 @@ void CStage1Map::MakeFloorCollider()
 	FloorPivot->AddChild(FloorCollider, TR_POS);
 	FloorCollider->SetExtent(5000.f,500.f);
 	FloorCollider->SetPivot(0.0f, 0.f, 0.f);
-	FloorCollider->SetCollisionProfile("Map");
+	FloorCollider->SetCollisionProfile("Map");*/
 }
 

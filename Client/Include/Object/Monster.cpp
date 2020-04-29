@@ -15,6 +15,7 @@ CMonster::CMonster()
 	m_Player = nullptr;
 	IsChasePlayer = false;
 	ColliderMode = CM_RECT;
+	Skill_Type = 0;
 }
 
 CMonster::~CMonster()
@@ -48,10 +49,20 @@ void CMonster::Render(float fTime)
 	CGameObject::Render(fTime);
 }
 
-void CMonster::Respawn()
+bool CMonster::Respawn()
 {
+	if (IsEnable())
+		return false;
+
 	SetWorldPos(InitPos);
 	Enable(true);
+	return true;
+
+}
+
+void CMonster::GoToBlackHole(float fTime)
+{
+	//MoveTarget
 }
 
 void CMonster::NearPlayerCheck(Vector3 pPos)
@@ -120,6 +131,11 @@ int CMonster::LookAt2D(Vector3 pPos)
 	}
 }
 
+void CMonster::SetSkillType(int type)
+{
+	Skill_Type = type;
+}
+
 int CMonster::GetSkillType()
 {
 	return Skill_Type;
@@ -145,6 +161,16 @@ void CMonster::AfterCollisionWithPlayer()
 
 }
 
+void CMonster::SetIsEating(bool onoff)
+{
+	IsEating = onoff;
+}
+
+bool CMonster::GetIsEating()
+{
+	return IsEating;
+}
+
 
 
 void CMonster::OnBlock(class CColliderBase* pSrc, class CColliderBase* pDest, float fTime)
@@ -158,3 +184,5 @@ void CMonster::SetHP(int hp)
 {
 	m_Hp = hp;
 }
+
+

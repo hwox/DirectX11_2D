@@ -135,6 +135,8 @@ private:
 	class CRenderState*		m_pAlphaBlend;
 	bool					m_bShowCursor;
 	KeyInfo					m_tMouseInfo[MT_END];
+	bool					m_bMouseClick;
+	class CGameObject*		m_pOnMouseObj;
 
 public:
 	Vector2 GetMousePos()	const;
@@ -146,8 +148,12 @@ public:
 	bool RButtonPush()	const;
 	bool LButtonRelease()	const;
 	bool RButtonRelease()	const;
+	bool IsMouseClick()	const;
+	class CGameObject* IsOnMouseObj()	const;
 
 public:
+	void SetMouseClick(bool bClick);
+	void SetOnMouseObj(class CGameObject* pObj);
 	void SetDoubleKeyTime(float fTime);
 	void CreateAnim2D();
 	void AddAnim2DSequence(const string& strName);

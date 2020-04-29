@@ -180,6 +180,96 @@ void CCollisionManager::ChangeScene()
 
 void CCollisionManager::Collision(float fTime)
 {
+	//auto	iter = m_ColliderList.begin();
+	//auto	iterEnd = m_ColliderList.end();
+
+	//for (; iter != iterEnd;)
+	//{
+	//	CColliderBase*	pCollider = *iter;
+
+	//	if (!pCollider->IsActive())
+	//	{
+	//		SAFE_RELEASE(pCollider);
+	//		iter = m_ColliderList.erase(iter);
+	//		iterEnd = m_ColliderList.end();
+	//		continue;
+	//	}
+
+	//	else if (!pCollider->IsEnable())
+	//	{
+	//		++iter;
+	//		continue;
+	//	}
+
+	//	pCollider->ClearCurrentFrameCollision();
+	//	pCollider->ClearSectionIndex();
+
+	//	if(pCollider->IsUI())
+	//		m_pUISectionManager->AddCollider(pCollider);
+
+	//	else
+	//		m_pSectionManager->AddCollider(pCollider);
+
+	//	++iter;
+	//}
+
+	//iter = m_ColliderList.begin();
+	//iterEnd = m_ColliderList.end();
+
+	//for (; iter != iterEnd; ++iter)
+	//{
+	//	(*iter)->CollisionFromSection(fTime);
+	//}
+
+	//m_pSectionManager->Sort();
+	//m_pUISectionManager->Sort();
+
+	//m_pCurrentMouseCollision	= nullptr;
+
+	//// UI와 마우스를 체크한다.
+	//if (!m_pUISectionManager->CollisionMouse(GET_SINGLE(CInput)->GetMousePos(), fTime))
+	//{
+	//	if (m_pSectionManager->CollisionMouse(GET_SINGLE(CInput)->GetMouseWorldPos(), fTime))
+	//	{
+	//		if (m_pPrevMouseCollision != m_pCurrentMouseCollision &&
+	//			m_pPrevMouseCollision)
+	//		{
+	//			m_pPrevMouseCollision->CallEndOverlap(nullptr, fTime);
+	//			m_pPrevMouseCollision->CollisionMouse(false);
+	//			m_pPrevMouseCollision = nullptr;
+	//		}
+	//	}
+
+	//	else if (m_pPrevMouseCollision != m_pCurrentMouseCollision &&
+	//		m_pPrevMouseCollision)
+	//	{
+	//		m_pPrevMouseCollision->CallEndOverlap(nullptr, fTime);
+	//		m_pPrevMouseCollision->CollisionMouse(false);
+	//		m_pPrevMouseCollision = nullptr;
+	//	}
+	//}
+
+	//else if (m_pPrevMouseCollision != m_pCurrentMouseCollision &&
+	//	m_pPrevMouseCollision)
+	//{
+	//	m_pPrevMouseCollision->CallEndOverlap(nullptr, fTime);
+	//	m_pPrevMouseCollision->CollisionMouse(false);
+	//	m_pPrevMouseCollision	= nullptr;
+	//}
+
+	//m_pPrevMouseCollision	= m_pCurrentMouseCollision;
+
+	//m_pUISectionManager->Collision(fTime);
+
+	//m_pSectionManager->Collision(fTime);
+
+	//iter = m_ColliderList.begin();
+	//iterEnd = m_ColliderList.end();
+
+	//for (; iter != iterEnd; ++iter)
+	//{
+	//	(*iter)->ComputeColor();
+	//}
 	auto	iter = m_ColliderList.begin();
 	auto	iterEnd = m_ColliderList.end();
 
@@ -204,7 +294,7 @@ void CCollisionManager::Collision(float fTime)
 		pCollider->ClearCurrentFrameCollision();
 		pCollider->ClearSectionIndex();
 
-		if(pCollider->IsUI())
+		if (pCollider->IsUI())
 			m_pUISectionManager->AddCollider(pCollider);
 
 		else
@@ -224,7 +314,7 @@ void CCollisionManager::Collision(float fTime)
 	m_pSectionManager->Sort();
 	m_pUISectionManager->Sort();
 
-	m_pCurrentMouseCollision	= nullptr;
+	m_pCurrentMouseCollision = nullptr;
 
 	// UI와 마우스를 체크한다.
 	if (!m_pUISectionManager->CollisionMouse(GET_SINGLE(CInput)->GetMousePos(), fTime))
@@ -247,6 +337,8 @@ void CCollisionManager::Collision(float fTime)
 			m_pPrevMouseCollision->CollisionMouse(false);
 			m_pPrevMouseCollision = nullptr;
 		}
+
+		GET_SINGLE(CInput)->SetMouseClick(true);
 	}
 
 	else if (m_pPrevMouseCollision != m_pCurrentMouseCollision &&
@@ -254,10 +346,22 @@ void CCollisionManager::Collision(float fTime)
 	{
 		m_pPrevMouseCollision->CallEndOverlap(nullptr, fTime);
 		m_pPrevMouseCollision->CollisionMouse(false);
-		m_pPrevMouseCollision	= nullptr;
+		m_pPrevMouseCollision = nullptr;
+		GET_SINGLE(CInput)->SetMouseClick(false);
 	}
 
-	m_pPrevMouseCollision	= m_pCurrentMouseCollision;
+	else
+	{
+		GET_SINGLE(CInput)->SetMouseClick(false);
+	}
+
+	if (m_pCurrentMouseCollision)
+		GET_SINGLE(CInput)->SetOnMouseObj(m_pCurrentMouseCollision->GetOwner());
+
+	else
+		GET_SINGLE(CInput)->SetOnMouseObj(nullptr);
+
+	m_pPrevMouseCollision = m_pCurrentMouseCollision;
 
 	m_pUISectionManager->Collision(fTime);
 

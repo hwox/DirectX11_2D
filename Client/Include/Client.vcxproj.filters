@@ -102,9 +102,6 @@
     <ClCompile Include="Object\PhoneCallUI.cpp">
       <Filter>02. Object\UI</Filter>
     </ClCompile>
-    <ClCompile Include="EffectList.cpp">
-      <Filter>03. Manager</Filter>
-    </ClCompile>
     <ClCompile Include="GameMode\StartGameMode.cpp">
       <Filter>01. GameMode\Title</Filter>
     </ClCompile>
@@ -175,9 +172,6 @@
     </ClInclude>
     <ClInclude Include="Object\PhoneCallUI.h">
       <Filter>02. Object\UI</Filter>
-    </ClInclude>
-    <ClInclude Include="Manager\EffectList.h">
-      <Filter>03. Manager</Filter>
     </ClInclude>
     <ClInclude Include="GameMode\StartGameMode.h">
       <Filter>01. GameMode\Title</Filter>

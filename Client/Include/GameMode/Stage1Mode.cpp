@@ -20,12 +20,12 @@
 #include "..\Object\PlayerLife.h"
 
 #include "..\Object\WaddleDee.h"
-
+#include "../Object/Title.h"
 
 #define STAGE1_MINX		0
-#define STAGE1_MAXX		10000
-#define STAGE1_MINY		0
-#define STAGE1_MAXY		1200
+#define STAGE1_MAXX		11000
+#define STAGE1_MINY		50
+#define STAGE1_MAXY		950
 
 CStage1Mode::CStage1Mode()
 {
@@ -49,7 +49,7 @@ bool CStage1Mode::Init()
 
 
 	CPlayer*	pObj = m_pScene->SpawnObject<CPlayer>();
-	pObj->SetStageMinMax(0, 10000.f, 50.f, 300.f);
+	pObj->SetStageMinMax(STAGE1_MINX, STAGE1_MAXX, STAGE1_MINY, STAGE1_MAXY);
 	SetPlayer(pObj);
 
 	//CBGMObj*	pBGMObj = m_pScene->SpawnObject<CBGMObj>("BGMObj");
@@ -60,6 +60,10 @@ bool CStage1Mode::Init()
 
 	SAFE_RELEASE(pObj);
 
+
+	CTitle*	pTitle = m_pScene->SpawnObject<CTitle>();
+
+	SAFE_RELEASE(pTitle);
 
 	CPhoneCallUI*	pPlayerPhone = m_pScene->SpawnObject<CPhoneCallUI>();
 
@@ -87,7 +91,6 @@ void CStage1Mode::SetCollidrProfile()
 	GET_SINGLE(CCollisionManager)->CreateChannel("Monster", CT_BLOCK);
 	GET_SINGLE(CCollisionManager)->CreateChannel("PlayerProjectile", CT_BLOCK);
 	GET_SINGLE(CCollisionManager)->CreateChannel("MonsterProjectile", CT_BLOCK);
-	GET_SINGLE(CCollisionManager)->CreateChannel("PlayerAirZone", CT_BLOCK);
 	GET_SINGLE(CCollisionManager)->CreateChannel("Map", CT_BLOCK);
 	GET_SINGLE(CCollisionManager)->CreateChannel("MapObject", CT_BLOCK);
 
@@ -124,32 +127,18 @@ void CStage1Mode::SetCollidrProfile()
 
 
 
-
-	GET_SINGLE(CCollisionManager)->CreateProfile("PlayerAirZone", "PlayerAirZone");
-	GET_SINGLE(CCollisionManager)->UpdateProfileChannel("PlayerAirZone", "Player", CT_IGNORE);
-	GET_SINGLE(CCollisionManager)->UpdateProfileChannel("PlayerAirZone", "PlayerProjectile", CT_IGNORE);
-	GET_SINGLE(CCollisionManager)->UpdateProfileChannel("PlayerAirZone", "MonsterProjectile", CT_IGNORE);
-	GET_SINGLE(CCollisionManager)->UpdateProfileChannel("PlayerAirZone", "Map", CT_IGNORE);
-	GET_SINGLE(CCollisionManager)->UpdateProfileChannel("PlayerAirZone", "PlayerMap", CT_IGNORE);
-	GET_SINGLE(CCollisionManager)->UpdateProfileChannel("PlayerAirZone", "MapObject", CT_IGNORE);
-
-
-
 	GET_SINGLE(CCollisionManager)->CreateProfile("Map", "Map");
 	GET_SINGLE(CCollisionManager)->UpdateProfileChannel("Map", "Player", CT_IGNORE);
 	GET_SINGLE(CCollisionManager)->UpdateProfileChannel("Map", "Map", CT_IGNORE);
-	GET_SINGLE(CCollisionManager)->UpdateProfileChannel("Map", "PlayerAirZone", CT_IGNORE);
 	GET_SINGLE(CCollisionManager)->UpdateProfileChannel("Map", "MapObject", CT_IGNORE);
 
 
 	GET_SINGLE(CCollisionManager)->CreateProfile("MapObject", "MapObject");
 	GET_SINGLE(CCollisionManager)->UpdateProfileChannel("MapObject", "Map", CT_IGNORE);
-	GET_SINGLE(CCollisionManager)->UpdateProfileChannel("MapObject", "PlayerAirZone", CT_IGNORE);
 
 
 	GET_SINGLE(CCollisionManager)->CreateProfile("PlayerMap", "PlayerMap");
 	GET_SINGLE(CCollisionManager)->UpdateProfileChannel("PlayerMap", "Player", CT_IGNORE);
-	GET_SINGLE(CCollisionManager)->UpdateProfileChannel("PlayerMap", "PlayerAirZone", CT_IGNORE);
 	GET_SINGLE(CCollisionManager)->UpdateProfileChannel("PlayerMap", "MonsterProjectile", CT_IGNORE);
 	GET_SINGLE(CCollisionManager)->UpdateProfileChannel("PlayerMap", "PlayerProjectile", CT_IGNORE);
 	GET_SINGLE(CCollisionManager)->UpdateProfileChannel("PlayerMap", "Monster", CT_IGNORE);

@@ -15,8 +15,8 @@ private:
 	CStaticMeshComponent*	m_BackImage;
 
 
-	class CColliderRect*		FloorCollider;
-	class CSceneComponent*		FloorPivot;
+	//class CColliderRect*		FloorCollider;
+	//class CSceneComponent*		FloorPivot;
 public:
 	virtual bool Init();
 	virtual void Begin();

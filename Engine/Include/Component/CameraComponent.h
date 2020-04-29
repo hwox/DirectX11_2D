@@ -16,6 +16,10 @@ protected:
 	Matrix			m_matView;
 	Matrix			m_matProj;
 
+
+	bool LimitSetComplete;
+	bool DontComputeCamY;
+	bool DontComputeCamX;
 public:
 	CAMERA_TYPE GetCameraType()	const;
 	void SetCameraType(CAMERA_TYPE eType);
@@ -37,5 +41,14 @@ public:
 	virtual void Begin();
 	virtual void Update(float fTime);
 	virtual void Render(float fTime);
+
+	virtual void SetLimitSetComplete(bool enable);
+	virtual bool GetLimitSetComplete();
+
+	virtual void SetDontComputeCamY(bool enable);
+	virtual bool GetDontComputeCamY();
+
+	virtual void SetDontComputeCamX(bool enable);
+	virtual bool GetDontComputeCamX();
 };
 

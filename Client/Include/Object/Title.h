@@ -13,7 +13,7 @@ public:
 
 private:
 	class CText*	m_pText;
-
+	bool DebugText;
 public:
 	virtual bool Init();
 	virtual void Begin();

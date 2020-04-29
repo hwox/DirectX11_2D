@@ -7,7 +7,7 @@
 #include "Resource/Material.h"
 #include "../Object/Title.h"
 #include "..\Object\StartMap.h"
-
+#include "../Object/BGMObj.h"
 
 CStartGameMode::CStartGameMode()
 {
@@ -57,7 +57,9 @@ bool CStartGameMode::Init()
 
 	SAFE_RELEASE(pStartButton);
 
+	CBGMObj*	pBGMObj = m_pScene->SpawnObject<CBGMObj>("BGMObj");
 
+	SAFE_RELEASE(pBGMObj);
 
 	return true;
 }
@@ -308,9 +310,9 @@ void CStartGameMode::Player_Jump_Texture_Create()
 
 	////////////////////     Kirby DigestMonster     ///////////////////////
 
-	GET_SINGLE(CResourceManager)->CreateAnimation2DSequence("KirbyDigestMonster", false, 1.0f, 14);
+	GET_SINGLE(CResourceManager)->CreateAnimation2DSequence("KirbyDigestMonster", false, 0.9f, 8);
 
-	for (int i = 0; i <= 13; ++i)
+	for (int i = 0; i <= 7; ++i)
 	{
 		TCHAR	strFileName[MAX_PATH] = {};
 
@@ -330,7 +332,7 @@ void CStartGameMode::Player_Jump_Texture_Create()
 
 	////////////////////     Kirby Digest    ///////////////////////
 
-	GET_SINGLE(CResourceManager)->CreateAnimation2DSequence("KirbyDigest", false, 1.0f, 6);
+	GET_SINGLE(CResourceManager)->CreateAnimation2DSequence("KirbyDigest", false, 0.8f, 6);
 
 	for (int i = 0; i <= 5; ++i)
 	{
@@ -374,7 +376,7 @@ void CStartGameMode::Player_Jump_Texture_Create()
 
 	////////////////////     Kirby Jump Down    ///////////////////////
 
-	GET_SINGLE(CResourceManager)->CreateAnimation2DSequence("KirbyJumpDown", false, 1.0f, 9);
+	GET_SINGLE(CResourceManager)->CreateAnimation2DSequence("KirbyJumpDown", false, 0.7f, 9);
 
 	for (int i = 0; i <= 8; ++i)
 	{
@@ -390,6 +392,91 @@ void CStartGameMode::Player_Jump_Texture_Create()
 
 	GET_SINGLE(CResourceManager)->SetAnimation2DSequenceFrameInfoAll("KirbyJumpDown", Vector2(0.f, 0.f),
 		Vector2(25.f, 20.f));
+
+	///////////////////////////////////////////////////////////////
+
+
+		////////////////////     Kirby MonsterWlak   ///////////////////////
+
+	GET_SINGLE(CResourceManager)->CreateAnimation2DSequence("KirbyMonsterWalk", true, 0.7f, 14);
+
+	for (int i = 0; i <= 13; ++i)
+	{
+		TCHAR	strFileName[MAX_PATH] = {};
+
+		wsprintf(strFileName, TEXT("Player/Kirby_MonsterWalk/Kirby_MonsterWalk_%d.png"), i);
+
+		char	strKey[256] = {};
+		sprintf_s(strKey, "KirbyMonsterWalk%d", i);
+
+		GET_SINGLE(CResourceManager)->AddAnimation2DSequenceTexture("KirbyMonsterWalk", strKey, strFileName);
+	}
+
+	GET_SINGLE(CResourceManager)->SetAnimation2DSequenceFrameInfoAll("KirbyMonsterWalk", Vector2(0.f, 0.f),
+		Vector2(27.f, 27.f));
+
+	///////////////////////////////////////////////////////////////
+
+	////////////////////     Kirby MonsterJump   ///////////////////////
+
+	GET_SINGLE(CResourceManager)->CreateAnimation2DSequence("KirbyMonsterJump", false, 0.7f, 6);
+
+	for (int i = 0; i <= 5; ++i)
+	{
+		TCHAR	strFileName[MAX_PATH] = {};
+
+		wsprintf(strFileName, TEXT("Player/Kirby_MonsterJump/Kirby_MonsterJump_%d.png"), i);
+
+		char	strKey[256] = {};
+		sprintf_s(strKey, "KirbyMonsterJump%d", i);
+
+		GET_SINGLE(CResourceManager)->AddAnimation2DSequenceTexture("KirbyMonsterJump", strKey, strFileName);
+	}
+
+	GET_SINGLE(CResourceManager)->SetAnimation2DSequenceFrameInfoAll("KirbyMonsterJump", Vector2(0.f, 0.f),
+		Vector2(30.f, 30.f));
+
+	///////////////////////////////////////////////////////////////
+
+	////////////////////     Kirby MonsterJumpUp   ///////////////////////
+
+	GET_SINGLE(CResourceManager)->CreateAnimation2DSequence("KirbyMonsterJumpUp", true, 0.7f, 1);
+
+	for (int i = 0; i <= 0; ++i)
+	{
+		TCHAR	strFileName[MAX_PATH] = {};
+
+		wsprintf(strFileName, TEXT("Player/monster_jump_up.png"), i);
+
+		char	strKey[256] = {};
+		sprintf_s(strKey, "KirbyMonsterJumpUp%d", i);
+
+		GET_SINGLE(CResourceManager)->AddAnimation2DSequenceTexture("KirbyMonsterJumpUp", strKey, strFileName);
+	}
+
+	GET_SINGLE(CResourceManager)->SetAnimation2DSequenceFrameInfoAll("KirbyMonsterJumpUp", Vector2(0.f, 0.f),
+		Vector2(30.f, 35.f));
+
+	///////////////////////////////////////////////////////////////
+
+	////////////////////     Kirby MonsterIdle  ///////////////////////
+
+	GET_SINGLE(CResourceManager)->CreateAnimation2DSequence("KirbyMonsterIdle", true, 0.7f, 9);
+
+	for (int i = 0; i <= 8; ++i)
+	{
+		TCHAR	strFileName[MAX_PATH] = {};
+
+		wsprintf(strFileName, TEXT("Player/Kirby_MonsterIdle/Kirby_MonsterIdle_%d.png"), i);
+
+		char	strKey[256] = {};
+		sprintf_s(strKey, "KirbyMonsterIdle%d", i);
+
+		GET_SINGLE(CResourceManager)->AddAnimation2DSequenceTexture("KirbyMonsterIdle", strKey, strFileName);
+	}
+
+	GET_SINGLE(CResourceManager)->SetAnimation2DSequenceFrameInfoAll("KirbyMonsterIdle", Vector2(0.f, 0.f),
+		Vector2(27.f, 25.f));
 
 	///////////////////////////////////////////////////////////////
 }

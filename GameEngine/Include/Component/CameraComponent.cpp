@@ -8,9 +8,10 @@ CCameraComponent::CCameraComponent()
 	m_eCameraType = CT_PERSPECTIVE;
 
 	ComputeMatrix();
+	LimitSetComplete = false;
 }
 
-CCameraComponent::CCameraComponent(const CCameraComponent & com)	:
+CCameraComponent::CCameraComponent(const CCameraComponent & com) :
 	CSceneComponent(com)
 {
 	m_eCameraType = com.m_eCameraType;
@@ -48,6 +49,7 @@ void CCameraComponent::SetCameraPosLimit(float _minX, float _maxX, float _minY, 
 	maxX = _maxX;
 	minY = _minY;
 	maxY = _maxY;
+	LimitSetComplete = true;
 }
 
 void CCameraComponent::ComputeMatrix()
@@ -82,7 +84,7 @@ void CCameraComponent::Begin()
 void CCameraComponent::Update(float fTime)
 {
 	CSceneComponent::Update(fTime);
-	
+
 	/*
 	Xx Xy Xz   00 01 02    1 0 0
 	Yx Yy Yz * 10 11 12 = 0 1 0
@@ -98,22 +100,192 @@ void CCameraComponent::Update(float fTime)
 	Xz Yz Zz 0
 	-P.X -P.Y -P.Z  1
 	*/
-	m_matView.Identity();
 
-	for (int i = 0; i < AXIS_MAX; ++i)
-	{
-		memcpy(&m_matView[i][0], &m_pTransform->GetWorldAxis((AXIS)i), sizeof(Vector3));
+	if (LimitSetComplete) {
+		//if (!DontComputeCamY && !DontComputeCamX) {
+		//	m_matView.Identity();
+
+		//	for (int i = 0; i < AXIS_MAX; ++i)
+		//	{
+		//		memcpy(&m_matView[i][0], &m_pTransform->GetWorldAxis((AXIS)i), sizeof(Vector3));
+
+		//	}
+
+		//	m_matView.Transpose();
+
+		//	for (int i = 0; i < AXIS_MAX; ++i)
+		//	{
+
+		//		m_matView[3][i] = m_pTransform->GetWorldPos().Dot(m_pTransform->GetWorldAxis((AXIS)i)) * -1.f;
+
+		//	}
+		//	OutputDebugString(TEXT("1 \n"));
+		//}
+		//else if (DontComputeCamX && DontComputeCamY)
+		//{
+		//	// ตัดู
+		//	m_matView.Identity();
+
+		//	for (int i = 0; i < AXIS_MAX; ++i)
+		//	{
+		//		if (i != 1 || i != 0) {
+		//			memcpy(&m_matView[i][0], &m_pTransform->GetWorldAxis((AXIS)i), sizeof(Vector3));
+		//		}
+		//	}
+
+		//	m_matView.Transpose();
+
+		//	for (int i = 0; i < AXIS_MAX; ++i)
+		//	{
+		//		if (i != 1 || i != 0) {
+		//			m_matView[3][i] = m_pTransform->GetWorldPos().Dot(m_pTransform->GetWorldAxis((AXIS)i)) * -1.f;
+		//		}
+		//	}
+
+		//	// r
+		//	OutputDebugString(TEXT("2 \n"));
+		//}
+		//else if (DontComputeCamY)
+		//{
+		//	m_matView.Identity();
+
+		//	for (int i = 0; i < AXIS_MAX; ++i)
+		//	{
+		//		if (i != 1) {
+		//			memcpy(&m_matView[i][0], &m_pTransform->GetWorldAxis((AXIS)i), sizeof(Vector3));
+		//		}
+		//	}
+
+		//	m_matView.Transpose();
+
+		//	for (int i = 0; i < AXIS_MAX; ++i)
+		//	{
+		//		if (i != 1) {
+		//			m_matView[3][i] = m_pTransform->GetWorldPos().Dot(m_pTransform->GetWorldAxis((AXIS)i)) * -1.f;
+		//		}
+		//	}
+
+		//	OutputDebugString(TEXT("3 \n"));
+		//}
+		//else if (DontComputeCamX)
+		//{
+
+		//	m_matView.Identity();
+
+		//	for (int i = 0; i < AXIS_MAX; ++i)
+		//	{
+		//		if (i != 0 ) {
+		//			memcpy(&m_matView[i][0], &m_pTransform->GetWorldAxis((AXIS)i), sizeof(Vector3));
+		//		}
+		//	}
+
+		//	m_matView.Transpose();
+
+		//	for (int i = 0; i < AXIS_MAX; ++i)
+		//	{
+		//		if (i != 0) {
+		//			m_matView[3][i] = m_pTransform->GetWorldPos().Dot(m_pTransform->GetWorldAxis((AXIS)i)) * -1.f;
+		//		}
+		//	}
+
+		//	OutputDebugString(TEXT("4 \n"));
+		//}
+
+		if (DontComputeCamX)
+		{
+
+			m_matView.Identity();
+
+			for (int i = 0; i < AXIS_MAX; ++i)
+			{
+				if (i == 2) {
+					memcpy(&m_matView[i][0], &m_pTransform->GetWorldAxis((AXIS)i), sizeof(Vector3));
+				}
+			}
+
+			m_matView.Transpose();
+
+			for (int i = 0; i < AXIS_MAX; ++i)
+			{
+				if (i == 2) {
+					m_matView[3][i] = m_pTransform->GetWorldPos().Dot(m_pTransform->GetWorldAxis((AXIS)i)) * -1.f;
+				}
+			}
+
+		//	OutputDebugString(TEXT("4 \n"));
+		}
+		else
+		{
+			m_matView.Identity();
+
+			for (int i = 0; i < AXIS_MAX; ++i)
+			{
+				if (i != 1) {
+					memcpy(&m_matView[i][0], &m_pTransform->GetWorldAxis((AXIS)i), sizeof(Vector3));
+				}
+			}
+
+			m_matView.Transpose();
+
+			for (int i = 0; i < AXIS_MAX; ++i)
+			{
+				if (i != 1) {
+					m_matView[3][i] = m_pTransform->GetWorldPos().Dot(m_pTransform->GetWorldAxis((AXIS)i)) * -1.f;
+				}
+			}
+		///	OutputDebugString(TEXT("3 \n"));
+		}
+
 	}
-
-	m_matView.Transpose();
-
-	for (int i = 0; i < AXIS_MAX; ++i)
+	else
 	{
-		m_matView[3][i] = m_pTransform->GetWorldPos().Dot(m_pTransform->GetWorldAxis((AXIS)i)) * -1.f;
+		m_matView.Identity();
+
+		for (int i = 0; i < AXIS_MAX; ++i)
+		{
+			memcpy(&m_matView[i][0], &m_pTransform->GetWorldAxis((AXIS)i), sizeof(Vector3));
+		}
+
+		m_matView.Transpose();
+
+		for (int i = 0; i < AXIS_MAX; ++i)
+		{
+			m_matView[3][i] = m_pTransform->GetWorldPos().Dot(m_pTransform->GetWorldAxis((AXIS)i)) * -1.f;
+		}
 	}
 }
 
 void CCameraComponent::Render(float fTime)
 {
 	CSceneComponent::Render(fTime);
+}
+
+void CCameraComponent::SetLimitSetComplete(bool enable)
+{
+	LimitSetComplete = enable;
+}
+
+bool CCameraComponent::GetLimitSetComplete()
+{
+	return LimitSetComplete;
+}
+
+void CCameraComponent::SetDontComputeCamY(bool enable)
+{
+	DontComputeCamY = enable;
+}
+
+bool CCameraComponent::GetDontComputeCamY()
+{
+	return DontComputeCamY;
+}
+
+void CCameraComponent::SetDontComputeCamX(bool enable)
+{
+	DontComputeCamX = enable;
+}
+
+bool CCameraComponent::GetDontComputeCamX()
+{
+	return DontComputeCamX;
 }

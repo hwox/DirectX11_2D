@@ -15,6 +15,7 @@ private:
 
 private:
 	bool IsBackStep;
+	int Skill_Type;
 public:
 	virtual bool Init();
 	virtual void Begin();
@@ -23,9 +24,15 @@ public:
 	virtual void NearPlayerCheck(Vector3 pPos);
 	virtual void SetPlayerInfo(CGameObject *pObj);
 	virtual void SetColliderMode(int mode);
+	virtual void SetSkillType(int type);
+	virtual int GetSkillType();
 	virtual void AfterCollisionWithPlayer();
 	virtual void AfterCollisionWithAirZone();
+	virtual void SetIsEating(bool onoff);
+	virtual bool GetIsEating();
+	virtual bool Respawn();
 
+	virtual void GoToBlackHole(float fTime);
 public:
 	virtual void OnBlock(class CColliderBase* pSrc, class CColliderBase* pDest, float fTime);
 

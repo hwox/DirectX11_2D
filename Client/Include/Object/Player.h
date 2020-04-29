@@ -9,7 +9,7 @@ enum Kirby_State
 
 };
 
-#define JUMP_AMOUNT 7.0f
+#define JUMP_AMOUNT 10.0f
 
 class CPlayer :
 	public CGameObject
@@ -23,25 +23,25 @@ public:
 private:
 	bool m_IsMove; // 움직이는 상태
 
-	bool m_pJumpEnable; // press_time MAX 도달 또는 키 입력 중이면 true 아니면 false
-	bool IsAirMouse; // 입안에 공기 머금고 있는지 아닌지
-	bool HasMonster; // 입 안에 몬스터 갖고있는지 아닌지
+	//bool m_pJumpEnable; // press_time MAX 도달 또는 키 입력 중이면 true 아니면 false
+	//bool IsAirMouse; // 입안에 공기 머금고 있는지 아닌지
+	//bool HasMonster; // 입 안에 몬스터 갖고있는지 아닌지
 
-	bool EatAirIng;
+	//bool EatAirIng;
 	int m_KirbyState;
 
 
-	int EatProcess;
+	//int EatProcess;
 	bool JumpIng = false;  // 지금 공중에 떠있는지 아닌지
-	bool FirstJump;
+	//bool FirstJump;
 
 	float press_time;
 	float jump_time;
-	float jump_temp; // 점프 얼마나 했느지 그니까 깎인 양
+	//float jump_temp; // 점프 얼마나 했느지 그니까 깎인 양
 
 
 	float m_pMass; // 무게 (입에 뭐 있을 때랑 없을 때 구분용 무게임)
-	float g; // 중력가속도 값 
+	//float g; // 중력가속도 값 
 	Vector3 pPos;
 
 
@@ -49,7 +49,7 @@ private:
 	float m_pHP;
 
 
-	float m_UPkeyCoolTime;
+	//float m_UPkeyCoolTime;
 
 
 	bool m_pHasMonster;
@@ -57,12 +57,20 @@ private:
 	bool m_pIsJumping;
 	bool m_pNowEating;  // s키로 빨아들이고 있는 상태
 	bool m_pJumpKeyInputIng; // jump key 누르고 있는 상태
-
+	bool m_pFishingMonster; //  Blackhole상태
 
 	float StageMinX;
 	float StageMaxX;
 	float StageMinY;
 	float StageMaxY;
+
+
+	bool JumpUp;
+	bool JumpDown;
+
+	bool JumpAnimationChangeOnce;
+
+	//int Eat_Skill;
 
 private:
 	class CStaticMeshComponent*	m_pMesh;
@@ -75,10 +83,9 @@ private:
 	class CColliderRect*		m_pMapBody;  // 맵용 충돌체
 	class CPlayerLife*			m_pLifeBar;
 
+	class CMonster*				m_pEatMonster;
 	class CStaticMeshComponent*	BackImage;
 
-	//class CEffectComponent*		m_pEffect;
-	CColliderRect*		m_Zone;
 
 public:
 	virtual bool Init();
@@ -102,17 +109,9 @@ public:
 
 	void DownKey(float fScale, float fTime);
 	void ReturnToIdle(float fTime);
-
 	void EnableMove(float fTime);
 	void DisableMove(float fTime);
 
-	void EatIng();
-
-	void AKey(float fTime);
-	void AKeyEnd(float fTime);
-	void JumpUpdate(float fTime);
-
-	void Up(float fTime);
 
 	/////////////////////////////////////////////////////////////
 
@@ -132,10 +131,9 @@ public:
 	void SplitStar(float fTime);
 	void Yup(float fTime);
 	void EatAirFail(float fTime);
-	void EatMonsterSuccess(float fTime);
+	void EatMonsterSuccess(int _type);
 	void ComputeJump(float fTime);
 	void JumpEnd();
-	void MakeAirZone(float fTime);
 
 	void CamLimit(float fTime);
 
@@ -144,8 +142,6 @@ public:
 public:
 	void OnBlock(class CColliderBase* pSrc, class CColliderBase* pDest, float fTime);
 	void StruckedByMonster(class CColliderBase* pSrc, class CColliderBase* pDest, float fTime);
-	void HitAirZone(class CColliderBase* pSrc, class CColliderBase* pDest, float fTime);
-
 	void OnTheMap(class CColliderBase* pSrc, class CColliderBase* pDest, float fTime);
 	void NotOnTheMap(class CColliderBase* pSrc, class CColliderBase* pDest, float fTime);
 
@@ -154,3 +150,58 @@ public:
 
 };
 
+//if (/*jump_time > 0.f*/ JumpIng)
+//{
+//	if (!IsAirMouse)
+//	{
+//		//if (!m_pJumpEnable) {
+//		if (jump_time > 0 && jump_time <= JUMP_AMOUNT)
+//		{
+//			float tempY = jump_time + (g / m_pMass);
+//			m_pMovement->SetMoveSpeed(700.f);
+//			m_pMovement->AddMovement(GetWorldAxis(AXIS_Y) * tempY);
+
+//			jump_time -= 0.1f;
+//			jump_temp += 0.1f;
+
+
+//			m_pAnimation->ChangeAnimation("KirbyJump");
+
+//			//char buff[100];
+//			//sprintf_s(buff, " Press 1  : %f \n", jump_time);
+//			//OutputDebugStringA(buff);
+//		}
+//		//}
+//		//else {
+//		else if (jump_time < 0 && jump_time >((-1)*jump_temp))
+//		{
+//			float tempY = jump_time + (g / m_pMass);
+//			m_pMovement->SetMoveSpeed(700.f);
+//			m_pMovement->AddMovement(GetWorldAxis(AXIS_Y) * tempY);
+
+//			jump_time -= 0.1f;
+
+
+//		}
+//		else if (jump_time <= ((-1)*jump_temp) || pPos.y <= 130.f)
+//		{
+//			JumpIng = false;
+//			m_pMovement->SetMoveSpeed(500.f);
+//			//JumpInputEnd(fTime);
+//			pPos.y = 130.f;
+//			jump_time = 0.1f;
+//			press_time = 0.f;
+//			jump_temp = 0.f;
+//		}
+//		// 올라가다가 내려와야함  
+//	//}
+//	}
+//	else
+//	{
+//		// 내려올 필요 없음
+//		float tempY = jump_time + (g / m_pMass);
+//		m_pMovement->AddMovement(GetWorldAxis(AXIS_Y) * tempY);
+//		jump_time -= 0.05f;
+//	}
+
+//}

@@ -2,8 +2,7 @@
 #include "SceneComponent.h"
 #include "../Scene/Navigation2D.h"
 #include "../Scene/Scene.h"
-#define GA	900.f   // 중력 가속도
-#define FALLSPEED	0 // 떨어지는 속도
+
 CMovementComponent::CMovementComponent() :
 	m_pUpdateComponent(nullptr),
 	m_fMoveSpeed(500.f),
@@ -47,6 +46,11 @@ void CMovementComponent::SetMoveSpeed(float fMoveSpeed)
 void CMovementComponent::SetRotationSpeed(float fRotationSpeed)
 {
 	m_fRotationSpeed = fRotationSpeed;
+}
+
+float CMovementComponent::GetMoveSpeed()
+{
+	return m_fMoveSpeed;
 }
 
 bool CMovementComponent::Init()

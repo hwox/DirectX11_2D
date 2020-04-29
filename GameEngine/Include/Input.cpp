@@ -99,6 +99,26 @@ bool CInput::RButtonRelease() const
 	return m_tMouseInfo[MT_RBUTTON].bOnEvent[KS_RELEASE];
 }
 
+bool CInput::IsMouseClick() const
+{
+	return m_bMouseClick;
+}
+
+CGameObject * CInput::IsOnMouseObj() const
+{
+	return m_pOnMouseObj;
+}
+
+void CInput::SetMouseClick(bool bClick)
+{
+	m_bMouseClick = bClick;
+}
+
+void CInput::SetOnMouseObj(CGameObject * pObj)
+{
+	m_pOnMouseObj = pObj;
+}
+
 void CInput::SetDoubleKeyTime(float fTime)
 {
 	m_fDoubleKeyTime = fTime;

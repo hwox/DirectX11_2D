@@ -21,7 +21,6 @@ public:
 	CGameMode* GetGameMode()	const;
 	class CCameraManager* GetCameraManager()	const;
 	class CNavigation* GetNavigation(RENDER_MODE eMode)	const;
-
 private:
 	list<class CGameObject*>	m_ObjList;
 	list<class CGameObject*>	m_BeginList;

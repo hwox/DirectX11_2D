@@ -30,6 +30,7 @@ public:
 	void SetMoveSpeed(float fMoveSpeed);
 	void SetRotationSpeed(float fRotationSpeed);
 
+	float GetMoveSpeed();
 public:
 	virtual bool Init();
 	virtual void Begin();
