@@ -1,5 +1,6 @@
 #pragma once
-#include "E:\200425_ver\Engine\Include\Object\GameObject.h"
+//#include "E:\200425_ver\Engine\Include\Object\GameObject.h"
+#include "Object/GameObject.h"
 
 enum CM_CHOICE
 {
@@ -13,6 +14,8 @@ enum CM_CHOICE
 class CMonster :
 	public CGameObject
 {
+	GAMEOBJECT_DEFAULT()
+
 public:
 	CMonster();
 	~CMonster();

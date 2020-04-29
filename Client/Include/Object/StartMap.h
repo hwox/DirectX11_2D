@@ -1,5 +1,6 @@
 #pragma once
-#include "E:\200425_ver\Engine\Include\Object\GameObject.h"
+//#include "E:\200425_ver\Engine\Include\Object\GameObject.h"
+#include "Object/GameObject.h"
 class CStartMap :
 	public CGameObject
 {
@@ -11,7 +12,7 @@ public:
 private:
 	//	class CTileMap*	m_pTileMap;
 	class CStaticMeshComponent*	m_pMesh;
-
+	CStaticMeshComponent*	m_BackImage;
 
 public:
 	virtual bool Init();

@@ -20,9 +20,10 @@
 
 #define STAND_SCALE				130.f
 #define JUMP_SCALE				200.f
+#define MONSTERSPLIT_SCALE		350.f
 #define EAT_SCALE				180.f
 #define EATMONSTER_SCALE		160.f
-#define INIT_YPOS				 250.f
+#define INIT_YPOS				 230.f
 #define STAND_MASS				1.f
 #define FAT_MASS				10.f
 
@@ -453,12 +454,17 @@ void CPlayer::DownKey(float fScale, float fTime)
 			else
 			{
 				if (IsPlayAnimation) {
-					m_pAnimation->ChangeAnimation("KirbyDigest");
-					m_pAnimation->SetReturnSequenceName("KirbyDigest", "KirbyIdle");
+
 					m_pHasAir = false;
 					m_pMass = STAND_MASS;
-					DisablePlayAnimation();
-					GET_SINGLE(CScheduler)->AddSchedule<CPlayer>("EnablePlayAnimation", false, 1.f, this, &CPlayer::EnablePlayAnimation);
+					DisablePlayAnimation(fTime);
+	
+
+					m_pAnimation->ChangeAnimation("KirbyDigest");
+					m_pAnimation->SetReturnSequenceName("KirbyDigest", "KirbyIdle");
+				//	m_pAnimation->CreateNotify("KirbyDigest", "ChangeToIdle", 6);
+				//	m_pAnimation->AddNotifyFunction<CPlayer>("KirbyDigest", "ChangeToIdle", this, &CPlayer::EnablePlayAnimation);
+
 				}
 			}
 		}
@@ -529,7 +535,9 @@ void CPlayer::SKeyDown(float fTime)
 			// 공격함수 추가
 			//m_pAnimation->ChangeAnimation("KirbySplitStar");
 			// 여기서 좌측 scale 증가시켜야 함 
-
+			m_pMesh->SetRelativeScale(MONSTERSPLIT_SCALE, STAND_SCALE, 1.f);
+			m_pAnimation->ChangeAnimation("KirbySplitStar");
+			m_pHasMonster = false;
 			// 특정 frame에 fire 함수 등록시키고 
 
 			return;
@@ -550,9 +558,11 @@ void CPlayer::SKeyUp(float fTime)
 	}
 	else if (m_pHasAir)
 	{
-		m_pAnimation->ChangeAnimation("KirbyEatOver");
-		m_pAnimation->SetReturnSequenceName("KirbyEatOver", "KirbyIdle");
-
+		//m_pAnimation->ChangeAnimation("KirbyEatOver");
+		////m_pAnimation->SetReturnSequenceName("KirbyEatOver", "KirbyIdle");
+		//m_pAnimation->CreateNotify("KirbyEatOver", "SetHasAirFalse", 3);
+		//m_pAnimation->AddNotifyFunction<CPlayer>("KirbyEatOver", "SetHasAirFalse", this, &CPlayer::SetHasAirFalse);
+		//m_IsMove = false;
 	}
 	else if (m_pNowEating)
 	{
@@ -672,16 +682,20 @@ void CPlayer::ToEatAirState(float fTime)
 
 void CPlayer::SpitAir(float fTime)
 {
-	if (m_pIsJumping) {
-		m_pAnimation->ChangeAnimation("KirbyJumpEnd");
-		m_pAnimation->SetReturnSequenceName("KirbyJumpEnd", "KirbyIdle");
-	}
-	else if (m_pHasAir) {
-		m_pAnimation->ChangeAnimation("KirbyEatOver");
-		m_pAnimation->SetReturnSequenceName("KirbyEatOver", "KirbyIdle");
-	}
+	//if (m_pIsJumping && m_pHasAir) {
+	//	m_pAnimation->ChangeAnimation("KirbyJumpEnd");
+	//	m_pAnimation->SetReturnSequenceName("KirbyJumpEnd", "KirbyIdle");
+	//}
+	//else if (m_pHasAir && !m_pIsJumping) {
+	m_pAnimation->ChangeAnimation("KirbyEatOver");
+	//m_pAnimation->SetReturnSequenceName("KirbyEatOver", "KirbyIdle");
+	m_pAnimation->CreateNotify("KirbyEatOver", "SetHasAirFalse", 3);
+	m_pAnimation->AddNotifyFunction<CPlayer>("KirbyEatOver", "SetHasAirFalse", this, &CPlayer::SetHasAirFalse);
 
-	m_pHasAir = false;
+	//m_IsMove = false;
+	//}
+
+	//m_pHasAir = false;
 	m_pIsJumping = false;
 
 	m_pMass = STAND_MASS;
@@ -1073,14 +1087,26 @@ void CPlayer::JumpIngStateAnimation(int state)
 	}
 }
 
-void CPlayer::EnablePlayAnimation()
+void CPlayer::EnablePlayAnimation(float fTime)
 {
 	IsPlayAnimation = false;
 }
 
-void CPlayer::DisablePlayAnimation()
+void CPlayer::DisablePlayAnimation(float fTime)
 {
 	IsPlayAnimation = true;
+}
+
+void CPlayer::SetHasAirFalse(float fTime)
+{
+	m_pHasAir = false;
+	IdleStateAnimation(m_KirbyState);
+}
+
+void CPlayer::SetHasMonsterFalse(float fTime)
+{
+	m_pHasMonster = false;
+	IdleStateAnimation(m_KirbyState);
 }
 
 void CPlayer::OnBlock(CColliderBase * pSrc, CColliderBase * pDest, float fTime)
@@ -1114,9 +1140,12 @@ void CPlayer::StruckedByMonster(CColliderBase * pSrc, CColliderBase * pDest, flo
 			m_pAnimation->CreateNotify("KirbyDigestMonster", "ChangeToMonsterIdle", 7);
 			m_pAnimation->AddNotifyFunction<CPlayer>("KirbyDigestMonster", "ChangeToMonsterIdle", this, &CPlayer::ReturnToMonsterIdle);
 
+
 			m_SaveState = m_pEatMonster->GetSkillType();
 
 			m_pFishingMonster = false;
+
+
 			return;
 		}
 		m_pEatMonster = (CMonster*)(pDest->GetOwner());

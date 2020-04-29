@@ -57,7 +57,7 @@ bool CColliderRect::Init()
 	if (!CColliderBase::Init())
 		return false;
 
-	//SetDebugMesh("ColliderRect");
+	SetDebugMesh("ColliderRect");
 
 	return true;
 }
@@ -103,6 +103,8 @@ bool CColliderRect::Collision(CColliderBase * pDest)
 	case COLLIDER_PIXEL:
 		return CCollision::CollisionRectToPixel(this, (CColliderPixel*)pDest);
 	case COLLIDER_POINT:
+		break;
+	case COLLIDER_OBSTACLE:
 		break;
 	}
 

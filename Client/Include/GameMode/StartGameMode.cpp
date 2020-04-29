@@ -290,7 +290,7 @@ void CStartGameMode::Player_Stand_Texture_Create()
 
 		////////////////////     Kirby SplitStar     ///////////////////////
 
-	GET_SINGLE(CResourceManager)->CreateAnimation2DSequence("KirbySplitStar", false, 1.0f, 14);
+	GET_SINGLE(CResourceManager)->CreateAnimation2DSequence("KirbySplitStar", false, 1.2f, 14);
 
 	for (int i = 0; i <= 13; ++i)
 	{
@@ -727,7 +727,7 @@ void CStartGameMode::Effect_Texture_Create()
 {
 	////////////////////     Star Bullet    ///////////////////////
 
-	GET_SINGLE(CResourceManager)->CreateAnimation2DSequence("StarBullet", true, 1.0f, 4);
+	GET_SINGLE(CResourceManager)->CreateAnimation2DSequence("StarBullet", true, 0.7f, 4);
 
 	for (int i = 0; i <= 3; ++i)
 	{
@@ -875,6 +875,16 @@ bool CStartGameMode::CreateMaterial()
 
 	SAFE_RELEASE(pMaterial);
 
+	GET_SINGLE(CResourceManager)->CreateMaterial("BulletAnimMtrl");
+
+	pMaterial = GET_SINGLE(CResourceManager)->FindMaterial("BulletAnimMtrl");
+
+	pMaterial->SetSubsetShader(STANDARD_ANIM2D_SHADER);
+	pMaterial->SetRenderState("AlphaBlend");
+	pMaterial->SetMaterialShaderStyle(MSS_ALPHA);
+
+	SAFE_RELEASE(pMaterial);
+
 
 
 	GET_SINGLE(CResourceManager)->CreateMaterial("StageBackMaterial");
@@ -919,6 +929,17 @@ bool CStartGameMode::CreateMaterial()
 
 	pMaterial->SetSubsetShader(STANDARD_TEX_SHADER);
 	pMaterial->SetTexture(0, "Stage3BG", TEXT("stage_3.png"));
+	pMaterial->SetRenderState("AlphaBlend");
+	pMaterial->SetMaterialShaderStyle(MSS_ENVIRONMENT);
+
+	SAFE_RELEASE(pMaterial);
+
+
+	GET_SINGLE(CResourceManager)->CreateMaterial("ObstacleMaterial");
+
+	pMaterial = GET_SINGLE(CResourceManager)->FindMaterial("ObstacleMaterial");
+	pMaterial->SetSubsetShader(STANDARD_TEX_SHADER);
+	pMaterial->SetTexture(0, "Obstacle", TEXT("Tile_Test_0.png"));
 	pMaterial->SetRenderState("AlphaBlend");
 	pMaterial->SetMaterialShaderStyle(MSS_ENVIRONMENT);
 

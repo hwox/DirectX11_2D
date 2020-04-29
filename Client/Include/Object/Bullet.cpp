@@ -3,13 +3,22 @@
 #include "Scene/Scene.h"
 #include "Component/ColliderRect.h"
 #include "Resource/Material.h"
+#include "Component/Animation2D.h"
+#include "Resource/Animation2DSequence.h" 
 
 CBullet::CBullet()
 {
+	m_pAnimation = nullptr;
+	m_pBody = nullptr;
+	m_pMesh = nullptr;
+	m_pMovement = nullptr;
+
+	b_Type = BT_DEFAULT;
 }
 
 CBullet::~CBullet()
 {
+	SAFE_RELEASE(m_pAnimation);
 	SAFE_RELEASE(m_pBody);
 	SAFE_RELEASE(m_pMesh);
 	SAFE_RELEASE(m_pMovement);
@@ -27,12 +36,17 @@ bool CBullet::Init()
 
 	m_pMesh = CGameObject::CreateComponent<CStaticMeshComponent>("Mesh");
 	m_pBody = CreateComponent<CColliderRect>("BulletBody");
+	m_pAnimation = CAnimation2D::CreateAnimation2D<CAnimation2D>();
+
+
+	m_pAnimation->AddAnimation2DSequence("StarBullet");
 
 	CStaticMesh*	pMesh = (CStaticMesh*)GET_SINGLE(CResourceManager)->FindMesh("TexRect");
 
 	m_pMesh->SetStaticMesh(pMesh);
+	m_pMesh->SetAnimation2D(m_pAnimation);
 
-	CMaterial* pMaterial = GET_SINGLE(CResourceManager)->FindMaterial("BulletMaterial");
+	CMaterial* pMaterial = GET_SINGLE(CResourceManager)->FindMaterial("BulletAnimMaterial");
 
 	m_pMesh->SetMaterial(pMaterial);
 
@@ -72,3 +86,5 @@ void CBullet::Render(float fTime)
 {
 	CGameObject::Render(fTime);
 }
+
+

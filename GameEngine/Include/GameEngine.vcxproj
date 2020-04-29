@@ -186,6 +186,7 @@
     <ClInclude Include="Component\CameraComponent.h" />
     <ClInclude Include="Component\CharacterMovementComponent.h" />
     <ClInclude Include="Component\ColliderBase.h" />
+    <ClInclude Include="Component\ColliderMapObstacle.h" />
     <ClInclude Include="Component\ColliderOBB2D.h" />
     <ClInclude Include="Component\ColliderPixel.h" />
     <ClInclude Include="Component\ColliderPoint.h" />
@@ -269,6 +270,7 @@
     <ClCompile Include="Component\CameraComponent.cpp" />
     <ClCompile Include="Component\CharacterMovementComponent.cpp" />
     <ClCompile Include="Component\ColliderBase.cpp" />
+    <ClCompile Include="Component\ColliderMapObstacle.cpp" />
     <ClCompile Include="Component\ColliderOBB2D.cpp" />
     <ClCompile Include="Component\ColliderPixel.cpp" />
     <ClCompile Include="Component\ColliderPoint.cpp" />

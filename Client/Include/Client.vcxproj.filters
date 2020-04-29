@@ -114,6 +114,9 @@
     <ClCompile Include="GameMode\Stage1Mode.cpp">
       <Filter>01. GameMode\Stage</Filter>
     </ClCompile>
+    <ClCompile Include="Object\MapObstacle.cpp">
+      <Filter>02. Object\Map</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -184,6 +187,9 @@
     </ClInclude>
     <ClInclude Include="GameMode\Stage1Mode.h">
       <Filter>01. GameMode\Stage</Filter>
+    </ClInclude>
+    <ClInclude Include="Object\MapObstacle.h">
+      <Filter>02. Object\Map</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

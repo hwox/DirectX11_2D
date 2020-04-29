@@ -23,9 +23,9 @@
 #include "../Object/Title.h"
 
 #define STAGE1_MINX		0
-#define STAGE1_MAXX		11000
+#define STAGE1_MAXX		9500
 #define STAGE1_MINY		50
-#define STAGE1_MAXY		950
+#define STAGE1_MAXY		800
 
 CStage1Mode::CStage1Mode()
 {
@@ -78,7 +78,7 @@ bool CStage1Mode::Init()
 void CStage1Mode::SpawnMonster()
 {
 
-	CWaddleDee*	pMinion = m_pScene->SpawnObject<CWaddleDee>(Vector3(1800.f, 250.f, 0.f));
+	CWaddleDee*	pMinion = m_pScene->SpawnObject<CWaddleDee>(Vector3(1600.f, 230.f, 0.f));
 
 	SAFE_RELEASE(pMinion);
 
@@ -135,6 +135,7 @@ void CStage1Mode::SetCollidrProfile()
 
 	GET_SINGLE(CCollisionManager)->CreateProfile("MapObject", "MapObject");
 	GET_SINGLE(CCollisionManager)->UpdateProfileChannel("MapObject", "Map", CT_IGNORE);
+	//GET_SINGLE(CCollisionManager)->UpdateProfileChannel("MapObject", "Map", CT_IGNORE);
 
 
 	GET_SINGLE(CCollisionManager)->CreateProfile("PlayerMap", "PlayerMap");

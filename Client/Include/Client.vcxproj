@@ -173,6 +173,7 @@
     <ClCompile Include="Object\Bullet.cpp" />
     <ClCompile Include="Object\ChildObj.cpp" />
     <ClCompile Include="Object\MainMap.cpp" />
+    <ClCompile Include="Object\MapObstacle.cpp" />
     <ClCompile Include="Object\Minion.cpp" />
     <ClCompile Include="Object\Monster.cpp" />
     <ClCompile Include="Object\PhoneCallUI.cpp" />
@@ -197,6 +198,7 @@
     <ClInclude Include="Object\Bullet.h" />
     <ClInclude Include="Object\ChildObj.h" />
     <ClInclude Include="Object\MainMap.h" />
+    <ClInclude Include="Object\MapObstacle.h" />
     <ClInclude Include="Object\Minion.h" />
     <ClInclude Include="Object\Monster.h" />
     <ClInclude Include="Object\PhoneCallUI.h" />

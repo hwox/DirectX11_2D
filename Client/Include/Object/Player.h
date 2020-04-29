@@ -1,5 +1,7 @@
 #pragma once
-#include "E:\200425_ver\Engine\Include\Object\GameObject.h"
+#include "Object/GameObject.h"
+//#include "E:\200425_ver\Engine\Include\Object\GameObject.h"
+//#include "E:\200425_ver\Engine\Include\Object\GameObject.h"
 
 
 enum Kirby_State
@@ -137,8 +139,11 @@ public:
 	void DamageStateAnimation(int state);
 	void JumpIngStateAnimation(int state);
 
-	void EnablePlayAnimation();
-	void DisablePlayAnimation();
+	void EnablePlayAnimation(float fTime);
+	void DisablePlayAnimation(float fTime);
+
+	void SetHasAirFalse(float fTime);
+	void SetHasMonsterFalse(float fTime);
 public:
 	void OnBlock(class CColliderBase* pSrc, class CColliderBase* pDest, float fTime);
 	void StruckedByMonster(class CColliderBase* pSrc, class CColliderBase* pDest, float fTime);
