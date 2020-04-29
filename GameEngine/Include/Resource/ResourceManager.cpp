@@ -25,7 +25,7 @@ CResourceManager::~CResourceManager()
 	SAFE_RELEASE_MAP(m_mapRenderState);
 	SAFE_RELEASE_MAP(m_mapMaterial);
 	SAFE_RELEASE_NORMAL_MAP(m_mapSampler);
-	SAFE_RELEASE_MAP(m_mapTexture);
+//	SAFE_RELEASE_MAP(m_mapTexture);
 	SAFE_RELEASE_MAP(m_mapMesh);
 
 	m_pSystem->close();

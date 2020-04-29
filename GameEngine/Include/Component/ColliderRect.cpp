@@ -57,7 +57,7 @@ bool CColliderRect::Init()
 	if (!CColliderBase::Init())
 		return false;
 
-	SetDebugMesh("ColliderRect");
+	//SetDebugMesh("ColliderRect");
 
 	return true;
 }

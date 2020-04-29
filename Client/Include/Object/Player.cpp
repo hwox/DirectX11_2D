@@ -43,7 +43,7 @@ CPlayer::CPlayer()
 	//m_pEffect = nullptr;
 	m_KirbyState = 0;
 	m_pEatMonster = nullptr;
-
+	m_SaveState = 0;
 	m_IsMove = true;
 
 	///////////////// HP	 /////////////////
@@ -220,6 +220,10 @@ void CPlayer::PlayerKeySetting()
 	GET_SINGLE(CInput)->AddActionKey("Fire", DIK_SPACE);
 	GET_SINGLE(CInput)->BindAction<CPlayer>("Fire", AKS_PRESS, this, &CPlayer::Fire);
 
+	////////////////////////////////////////////////////////////////////////////
+
+	GET_SINGLE(CInput)->AddAxisKey("DigestMonster", DIK_F, -1.f);
+	GET_SINGLE(CInput)->BindAxis<CPlayer>("DigestMonster", this, &CPlayer::DigestMonster);
 
 
 	////////////////////////////////////////////////////////////////////////////
@@ -233,8 +237,6 @@ void CPlayer::PlayerKeySetting()
 	GET_SINGLE(CInput)->AddActionKey("JumpEnd", DIK_A);
 	GET_SINGLE(CInput)->BindAction<CPlayer>("JumpEnd", AKS_RELEASE, this, &CPlayer::AKeyUp);
 
-	// 짧게 두번 먹었으면 공기먹은 상태 됨 
-	// 혹은 점프중에 착ㄱ지 안했는데 A 한번 더 누르면 공기먹은 상태로 바뀌고 착지
 
 	////////////////////////////////////////////////////////////////////////////
 
@@ -261,8 +263,9 @@ void CPlayer::PlayerKeySetting()
 	GET_SINGLE(CInput)->AddActionKey("BlackholeEnd", DIK_S);
 	GET_SINGLE(CInput)->BindAction<CPlayer>("BlackholeEnd", AKS_RELEASE, this, &CPlayer::SKeyUp);
 
-
 	////////////////////////////////////////////////////////////////////////////
+
+
 
 	GET_SINGLE(CInput)->AddActionKey("DeleteChild", DIK_RETURN);
 	GET_SINGLE(CInput)->BindAction<CPlayer>("DeleteChild", AKS_PRESS, this, &CPlayer::Delete);
@@ -292,6 +295,16 @@ void CPlayer::SetPlayerAnimation()
 	m_pAnimation->AddAnimation2DSequence("KirbyMonsterJump");
 	m_pAnimation->AddAnimation2DSequence("KirbyMonsterJumpUp");
 	m_pAnimation->AddAnimation2DSequence("KirbyMonsterIdle");
+
+
+	////////////////////////////////////////////////////////////
+
+	m_pAnimation->AddAnimation2DSequence("BeamJumpUp");
+	m_pAnimation->AddAnimation2DSequence("BeamWalk");
+	m_pAnimation->AddAnimation2DSequence("BeamJumpDown");
+	m_pAnimation->AddAnimation2DSequence("BeamIdleDown");
+	m_pAnimation->AddAnimation2DSequence("BeamIdle");
+
 }
 
 void CPlayer::MoveSide(float fScale, float fTime)
@@ -300,18 +313,16 @@ void CPlayer::MoveSide(float fScale, float fTime)
 	if (m_IsMove) {
 		if (fScale != 0.f)
 		{
-			if (!m_pHasAir /*&& !m_pNowEating*/ && !JumpUp && !JumpDown && !m_pHasMonster)
-			{
-				m_pAnimation->ChangeAnimation("KirbyWalk");
-				m_pMesh->SetRelativeScale(STAND_SCALE, STAND_SCALE, 1.f);
-				m_pBody->SetRelativeScale(STAND_SCALE, STAND_SCALE, 1.f);
+			if (!JumpUp && !JumpDown) {
+				if (!m_pHasAir /*&& !m_pNowEating*/ && !m_pHasMonster)
+				{
+					WalkStateAnimation(m_KirbyState);
 
-			}
-			else if (m_pHasMonster)
-			{
-				m_pAnimation->ChangeAnimation("KirbyMonsterWalk");
-				m_pMesh->SetRelativeScale(EATMONSTER_SCALE, EATMONSTER_SCALE, 1.f);
-				m_pBody->SetRelativeScale(EATMONSTER_SCALE, EATMONSTER_SCALE, 1.f);
+				}
+				else if (m_pHasMonster)
+				{
+					MonsterWalkStateAnimation(m_KirbyState);
+				}
 			}
 			if (fScale < 0.f)
 				m_pMesh->SetRelativeRotationY(180.f);
@@ -324,13 +335,15 @@ void CPlayer::MoveSide(float fScale, float fTime)
 
 		else
 		{
-			if (!m_pHasAir && !m_pNowEating && !JumpUp && !JumpDown && !m_pHasMonster)
-			{
-				m_pAnimation->ChangeAnimation("KirbyIdle");
-			}
-			else if (m_pHasMonster)
-			{
-				m_pAnimation->ChangeAnimation("KirbyMonsterIdle");
+			if (!JumpUp && !JumpDown) {
+				if (!m_pHasAir && !m_pNowEating && !m_pHasMonster)
+				{
+					IdleStateAnimation(m_KirbyState);
+				}
+				else if (m_pHasMonster)
+				{
+					MonsterIdleStateAnimation(m_KirbyState);
+				}
 			}
 		}
 	}
@@ -432,36 +445,47 @@ void CPlayer::DownKey(float fScale, float fTime)
 			bMove = true;
 			if (!m_pHasAir)
 			{
-				m_pAnimation->ChangeAnimation("KirbyIdleDown");
+				if (IsPlayAnimation) {
+					IdleDownStateAnimation(m_KirbyState);
+					OutputDebugString(TEXT("들어오면 안되는 곳 \n"));
+				}
 			}
 			else
 			{
-				m_pAnimation->ChangeAnimation("KirbyDigest");
-				m_pAnimation->SetReturnSequenceName("KirbyDigest", "KirbyIdle");
-				m_pHasAir = false;
-				m_pMass = STAND_MASS;
+				if (IsPlayAnimation) {
+					m_pAnimation->ChangeAnimation("KirbyDigest");
+					m_pAnimation->SetReturnSequenceName("KirbyDigest", "KirbyIdle");
+					m_pHasAir = false;
+					m_pMass = STAND_MASS;
+					DisablePlayAnimation();
+					GET_SINGLE(CScheduler)->AddSchedule<CPlayer>("EnablePlayAnimation", false, 1.f, this, &CPlayer::EnablePlayAnimation);
+				}
 			}
 		}
 		else
 		{
 			if (bMove)
 			{
-				m_pAnimation->ChangeAnimation("KirbyIdle");
+				IdleStateAnimation(m_KirbyState);
 				bMove = false;
 			}
 		}
 	}
-	else
-	{
-		// 스킬 변화 
-		// ChangeSkill(m_KirbyState);
-	}
+
 }
 
+
+// sequence Notify가 다 호출 안되는데..? 
 void CPlayer::ReturnToIdle(float fTime)
 {
 	m_pMesh->SetRelativeScale(STAND_SCALE, STAND_SCALE, 1.f);
-	m_pAnimation->ChangeAnimation("KirbyIdle");
+	IdleStateAnimation(m_KirbyState);
+}
+
+void CPlayer::ReturnToMonsterIdle(float fTime)
+{
+	m_pMesh->SetRelativeScale(EATMONSTER_SCALE, EATMONSTER_SCALE, 1.f);
+	MonsterIdleStateAnimation(m_KirbyState);
 }
 
 void CPlayer::EnableMove(float fTime)
@@ -503,7 +527,7 @@ void CPlayer::SKeyDown(float fTime)
 		{
 			// 공격
 			// 공격함수 추가
-			m_pAnimation->ChangeAnimation("KirbySplitStar");
+			//m_pAnimation->ChangeAnimation("KirbySplitStar");
 			// 여기서 좌측 scale 증가시켜야 함 
 
 			// 특정 frame에 fire 함수 등록시키고 
@@ -528,6 +552,7 @@ void CPlayer::SKeyUp(float fTime)
 	{
 		m_pAnimation->ChangeAnimation("KirbyEatOver");
 		m_pAnimation->SetReturnSequenceName("KirbyEatOver", "KirbyIdle");
+
 	}
 	else if (m_pNowEating)
 	{
@@ -545,10 +570,8 @@ void CPlayer::SKeyUp(float fTime)
 
 void CPlayer::AKeyDown(float fTime)
 {
-
 	if (press_time < JUMP_AMOUNT + 10.f)
 	{
-
 		m_pMovement->SetMoveSpeed(700.f);
 		m_pMovement->AddMovement(GetWorldAxis(AXIS_Y) * m_pMass);
 		press_time += (fTime)*20.f;
@@ -556,15 +579,13 @@ void CPlayer::AKeyDown(float fTime)
 		if (!JumpAnimationChangeOnce) {
 			if (!m_pHasMonster && !m_pHasAir)
 			{
-				m_pAnimation->ChangeAnimation("KirbyJumpUp");
+				JumpUpStateAnimation(m_KirbyState);
 				JumpAnimationChangeOnce = true;
 			}
 			else if (m_pHasMonster)
 			{
-				m_pMesh->SetRelativeScale(EAT_SCALE, EAT_SCALE*1.5, 1.f);
-				m_pAnimation->ChangeAnimation("KirbyMonsterJumpUp");
+				MonsterJumpUpStateAnimation(m_KirbyState);
 				JumpAnimationChangeOnce = true;
-
 			}
 		}
 	}
@@ -640,6 +661,7 @@ void CPlayer::UpKeyDoubleDown(float fTime)
 		m_pAnimation->SetReturnSequenceName("KirbyJump", "KirbyJumpIng");
 		m_pHasAir = true;
 		m_pMass = FAT_MASS;
+		m_pMesh->SetRelativeScale(EAT_SCALE, EAT_SCALE, 1.f);
 	}
 }
 
@@ -666,20 +688,6 @@ void CPlayer::SpitAir(float fTime)
 	m_pMesh->SetRelativeScale(STAND_SCALE, STAND_SCALE, 1.f);
 }
 
-void CPlayer::SplitStar(float fTime)
-{
-	if (m_pHasMonster)
-	{
-		m_pHasMonster = false;
-		// 몬스터 있던거 날리는거니까
-
-		// 뱉는거 별 날아가야 함 
-		// 별 회전시키면서 날아가야댐 
-
-		m_pAnimation->ChangeAnimation("KirbyEatOver");
-		m_pAnimation->SetReturnSequenceName("KirbyEatOver", "KirbyIdle");
-	}
-}
 
 void CPlayer::Yup(float fTime)
 {
@@ -688,13 +696,13 @@ void CPlayer::Yup(float fTime)
 
 void CPlayer::EatAirFail(float fTime)
 {
-	m_pAnimation->ChangeAnimation("KirbyIdle");
+	IdleStateAnimation(m_KirbyState);
 	m_pNowEating = false;
 	m_IsMove = true; // 이거 하는동안에 움직이지 말라고 
 
 }
 
-void CPlayer::EatMonsterSuccess(int _type)
+void CPlayer::EatMonsterSuccess()
 {
 	m_pFishingMonster = true;
 
@@ -715,16 +723,14 @@ void CPlayer::ComputeJump(float fTime)
 		if (JumpAnimationChangeOnce) {
 			if (!m_pHasMonster && !m_pHasAir)
 			{
-				m_pAnimation->ChangeAnimation("KirbyJumpDown");
-				m_pAnimation->SetReturnSequenceName("KirbyJumpDown", "KirbyIdle");
+				JumpDownStateAnimation(m_KirbyState);
 				JumpAnimationChangeOnce = false;
 			}
 			else if (m_pHasMonster)
 			{
-				m_pAnimation->ChangeAnimation("KirbyMonsterJump");
-				m_pAnimation->SetReturnSequenceName("KirbyMonsterJump", "KirbyMonsterIdle");
+				MonsterJumpDownStateAnimation(m_KirbyState);
 				JumpAnimationChangeOnce = false;
-				m_pMesh->SetRelativeScale(EAT_SCALE, EAT_SCALE, 1.f);
+
 			}
 		}
 	}
@@ -746,6 +752,45 @@ void CPlayer::JumpEnd()
 
 	m_pIsJumping = false;
 
+}
+
+void CPlayer::ApplySkill(int state)
+{
+	m_KirbyState = state;
+	switch (state)
+	{
+	case Stand:
+		OutputDebugString(TEXT("Skill Input 0, Something has problem"));
+		break;
+	case Beam:
+		//1
+		OutputDebugString(TEXT("Skill Input 1"));
+
+
+		break;
+	case Cutter:
+		//2
+		break;
+	case Ice:
+		break;
+	}
+}
+
+void CPlayer::DigestMonster(float fScale, float fTime)
+{
+	if (fScale != 0) {
+		if (m_SaveState != 0)
+		{
+			//m_pMesh->SetRelativeScale(STAND_SCALE * 2.5f, STAND_SCALE*1.5f, 1.f);
+			m_pAnimation->ChangeAnimation("KirbyDigest");
+			m_pAnimation->CreateNotify("KirbyDigest", "ChangeToIdle", 6);
+			m_pAnimation->AddNotifyFunction<CPlayer>("KirbyDigest", "ChangeToIdle", this, &CPlayer::ReturnToIdle);
+
+			m_pHasMonster = false;
+			m_KirbyState = m_SaveState;
+			m_SaveState = 0;
+		}
+	}
 }
 
 void CPlayer::CamLimit(float fTime)
@@ -801,6 +846,243 @@ void CPlayer::SetStageMinMax(float minx, float maxx, float miny, float maxy)
 	StageMaxY = maxy;
 }
 
+void CPlayer::WalkStateAnimation(int state)
+{
+	switch (state)
+	{
+	case Stand:
+		m_pAnimation->ChangeAnimation("KirbyWalk");
+		m_pMesh->SetRelativeScale(STAND_SCALE, STAND_SCALE, 1.f);
+		m_pBody->SetRelativeScale(STAND_SCALE, STAND_SCALE, 1.f);
+		break;
+	case Beam:
+		m_pAnimation->ChangeAnimation("BeamWalk");
+		m_pMesh->SetRelativeScale(STAND_SCALE + 20.f, STAND_SCALE + 20.f, 1.f);
+		m_pBody->SetRelativeScale(STAND_SCALE, STAND_SCALE, 1.f);
+		break;
+	case Cutter:
+		break;
+	case Ice:
+		break;
+	default:
+		OutputDebugString(TEXT("State : Something wrong"));
+	}
+}
+
+void CPlayer::MonsterWalkStateAnimation(int state)
+{
+	switch (state)
+	{
+	case Stand:
+		m_pAnimation->ChangeAnimation("KirbyMonsterWalk");
+		m_pMesh->SetRelativeScale(EATMONSTER_SCALE, EATMONSTER_SCALE, 1.f);
+		m_pBody->SetRelativeScale(EATMONSTER_SCALE, EATMONSTER_SCALE, 1.f);
+		break;
+	case Beam:
+		break;
+	case Cutter:
+		break;
+	case Ice:
+		break;
+	default:
+		OutputDebugString(TEXT("State : Something wrong"));
+	}
+}
+
+void CPlayer::IdleStateAnimation(int state)
+{
+	switch (state)
+	{
+	case Stand:
+		m_pMesh->SetRelativeScale(STAND_SCALE, STAND_SCALE, 1.f);
+		m_pAnimation->ChangeAnimation("KirbyIdle");
+		break;
+	case Beam:
+		m_pMesh->SetRelativeScale(STAND_SCALE + 20.f, STAND_SCALE + 20.f, 1.f);
+		m_pAnimation->ChangeAnimation("BeamIdle");
+		break;
+	case Cutter:
+		break;
+	case Ice:
+		break;
+	default:
+		OutputDebugString(TEXT("State : Something wrong"));
+	}
+}
+
+void CPlayer::MonsterIdleStateAnimation(int state)
+{
+	switch (state)
+	{
+	case Stand:
+		m_pAnimation->ChangeAnimation("KirbyMonsterIdle");
+		break;
+	case Beam:
+		break;
+	case Cutter:
+		break;
+	case Ice:
+		break;
+	default:
+		OutputDebugString(TEXT("State : Something wrong"));
+	}
+}
+
+void CPlayer::IdleDownStateAnimation(int state)
+{
+	switch (state)
+	{
+	case Stand:
+		m_pAnimation->ChangeAnimation("KirbyIdleDown");
+		break;
+	case Beam:
+		m_pAnimation->ChangeAnimation("BeamIdleDown");
+		break;
+	case Cutter:
+		break;
+	case Ice:
+		break;
+	default:
+		OutputDebugString(TEXT("State : Something wrong"));
+	}
+}
+
+void CPlayer::JumpDownStateAnimation(int state)
+{
+	switch (state)
+	{
+	case Stand:
+		m_pAnimation->ChangeAnimation("KirbyJumpDown");
+		m_pAnimation->SetReturnSequenceName("KirbyJumpDown", "KirbyIdle");
+		break;
+	case Beam:
+		m_pAnimation->ChangeAnimation("BeamJumpDown");
+		m_pAnimation->SetReturnSequenceName("BeamJumpDown", "BeamIdle");
+		break;
+	case Cutter:
+		break;
+	case Ice:
+		break;
+	default:
+		OutputDebugString(TEXT("State : Something wrong"));
+	}
+}
+
+void CPlayer::MonsterJumpDownStateAnimation(int state)
+{
+	switch (state)
+	{
+	case Stand:
+		m_pAnimation->ChangeAnimation("KirbyMonsterJump");
+		m_pAnimation->SetReturnSequenceName("KirbyMonsterJump", "KirbyMonsterIdle");
+		m_pMesh->SetRelativeScale(EATMONSTER_SCALE, EATMONSTER_SCALE, 1.f);
+		break;
+	case Beam:
+		break;
+	case Cutter:
+		break;
+	case Ice:
+		break;
+	default:
+		OutputDebugString(TEXT("State : Something wrong"));
+	}
+}
+
+void CPlayer::JumpUpStateAnimation(int state)
+{
+	switch (state)
+	{
+	case Stand:
+		m_pAnimation->ChangeAnimation("KirbyJumpUp");
+		break;
+	case Beam:
+		m_pAnimation->ChangeAnimation("BeamJumpUp");
+		break;
+	case Cutter:
+		break;
+	case Ice:
+		break;
+	default:
+		OutputDebugString(TEXT("State : Something wrong"));
+	}
+}
+
+void CPlayer::MonsterJumpUpStateAnimation(int state)
+{
+	switch (state)
+	{
+	case Stand:
+		m_pMesh->SetRelativeScale(EATMONSTER_SCALE, EATMONSTER_SCALE*1.2, 1.f);
+		m_pAnimation->ChangeAnimation("KirbyMonsterJumpUp");
+		break;
+	case Beam:
+		break;
+	case Cutter:
+		break;
+	case Ice:
+		break;
+	default:
+		OutputDebugString(TEXT("State : Something wrong"));
+	}
+}
+
+void CPlayer::DamageStateAnimation(int state)
+{
+	switch (state)
+	{
+	case Stand:
+		m_pAnimation->ChangeAnimation("KirbyDamage");
+		m_pAnimation->SetReturnSequenceName("KirbyDamage", "KirbyIdle");
+
+		m_pAnimation->CreateNotify("KirbyDamage", "DamageEnd", 7);
+		m_pAnimation->AddNotifyFunction<CPlayer>("KirbyDamage", "DamageEnd", this, &CPlayer::EnableMove);
+		break;
+	case Beam:
+
+		m_pAnimation->ChangeAnimation("BeamDamage");
+		m_pAnimation->SetReturnSequenceName("BeamDamage", "BeamIdle");
+
+		m_pAnimation->CreateNotify("BeamDamage", "BeamDamageEnd", 14);
+		m_pAnimation->AddNotifyFunction<CPlayer>("BeamDamage", "BeamDamageEnd", this, &CPlayer::EnableMove);
+		break;
+	case Cutter:
+		break;
+	case Ice:
+		break;
+	default:
+		OutputDebugString(TEXT("State : Something wrong"));
+	}
+}
+
+void CPlayer::JumpIngStateAnimation(int state)
+{
+	switch (state)
+	{
+	case Stand:
+		m_pMesh->SetRelativeScale(EATMONSTER_SCALE, EATMONSTER_SCALE*1.2, 1.f);
+		m_pAnimation->ChangeAnimation("KirbyMonsterJumpUp");
+		break;
+	case Beam:
+		break;
+	case Cutter:
+		break;
+	case Ice:
+		break;
+	default:
+		OutputDebugString(TEXT("State : Something wrong"));
+	}
+}
+
+void CPlayer::EnablePlayAnimation()
+{
+	IsPlayAnimation = false;
+}
+
+void CPlayer::DisablePlayAnimation()
+{
+	IsPlayAnimation = true;
+}
+
 void CPlayer::OnBlock(CColliderBase * pSrc, CColliderBase * pDest, float fTime)
 {
 	OutputDebugString(TEXT("Block\n"));
@@ -827,17 +1109,22 @@ void CPlayer::StruckedByMonster(CColliderBase * pSrc, CColliderBase * pDest, flo
 			m_pHasMonster = true;
 			m_pMesh->SetRelativeScale(STAND_SCALE * 2.5f, STAND_SCALE, 1.f);
 
-			m_pAnimation->ChangeAnimation("KirbyDigestMonster");
-			m_pAnimation->SetReturnSequenceName("KirbyDigestMonster", "KirbyMonsterIdle");
 
+			m_pAnimation->ChangeAnimation("KirbyDigestMonster");
+			m_pAnimation->CreateNotify("KirbyDigestMonster", "ChangeToMonsterIdle", 7);
+			m_pAnimation->AddNotifyFunction<CPlayer>("KirbyDigestMonster", "ChangeToMonsterIdle", this, &CPlayer::ReturnToMonsterIdle);
+
+			m_SaveState = m_pEatMonster->GetSkillType();
+
+			m_pFishingMonster = false;
 			return;
 		}
 		m_pEatMonster = (CMonster*)(pDest->GetOwner());
 		m_pEatMonster->SetIsEating(true);
 
-		int Eat_Skill = m_pEatMonster->GetSkillType();
+
 		// 함수 호출 !빨아들이는!
-		EatMonsterSuccess(Eat_Skill);
+		EatMonsterSuccess();
 		// eat_skill 전달
 	}
 	else if (!m_pNowEating)
@@ -856,11 +1143,9 @@ void CPlayer::StruckedByMonster(CColliderBase * pSrc, CColliderBase * pDest, flo
 		DisableMove(fTime);
 
 
-		m_pAnimation->ChangeAnimation("KirbyDamage");
-		m_pAnimation->SetReturnSequenceName("KirbyDamage", "KirbyIdle");
-
-		m_pAnimation->CreateNotify("KirbyDamage", "DamageEnd", 7);
-		m_pAnimation->AddNotifyFunction<CPlayer>("KirbyDamage", "DamageEnd", this, &CPlayer::EnableMove);
+		DamageStateAnimation(m_KirbyState);
+		//DamageStateAnimation(0);
+		//DamageStateAnimation(1);
 
 		m_pMovement->BackStep(GetWorldAxis(AXIS_X));
 	}

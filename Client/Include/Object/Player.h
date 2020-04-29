@@ -5,8 +5,9 @@
 enum Kirby_State
 {
 	Stand,
-	Sord,
-
+	Beam,
+	Cutter,
+	Ice,
 };
 
 #define JUMP_AMOUNT 10.0f
@@ -23,34 +24,17 @@ public:
 private:
 	bool m_IsMove; // 움직이는 상태
 
-	//bool m_pJumpEnable; // press_time MAX 도달 또는 키 입력 중이면 true 아니면 false
-	//bool IsAirMouse; // 입안에 공기 머금고 있는지 아닌지
-	//bool HasMonster; // 입 안에 몬스터 갖고있는지 아닌지
-
-	//bool EatAirIng;
 	int m_KirbyState;
-
-
-	//int EatProcess;
-	bool JumpIng = false;  // 지금 공중에 떠있는지 아닌지
-	//bool FirstJump;
+	int m_SaveState; // 밑에 키 누르면 그떄 kirbystate 에 이거 저장
 
 	float press_time;
 	float jump_time;
-	//float jump_temp; // 점프 얼마나 했느지 그니까 깎인 양
-
 
 	float m_pMass; // 무게 (입에 뭐 있을 때랑 없을 때 구분용 무게임)
-	//float g; // 중력가속도 값 
 	Vector3 pPos;
-
 
 	int m_pLifeCount;
 	float m_pHP;
-
-
-	//float m_UPkeyCoolTime;
-
 
 	bool m_pHasMonster;
 	bool m_pHasAir;
@@ -64,13 +48,11 @@ private:
 	float StageMinY;
 	float StageMaxY;
 
-
 	bool JumpUp;
 	bool JumpDown;
 
 	bool JumpAnimationChangeOnce;
-
-	//int Eat_Skill;
+	bool IsPlayAnimation;
 
 private:
 	class CStaticMeshComponent*	m_pMesh;
@@ -107,8 +89,9 @@ public:
 
 
 
-	void DownKey(float fScale, float fTime);
+
 	void ReturnToIdle(float fTime);
+	void ReturnToMonsterIdle(float fTime);
 	void EnableMove(float fTime);
 	void DisableMove(float fTime);
 
@@ -124,21 +107,38 @@ public:
 	void UpKeyDown(float fTime);
 	void UpKeyDoubleDown(float fTime);
 
+	void DownKey(float fScale, float fTime);
 	//void DownKeyDown(float fTime);
+	void DigestMonster(float fScale, float fTime);
 
 	void ToEatAirState(float fTime); // 공기 먹은 애니메이션으로 전환
 	void SpitAir(float fTime);
-	void SplitStar(float fTime);
 	void Yup(float fTime);
 	void EatAirFail(float fTime);
-	void EatMonsterSuccess(int _type);
+	void EatMonsterSuccess();
 	void ComputeJump(float fTime);
 	void JumpEnd();
+	void ApplySkill(int state);
 
 	void CamLimit(float fTime);
 
 	void SetStageMinMax(float minx, float maxx, float miny, float maxy);
 
+
+	void WalkStateAnimation(int state);
+	void MonsterWalkStateAnimation(int state);
+	void IdleStateAnimation(int state);
+	void MonsterIdleStateAnimation(int state);
+	void IdleDownStateAnimation(int state);
+	void JumpDownStateAnimation(int state);
+	void MonsterJumpDownStateAnimation(int state);
+	void JumpUpStateAnimation(int state);
+	void MonsterJumpUpStateAnimation(int state);
+	void DamageStateAnimation(int state);
+	void JumpIngStateAnimation(int state);
+
+	void EnablePlayAnimation();
+	void DisablePlayAnimation();
 public:
 	void OnBlock(class CColliderBase* pSrc, class CColliderBase* pDest, float fTime);
 	void StruckedByMonster(class CColliderBase* pSrc, class CColliderBase* pDest, float fTime);

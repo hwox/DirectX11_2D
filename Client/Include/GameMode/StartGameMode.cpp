@@ -66,13 +66,14 @@ bool CStartGameMode::Init()
 
 void CStartGameMode::CreateAnimation2DSequence()
 {
-	Player_Jump_Texture_Create();
+	Player_Stand_Texture_Create();
+	Player_Skill_Beam_Texture_Create();
 	Monster_Texture_Create();
 	Effect_Texture_Create();
 	Else_Texture_Create();
 }
 
-void CStartGameMode::Player_Jump_Texture_Create()
+void CStartGameMode::Player_Stand_Texture_Create()
 {
 	////////////////////     Kirby Idle      ///////////////////////
 
@@ -419,7 +420,7 @@ void CStartGameMode::Player_Jump_Texture_Create()
 
 	////////////////////     Kirby MonsterJump   ///////////////////////
 
-	GET_SINGLE(CResourceManager)->CreateAnimation2DSequence("KirbyMonsterJump", false, 0.7f, 6);
+	GET_SINGLE(CResourceManager)->CreateAnimation2DSequence("KirbyMonsterJump", true, 0.7f, 6);
 
 	for (int i = 0; i <= 5; ++i)
 	{
@@ -479,6 +480,159 @@ void CStartGameMode::Player_Jump_Texture_Create()
 		Vector2(27.f, 25.f));
 
 	///////////////////////////////////////////////////////////////
+}
+
+void CStartGameMode::Player_Skill_Beam_Texture_Create()
+{
+
+	////////////////////    Beam Idle      ///////////////////////
+
+	GET_SINGLE(CResourceManager)->CreateAnimation2DSequence("BeamIdle", true, 1.5f, 9);
+
+	for (int i = 0; i <= 8; ++i)
+	{
+		TCHAR	strFileName[MAX_PATH] = {};
+
+		wsprintf(strFileName, TEXT("Player/Skill/Beam/Beam_Idle/Beam_Idle_%d.png"), i);
+
+		char	strKey[256] = {};
+		sprintf_s(strKey, "BeamIdle%d", i);
+
+		GET_SINGLE(CResourceManager)->AddAnimation2DSequenceTexture("BeamIdle", strKey, strFileName);
+	}
+
+	GET_SINGLE(CResourceManager)->SetAnimation2DSequenceFrameInfoAll("BeamIdle", Vector2(0.f, 0.f),
+		Vector2(25.f, 25.f));
+
+	///////////////////////////////////////////////////////////////
+
+
+	////////////////////    Beam IdleDown      ///////////////////////
+
+	GET_SINGLE(CResourceManager)->CreateAnimation2DSequence("BeamIdleDown", true, 0.5f, 2);
+
+	for (int i = 0; i <= 1; ++i)
+	{
+		TCHAR	strFileName[MAX_PATH] = {};
+
+		wsprintf(strFileName, TEXT("Player/Skill/Beam/Beam_IdleDown/Beam_IdleDown_%d.png"), i);
+
+		char	strKey[256] = {};
+		sprintf_s(strKey, "BeamIdleDown%d", i);
+
+		GET_SINGLE(CResourceManager)->AddAnimation2DSequenceTexture("BeamIdleDown", strKey, strFileName);
+	}
+
+	GET_SINGLE(CResourceManager)->SetAnimation2DSequenceFrameInfoAll("BeamIdleDown", Vector2(0.f, 0.f),
+		Vector2(26.f, 25.f));
+
+	///////////////////////////////////////////////////////////////
+
+	////////////////////    Beam Jump Down      ///////////////////////
+
+	GET_SINGLE(CResourceManager)->CreateAnimation2DSequence("BeamJumpDown", false, 1.0f, 10);
+
+	for (int i = 0; i <= 9; ++i)
+	{
+		TCHAR	strFileName[MAX_PATH] = {};
+
+		wsprintf(strFileName, TEXT("Player/Skill/Beam/Beam_JumpDown/Beam_JumpDown_%d.png"), i);
+
+		char	strKey[256] = {};
+		sprintf_s(strKey, "BeamJumpDown%d", i);
+
+		GET_SINGLE(CResourceManager)->AddAnimation2DSequenceTexture("BeamJumpDown", strKey, strFileName);
+	}
+
+	GET_SINGLE(CResourceManager)->SetAnimation2DSequenceFrameInfoAll("BeamJumpDown", Vector2(0.f, 0.f),
+		Vector2(27.f, 35.f));
+
+	///////////////////////////////////////////////////////////////
+
+	////////////////////    Beam Walk      ///////////////////////
+
+	GET_SINGLE(CResourceManager)->CreateAnimation2DSequence("BeamWalk", true, 1.0f, 12);
+
+	for (int i = 0; i <= 11; ++i)
+	{
+		TCHAR	strFileName[MAX_PATH] = {};
+
+		wsprintf(strFileName, TEXT("Player/Skill/Beam/Beam_Walk/Beam_Walk_%d.png"), i);
+
+		char	strKey[256] = {};
+		sprintf_s(strKey, "BeamWalk%d", i);
+
+		GET_SINGLE(CResourceManager)->AddAnimation2DSequenceTexture("BeamWalk", strKey, strFileName);
+	}
+
+	GET_SINGLE(CResourceManager)->SetAnimation2DSequenceFrameInfoAll("BeamWalk", Vector2(0.f, 0.f),
+		Vector2(30.f, 25.f));
+
+	///////////////////////////////////////////////////////////////
+
+		////////////////////    Beam Jump UP     ///////////////////////
+
+	GET_SINGLE(CResourceManager)->CreateAnimation2DSequence("BeamJumpUp", true, 1.0f, 1);
+
+	for (int i = 0; i <= 0; ++i)
+	{
+		TCHAR	strFileName[MAX_PATH] = {};
+
+		wsprintf(strFileName, TEXT("Player/Skill/Beam/beam_jump_up.png"), i);
+
+		char	strKey[256] = {};
+		sprintf_s(strKey, "BeamJumpUp%d", i);
+
+		GET_SINGLE(CResourceManager)->AddAnimation2DSequenceTexture("BeamJumpUp", strKey, strFileName);
+	}
+
+	GET_SINGLE(CResourceManager)->SetAnimation2DSequenceFrameInfoAll("BeamJumpUp", Vector2(0.f, 0.f),
+		Vector2(25.f, 26.f));
+
+	///////////////////////////////////////////////////////////////
+
+	////////////////////    Beam Damage     ///////////////////////
+
+	GET_SINGLE(CResourceManager)->CreateAnimation2DSequence("BeamDamage", false, 1.5f, 15);
+
+	for (int i = 0; i <= 14; ++i)
+	{
+		TCHAR	strFileName[MAX_PATH] = {};
+
+		wsprintf(strFileName, TEXT("Player/Skill/Beam/Beam_Damage/Beam_Damage_%d.png"), i);
+
+		char	strKey[256] = {};
+		sprintf_s(strKey, "BeamDamage%d", i);
+
+		GET_SINGLE(CResourceManager)->AddAnimation2DSequenceTexture("BeamDamage", strKey, strFileName);
+	}
+
+	GET_SINGLE(CResourceManager)->SetAnimation2DSequenceFrameInfoAll("BeamDamage", Vector2(0.f, 0.f),
+		Vector2(27.f, 36.f));
+
+	///////////////////////////////////////////////////////////////
+
+		////////////////////    Beam Jump Ing     ///////////////////////
+
+	GET_SINGLE(CResourceManager)->CreateAnimation2DSequence("BeamJumpIng", true, 0.8f, 6);
+
+	for (int i = 0; i <= 5; ++i)
+	{
+		TCHAR	strFileName[MAX_PATH] = {};
+
+		wsprintf(strFileName, TEXT("Player/Skill/Beam/Bean_Jump_Ing/Bean_Jump_Ing_%d.png"), i);
+
+		char	strKey[256] = {};
+		sprintf_s(strKey, "BeamJumpIng%d", i);
+
+		GET_SINGLE(CResourceManager)->AddAnimation2DSequenceTexture("BeamJumpIng", strKey, strFileName);
+	}
+
+	GET_SINGLE(CResourceManager)->SetAnimation2DSequenceFrameInfoAll("BeamJumpIng", Vector2(0.f, 0.f),
+		Vector2(30.f, 35.f));
+
+	///////////////////////////////////////////////////////////////
+
 }
 
 void CStartGameMode::Monster_Texture_Create()
