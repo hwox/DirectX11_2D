@@ -1,6 +1,5 @@
 e:\200425_ver\gameengine\binobj\vc141.pdb
 e:\200425_ver\gameengine\binobj\vc141.idb
-e:\200425_ver\gameengine\binobj\scenecomponent.obj
 e:\200425_ver\gameengine\binobj\projectilemovementcomponent.obj
 e:\200425_ver\gameengine\binobj\objectcomponent.obj
 e:\200425_ver\gameengine\binobj\movementcomponent.obj
@@ -12,6 +11,7 @@ e:\200425_ver\gameengine\binobj\colliderrect.obj
 e:\200425_ver\gameengine\binobj\colliderpoint.obj
 e:\200425_ver\gameengine\binobj\colliderpixel.obj
 e:\200425_ver\gameengine\binobj\colliderobb2d.obj
+e:\200425_ver\gameengine\binobj\collidermapobstacle.obj
 e:\200425_ver\gameengine\binobj\colliderbase.obj
 e:\200425_ver\gameengine\binobj\charactermovementcomponent.obj
 e:\200425_ver\gameengine\binobj\cameracomponent.obj
@@ -20,7 +20,6 @@ e:\200425_ver\gameengine\binobj\animationmeshcomponent.obj
 e:\200425_ver\gameengine\binobj\animation2d.obj
 e:\200425_ver\gameengine\binobj\collisionmanager.obj
 e:\200425_ver\gameengine\binobj\cameramanager.obj
-e:\200425_ver\gameengine\binobj\animationmesh.obj
 e:\200425_ver\gameengine\binobj\animation2dsequence.obj
 e:\200425_ver\gameengine\binobj\rendermanager.obj
 e:\200425_ver\gameengine\binobj\ref.obj
@@ -40,7 +39,7 @@ e:\200425_ver\gameengine\binobj\tilemap.obj
 e:\200425_ver\gameengine\binobj\tile.obj
 e:\200425_ver\gameengine\binobj\text.obj
 e:\200425_ver\gameengine\binobj\staticmeshcomponent.obj
-e:\200425_ver\gameengine\binobj\section.obj
+e:\200425_ver\gameengine\binobj\scenecomponent.obj
 e:\200425_ver\gameengine\binobj\scheduler.obj
 e:\200425_ver\gameengine\binobj\scenemanager.obj
 e:\200425_ver\gameengine\binobj\scene.obj
@@ -60,12 +59,14 @@ e:\200425_ver\gameengine\binobj\mesh.obj
 e:\200425_ver\gameengine\binobj\material.obj
 e:\200425_ver\gameengine\binobj\depthstencilstate.obj
 e:\200425_ver\gameengine\binobj\blendstate.obj
+e:\200425_ver\gameengine\binobj\animationmesh.obj
 e:\200425_ver\gameengine\binobj\vector4.obj
 e:\200425_ver\gameengine\binobj\vector3.obj
 e:\200425_ver\gameengine\binobj\vector2.obj
 e:\200425_ver\gameengine\binobj\timermanager.obj
 e:\200425_ver\gameengine\binobj\timer.obj
 e:\200425_ver\gameengine\binobj\sectionmanager.obj
+e:\200425_ver\gameengine\binobj\section.obj
 e:\200425_ver\gameengine\bin\collider.cso
 e:\200425_ver\gameengine\bin\standard.cso
 e:\200425_ver\gameengine\bin\tilemap.cso

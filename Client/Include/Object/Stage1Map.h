@@ -10,6 +10,11 @@ public:
 	CStage1Map();
 	~CStage1Map();
 
+	float StageSizeMinX;
+	float StageSizeMaxX;
+	float StageSizeMinY;
+	float StageSizeMaxY;
+
 private:
 	//	class CTileMap*	m_pTileMap;
 	class CStaticMeshComponent*	m_pMesh;
@@ -28,6 +33,7 @@ public:
 	virtual void Render(float fTime);
 
 	void MakeMapObstacle();
+	void SetStageSize(float minx, float maxx, float miny, float maxy);
 
 };
 

@@ -57,9 +57,9 @@ bool CStartGameMode::Init()
 
 	SAFE_RELEASE(pStartButton);
 
-	CBGMObj*	pBGMObj = m_pScene->SpawnObject<CBGMObj>("BGMObj");
+	//CBGMObj*	pBGMObj = m_pScene->SpawnObject<CBGMObj>("BGMObj");
 
-	SAFE_RELEASE(pBGMObj);
+	//SAFE_RELEASE(pBGMObj);
 
 	return true;
 }

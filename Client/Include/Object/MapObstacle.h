@@ -27,5 +27,11 @@ public:
 	virtual void SetObstacleRotation(Vector3& mPos);
 	virtual void SetObstacleColliderExtent(Vector3& mPos);
 	virtual void SetObstacleColliderExtent(float x, float y);
+	virtual void SetObstacleColliderPivot(float x, float y, float z);
+	virtual void SetObstacleProfileType(int type);
+
+
+public:
+	//void OnBlock(class CColliderBase* pSrc, class CColliderBase* pDest, float fTime);
 };
 

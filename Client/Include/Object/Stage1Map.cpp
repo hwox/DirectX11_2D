@@ -67,7 +67,7 @@ bool CStage1Map::Init()
 	//MakeFloorCollider();
 
 	m_pMesh->SetRelativePos(0.f, 10.f, 0.f);
-	m_pMesh->SetRelativeScale(8000.f, 1050.f, 1.f);
+	m_pMesh->SetRelativeScale(8700.f, 1080.f, 1.f);
 
 	m_BackImage->SetRelativePos(0.f, 0.f, 0.f);
 	m_BackImage->SetRelativeScale(10000.f, 1200.f, 1.f);
@@ -99,10 +99,31 @@ void CStage1Map::MakeMapObstacle()
 	CMapObstacle*	Obstacle1 = m_pScene->SpawnObject<CMapObstacle>();
 
 	// 1850, 230 / 180, 180
-	Obstacle1->SetObstaclePosition(1870.f, 230.f, 1.f);
+	Obstacle1->SetObstaclePosition(1870.f, 330.f, 1.f);
 	Obstacle1->SetObstacleColliderExtent(200.f, 200.f);
+	Obstacle1->SetObstacleProfileType(1);
 	m_MapObstacleList.push_back(Obstacle1);
 	SAFE_RELEASE(Obstacle1);
+
+
+
+
+	CMapObstacle*	Floor = m_pScene->SpawnObject<CMapObstacle>();
+
+	Floor->SetObstaclePosition(4000.f, 100.f, 1.f);
+	Floor->SetObstacleColliderPivot(0.5f, 0.5f, 0.f);
+	Floor->SetObstacleColliderExtent(9000.f, 300.f);
+	Floor->SetObstacleProfileType(2);
+	m_MapObstacleList.push_back(Floor);
+	SAFE_RELEASE(Floor);
+}
+
+void CStage1Map::SetStageSize(float minx, float maxx, float miny, float maxy)
+{
+	StageSizeMinX = minx;
+	StageSizeMaxX = maxx;
+	StageSizeMinY = miny;
+	StageSizeMaxY = maxy;
 }
 
 

@@ -400,7 +400,7 @@ void CColliderBase::ComputeColor()
 
 	else
 	{
-		m_pMaterial->SetSubsetDiffuse(Vector4::Green);
+		m_pMaterial->SetSubsetDiffuse(Vector4::Blue);
 	}
 }
 

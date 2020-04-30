@@ -44,7 +44,7 @@ bool CStage1Mode::Init()
 
 
 	CStage1Map*	pMap = m_pScene->SpawnObject<CStage1Map>();
-
+	pMap->SetStageSize(STAGE1_MINX, STAGE1_MAXX, STAGE1_MINY, STAGE1_MAXY);
 	SAFE_RELEASE(pMap);
 
 
@@ -131,10 +131,12 @@ void CStage1Mode::SetCollidrProfile()
 	GET_SINGLE(CCollisionManager)->UpdateProfileChannel("Map", "Player", CT_IGNORE);
 	GET_SINGLE(CCollisionManager)->UpdateProfileChannel("Map", "Map", CT_IGNORE);
 	GET_SINGLE(CCollisionManager)->UpdateProfileChannel("Map", "MapObject", CT_IGNORE);
+	GET_SINGLE(CCollisionManager)->UpdateProfileChannel("Map", "Monster", CT_IGNORE);
 
 
 	GET_SINGLE(CCollisionManager)->CreateProfile("MapObject", "MapObject");
 	GET_SINGLE(CCollisionManager)->UpdateProfileChannel("MapObject", "Map", CT_IGNORE);
+	GET_SINGLE(CCollisionManager)->UpdateProfileChannel("MapObject", "MapObject", CT_IGNORE);
 	//GET_SINGLE(CCollisionManager)->UpdateProfileChannel("MapObject", "Map", CT_IGNORE);
 
 

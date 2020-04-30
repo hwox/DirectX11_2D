@@ -41,7 +41,6 @@ bool CMapObstacle::Init()
 	m_pMesh->AddChild(ObstacleCollider, TR_POS);
 
 	ObstacleCollider->SetExtent(100.f, 100.f);
-	ObstacleCollider->SetCollisionProfile("MapObject");
 
 	m_pMovement = CGameObject::CreateComponent<CProjectileMovementComponent>("MapObstacleMovement");
 	m_pMovement->SetUpdateComponent(m_pMesh);
@@ -51,6 +50,9 @@ bool CMapObstacle::Init()
 	m_pMesh->SetRelativeScale(100.f, 100.f, 1.f);
 
 	ObstacleCollider->SetPivot(0.5f, 0.5f, 0.f);
+
+
+	//ObstacleCollider->AddBlockCallback<CMapObstacle>(this, &CMapObstacle::OnBlock);
 
 	return true;
 }
@@ -94,3 +96,26 @@ void CMapObstacle::SetObstacleColliderExtent(float x, float y)
 {
 	ObstacleCollider->SetExtent(x, y);
 }
+
+void CMapObstacle::SetObstacleColliderPivot(float x, float y, float z)
+{
+	ObstacleCollider->SetPivot(x, y, z);
+}
+
+void CMapObstacle::SetObstacleProfileType(int type)
+{
+	switch (type)
+	{
+	case 1:
+		ObstacleCollider->SetCollisionProfile("MapObject");
+		break;
+	case 2:
+		ObstacleCollider->SetCollisionProfile("Map");
+		break;
+	}
+}
+//void CMapObstacle::OnBlock(class CColliderBase* pSrc, class CColliderBase* pDest, float fTime)
+//{
+//	OutputDebugString(TEXT("À½"));
+//}
+

@@ -106,15 +106,20 @@ bool CPlayer::Init()
 
 	m_pMesh->SetAnimation2D(m_pAnimation);
 	m_pMesh->AddChild(m_pBody, TR_POS);
+	m_pMesh->AddChild(m_pMapBody, TR_POS);
 
 	m_pBody->SetExtent(STAND_SCALE, STAND_SCALE);
 	m_pBody->SetPivot(0.5f, 0.f, 0.f);
 	m_pBody->AddBlockCallback<CPlayer>(this, &CPlayer::StruckedByMonster);
 	m_pBody->SetCollisionProfile("Player");
 
-	m_pMapBody->AddBeginOverlapCallback<CPlayer>(this, &CPlayer::OnTheMap);
+
+	m_pMapBody->SetExtent(STAND_SCALE+20.f, 50.f);
+	m_pMapBody->SetPivot(0.5f, 0.f, 0.f);
+	m_pMapBody->AddBlockCallback<CPlayer>(this, &CPlayer::OnTheMap);
 	m_pMapBody->AddEndOverlapCallback<CPlayer>(this, &CPlayer::NotOnTheMap);
 	m_pMapBody->SetCollisionProfile("PlayerMap");
+
 
 	CStaticMesh*	pMesh = (CStaticMesh*)GET_SINGLE(CResourceManager)->FindMesh("TexRect");
 
@@ -1183,6 +1188,7 @@ void CPlayer::StruckedByMonster(CColliderBase * pSrc, CColliderBase * pDest, flo
 void CPlayer::NotOnTheMap(CColliderBase * pSrc, CColliderBase * pDest, float fTime)
 {
 	// 맵에서 발바닥 뗌
+	OutputDebugString(TEXT("OUT \n"));
 	m_pIsJumping = true;
 }
 
@@ -1190,7 +1196,7 @@ void CPlayer::OnTheMap(CColliderBase * pSrc, CColliderBase * pDest, float fTime)
 {
 	// 맵바닥에 발 붙이고 있는 상태
 	m_pIsJumping = false;
-	OutputDebugString(TEXT("zzzzzz\n"));
+	OutputDebugString(TEXT("발 붙이고 있는중 \n"));
 }
 
 float CPlayer::Lerp(float value1, float value2, float amount)
