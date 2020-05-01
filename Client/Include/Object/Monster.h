@@ -30,7 +30,9 @@ protected:
 	int			Skill_Type;
 	Vector3 InitPos;
 	bool IsEating; // 먹히고 있는지
+	bool EatingEnd; // 다 먹혔음
 
+	bool AttackedByStar; // 별한테 공격당함
 private:
 	int			ColliderMode;
 	int			m_Hp;
@@ -56,6 +58,10 @@ public:
 	virtual bool GetIsEating();
 	virtual bool Respawn();
 
+	virtual void SetAttackedByStar(bool onoff);
+	virtual bool GetAttackedByStar();
+	virtual void SetEatingEnd(bool onoff);
+	virtual bool GetEatingEnd();
 	virtual void GoToBlackHole(float fTime);
 
 public:

@@ -725,7 +725,7 @@ void CStartGameMode::Monster_Texture_Create()
 
 void CStartGameMode::Effect_Texture_Create()
 {
-	////////////////////     Star Bullet    ///////////////////////
+	////////////////////////////     Star Bullet    ///////////////////////////////
 
 	GET_SINGLE(CResourceManager)->CreateAnimation2DSequence("StarBullet", true, 0.7f, 4);
 
@@ -744,8 +744,81 @@ void CStartGameMode::Effect_Texture_Create()
 	GET_SINGLE(CResourceManager)->SetAnimation2DSequenceFrameInfoAll("StarBullet", Vector2(0.f, 0.f),
 		Vector2(25.f, 25.f));
 
-	///////////////////////////////////////////////////////////////
+	///////////////////////////////////////////////////////////////////////////
 
+	GET_SINGLE(CResourceManager)->CreateAnimation2DSequence("PlayerBullet", true, 0.5f, 4);
+	GET_SINGLE(CResourceManager)->AddAnimation2DSequenceTexture("PlayerBullet", "KirbyAtlas_PlayerBullet",
+		TEXT("attack_star.png"));
+
+	for (int i = 0; i < 4; ++i)
+	{
+		GET_SINGLE(CResourceManager)->AddAnimation2DSequenceFrameInfo("PlayerBullet", Vector2(27.f * i, 0.f),
+			Vector2(27.f * (i + 1), 27.f));
+	}
+
+	////////////////////////////     Star Bullet Effect   ///////////////////////////////
+
+	GET_SINGLE(CResourceManager)->CreateAnimation2DSequence("StarBulletEffect", false, 0.2f, 5);
+
+	for (int i = 0; i <= 4; ++i)
+	{
+		TCHAR	strFileName[MAX_PATH] = {};
+
+		wsprintf(strFileName, TEXT("Player/StarBullet/BulletEffect/BulletEffect_%d.png"), i);
+
+		char	strKey[256] = {};
+		sprintf_s(strKey, "StarBulletEffect%d", i);
+
+		GET_SINGLE(CResourceManager)->AddAnimation2DSequenceTexture("StarBulletEffect", strKey, strFileName);
+	}
+
+	GET_SINGLE(CResourceManager)->SetAnimation2DSequenceFrameInfoAll("StarBulletEffect", Vector2(0.f, 0.f),
+		Vector2(16.f, 16.f));
+
+	///////////////////////////////////////////////////////////////////////////////
+
+
+	////////////////////////////     Jump Effect   ///////////////////////////////
+
+	GET_SINGLE(CResourceManager)->CreateAnimation2DSequence("JumpEffect", false, 0.3f, 4);
+
+	for (int i = 0; i <= 3; ++i)
+	{
+		TCHAR	strFileName[MAX_PATH] = {};
+
+		wsprintf(strFileName, TEXT("Player/Effect/Jump_Effect/Jump_Effect_%d.png"), i);
+
+		char	strKey[256] = {};
+		sprintf_s(strKey, "JumpEffect%d", i);
+
+		GET_SINGLE(CResourceManager)->AddAnimation2DSequenceTexture("JumpEffect", strKey, strFileName);
+	}
+
+	GET_SINGLE(CResourceManager)->SetAnimation2DSequenceFrameInfoAll("JumpEffect", Vector2(0.f, 0.f),
+		Vector2(10.f, 10.f));
+
+	///////////////////////////////////////////////////////////////////////////
+
+	////////////////////////////     Split Effect   ///////////////////////////
+
+	GET_SINGLE(CResourceManager)->CreateAnimation2DSequence("SplitAirEffect", false, 0.4f, 6);
+
+	for (int i = 0; i <= 5; ++i)
+	{
+		TCHAR	strFileName[MAX_PATH] = {};
+
+		wsprintf(strFileName, TEXT("Player/Effect/SplitAir_Effect/SplitAir_Effect_%d.png"), i);
+
+		char	strKey[256] = {};
+		sprintf_s(strKey, "SplitAirEffect%d", i);
+
+		GET_SINGLE(CResourceManager)->AddAnimation2DSequenceTexture("SplitAirEffect", strKey, strFileName);
+	}
+
+	GET_SINGLE(CResourceManager)->SetAnimation2DSequenceFrameInfoAll("SplitAirEffect", Vector2(0.f, 0.f),
+		Vector2(20.f, 20.f));
+
+	///////////////////////////////////////////////////////////////////////////
 }
 
 void CStartGameMode::Else_Texture_Create()
@@ -766,6 +839,26 @@ void CStartGameMode::Else_Texture_Create()
 
 	GET_SINGLE(CResourceManager)->SetAnimation2DSequenceFrameInfoAll("MainTitle", Vector2(0.f, 0.f),
 		Vector2(190.f, 30.f));
+
+
+	////////////////////////////////////////////////////////////////////////////
+
+	GET_SINGLE(CResourceManager)->CreateAnimation2DSequence("MagicMirror", true, 1.0f, 4);
+
+	for (int i = 0; i <= 3; ++i)
+	{
+		TCHAR	strFileName[MAX_PATH] = {};
+
+		wsprintf(strFileName, TEXT("Obstacle/MagicMirror/MagicMirror_%d.png"), i);
+
+		char	strKey[256] = {};
+		sprintf_s(strKey, "MagicMirror%d", i);
+
+		GET_SINGLE(CResourceManager)->AddAnimation2DSequenceTexture("MagicMirror", strKey, strFileName);
+	}
+
+	GET_SINGLE(CResourceManager)->SetAnimation2DSequenceFrameInfoAll("MagicMirror", Vector2(0.f, 0.f),
+		Vector2(60.f, 50.f));
 }
 
 bool CStartGameMode::CreateMaterial()
@@ -882,9 +975,8 @@ bool CStartGameMode::CreateMaterial()
 	pMaterial->SetSubsetShader(STANDARD_ANIM2D_SHADER);
 	pMaterial->SetRenderState("AlphaBlend");
 	pMaterial->SetMaterialShaderStyle(MSS_ALPHA);
-
+	pMaterial->AddRef();
 	SAFE_RELEASE(pMaterial);
-
 
 
 	GET_SINGLE(CResourceManager)->CreateMaterial("StageBackMaterial");

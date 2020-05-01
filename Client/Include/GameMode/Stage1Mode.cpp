@@ -82,6 +82,11 @@ void CStage1Mode::SpawnMonster()
 
 	SAFE_RELEASE(pMinion);
 
+
+	CWaddleDee*	pMinion2 = m_pScene->SpawnObject<CWaddleDee>(Vector3(2500.f, 230.f, 0.f));
+
+	SAFE_RELEASE(pMinion2);
+
 }
 
 void CStage1Mode::SetCollidrProfile()
@@ -100,7 +105,7 @@ void CStage1Mode::SetCollidrProfile()
 	GET_SINGLE(CCollisionManager)->UpdateProfileChannel("Player", "PlayerProjectile", CT_IGNORE);
 	GET_SINGLE(CCollisionManager)->UpdateProfileChannel("Player", "Map", CT_IGNORE);
 	GET_SINGLE(CCollisionManager)->UpdateProfileChannel("Player", "PlayerMap", CT_IGNORE);
-
+	GET_SINGLE(CCollisionManager)->UpdateProfileChannel("Player", "MapObject", CT_IGNORE);
 
 	GET_SINGLE(CCollisionManager)->CreateProfile("Monster", "Monster");
 	GET_SINGLE(CCollisionManager)->UpdateProfileChannel("Monster", "Monster", CT_IGNORE);
@@ -116,6 +121,7 @@ void CStage1Mode::SetCollidrProfile()
 	GET_SINGLE(CCollisionManager)->UpdateProfileChannel("PlayerProjectile", "PlayerProjectile", CT_IGNORE);
 	GET_SINGLE(CCollisionManager)->UpdateProfileChannel("PlayerProjectile", "MonsterProjectile", CT_IGNORE);
 	GET_SINGLE(CCollisionManager)->UpdateProfileChannel("PlayerProjectile", "PlayerMap", CT_IGNORE);
+	GET_SINGLE(CCollisionManager)->UpdateProfileChannel("PlayerProjectile", "Map", CT_IGNORE);
 
 
 
@@ -132,11 +138,13 @@ void CStage1Mode::SetCollidrProfile()
 	GET_SINGLE(CCollisionManager)->UpdateProfileChannel("Map", "Map", CT_IGNORE);
 	GET_SINGLE(CCollisionManager)->UpdateProfileChannel("Map", "MapObject", CT_IGNORE);
 	GET_SINGLE(CCollisionManager)->UpdateProfileChannel("Map", "Monster", CT_IGNORE);
+	GET_SINGLE(CCollisionManager)->UpdateProfileChannel("Map", "PlayerProjectile", CT_IGNORE);
 
 
 	GET_SINGLE(CCollisionManager)->CreateProfile("MapObject", "MapObject");
 	GET_SINGLE(CCollisionManager)->UpdateProfileChannel("MapObject", "Map", CT_IGNORE);
 	GET_SINGLE(CCollisionManager)->UpdateProfileChannel("MapObject", "MapObject", CT_IGNORE);
+	GET_SINGLE(CCollisionManager)->UpdateProfileChannel("MapObject", "Player", CT_IGNORE);
 	//GET_SINGLE(CCollisionManager)->UpdateProfileChannel("MapObject", "Map", CT_IGNORE);
 
 

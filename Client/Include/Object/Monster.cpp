@@ -60,6 +60,26 @@ bool CMonster::Respawn()
 
 }
 
+void CMonster::SetAttackedByStar(bool onoff)
+{
+	AttackedByStar = onoff;
+}
+
+bool CMonster::GetAttackedByStar()
+{
+	return AttackedByStar;
+}
+
+void CMonster::SetEatingEnd(bool onoff)
+{
+	EatingEnd = onoff;
+}
+
+bool CMonster::GetEatingEnd()
+{
+	return EatingEnd;
+}
+
 void CMonster::GoToBlackHole(float fTime)
 {
 	//MoveTarget

@@ -19,6 +19,7 @@ private:
 	class CAnimation2D*			m_pAnimation;
 
 	int b_Type;
+	float DisableTime;
 public:
 	class CColliderRect* GetBody()	const;
 
@@ -27,6 +28,14 @@ public:
 	virtual void Begin();
 	virtual void Update(float fTime);
 	virtual void Render(float fTime);
+
+	void SetDisableTime(float dTime);
+	float GetDisableTime();
+
+	void SetRelativeRotationY(float value);
+
+
+	void OnBlock(class CColliderBase* pSrc, class CColliderBase* pDest, float fTime);
 
 //	virtual void SetBulletType()
 };

@@ -99,11 +99,31 @@ void CStage1Map::MakeMapObstacle()
 	CMapObstacle*	Obstacle1 = m_pScene->SpawnObject<CMapObstacle>();
 
 	// 1850, 230 / 180, 180
-	Obstacle1->SetObstaclePosition(1870.f, 330.f, 1.f);
-	Obstacle1->SetObstacleColliderExtent(200.f, 200.f);
+	Obstacle1->SetObstaclePosition(1920.f, 290.f, 1.f);
+	Obstacle1->SetObstacleColliderExtent(200.f, 150.f);
 	Obstacle1->SetObstacleProfileType(1);
 	m_MapObstacleList.push_back(Obstacle1);
 	SAFE_RELEASE(Obstacle1);
+
+
+	CMapObstacle*	Obstacle2 = m_pScene->SpawnObject<CMapObstacle>();
+
+	Obstacle2->SetObstaclePosition(2770.f, 250.f, 1.f);
+	Obstacle2->SetObstacleColliderExtent(200.f, 500.f);
+	Obstacle2->SetObstacleProfileType(1);
+Obstacle2->SetObstacleColliderPivot(0.5f, 0.f, 0.f);
+	m_MapObstacleList.push_back(Obstacle2);
+	SAFE_RELEASE(Obstacle2);
+
+
+	CMapObstacle*	Obstacle3 = m_pScene->SpawnObject<CMapObstacle>();
+
+	Obstacle3->SetObstaclePosition(2970.f, 250.f, 1.f);
+	Obstacle3->SetObstacleColliderExtent(200.f, 260.f);
+	Obstacle3->SetObstacleColliderPivot(0.5f, 0.f, 0.f);
+	Obstacle3->SetObstacleProfileType(1);
+	m_MapObstacleList.push_back(Obstacle3);
+	SAFE_RELEASE(Obstacle3);
 
 
 

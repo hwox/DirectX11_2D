@@ -16,6 +16,7 @@
 #include "Component/ColliderOBB2D.h"
 #include "Monster.h"
 #include "..\Object\PlayerLife.h"
+#include "Effect.h"
 
 
 #define STAND_SCALE				130.f
@@ -111,14 +112,16 @@ bool CPlayer::Init()
 	m_pBody->SetExtent(STAND_SCALE, STAND_SCALE);
 	m_pBody->SetPivot(0.5f, 0.f, 0.f);
 	m_pBody->AddBlockCallback<CPlayer>(this, &CPlayer::StruckedByMonster);
+	//m_pBody->AddBlockCallback<CPlayer>(this, &CPlayer::BlockedByObstacle);
 	m_pBody->SetCollisionProfile("Player");
 
 
-	m_pMapBody->SetExtent(STAND_SCALE+20.f, 50.f);
+	m_pMapBody->SetExtent(STAND_SCALE + 20.f, 50.f);
 	m_pMapBody->SetPivot(0.5f, 0.f, 0.f);
 	m_pMapBody->AddBlockCallback<CPlayer>(this, &CPlayer::OnTheMap);
 	m_pMapBody->AddEndOverlapCallback<CPlayer>(this, &CPlayer::NotOnTheMap);
 	m_pMapBody->SetCollisionProfile("PlayerMap");
+	m_pMapBody->EnableOverlap(true);
 
 
 	CStaticMesh*	pMesh = (CStaticMesh*)GET_SINGLE(CResourceManager)->FindMesh("TexRect");
@@ -365,20 +368,20 @@ void CPlayer::Fire(float fTime)
 {
 	//m_pAnimation->ChangeAnimation("MinionKick");
 
-	//CBullet*	pBullet = m_pScene->SpawnObject<CBullet>(GetWorldPos() + GetWorldAxis(AXIS_Y) * 200.f,
-	//	Vector3(0.f, 0.f, GetRelativeRot().z));
+	CBullet*	pBullet = m_pScene->SpawnObject<CBullet>(GetWorldPos() + GetWorldAxis(AXIS_Y) * 60.f,
+		Vector3(0.f, 0.f, GetRelativeRot().z));
+	pBullet->SetRelativeRotationY(m_pMesh->GetRelativeRot().y);
+	CProjectileMovementComponent*	pMovement = pBullet->FindObjectComponent<CProjectileMovementComponent>();
 
-	//CProjectileMovementComponent*	pMovement = pBullet->FindObjectComponent<CProjectileMovementComponent>();
+	pMovement->SetDistance(500.f);
 
-	//pMovement->SetDistance(500.f);
+	SAFE_RELEASE(pMovement);
 
-	//SAFE_RELEASE(pMovement);
+	CColliderRect* pBody = pBullet->GetBody();
 
-	//CColliderRect* pBody = pBullet->GetBody();
+	pBody->SetCollisionProfile("PlayerProjectile");
 
-	//pBody->SetCollisionProfile("PlayerProjectile");
-
-	//SAFE_RELEASE(pBullet);
+	SAFE_RELEASE(pBullet);
 
 	//CEffectSoundObj*	pFireSound = m_pScene->SpawnObject<CEffectSoundObj>(GetWorldPos() + GetWorldAxis(AXIS_Y) * 200.f,
 	//	Vector3(0.f, 0.f, GetRelativeRot().z));
@@ -463,12 +466,12 @@ void CPlayer::DownKey(float fScale, float fTime)
 					m_pHasAir = false;
 					m_pMass = STAND_MASS;
 					DisablePlayAnimation(fTime);
-	
+
 
 					m_pAnimation->ChangeAnimation("KirbyDigest");
 					m_pAnimation->SetReturnSequenceName("KirbyDigest", "KirbyIdle");
-				//	m_pAnimation->CreateNotify("KirbyDigest", "ChangeToIdle", 6);
-				//	m_pAnimation->AddNotifyFunction<CPlayer>("KirbyDigest", "ChangeToIdle", this, &CPlayer::EnablePlayAnimation);
+					//	m_pAnimation->CreateNotify("KirbyDigest", "ChangeToIdle", 6);
+					//	m_pAnimation->AddNotifyFunction<CPlayer>("KirbyDigest", "ChangeToIdle", this, &CPlayer::EnablePlayAnimation);
 
 				}
 			}
@@ -512,7 +515,7 @@ void CPlayer::DisableMove(float fTime)
 
 void CPlayer::SKeyDown(float fTime)
 {
-	if (!m_pIsJumping && !m_pHasAir && !m_pHasMonster)
+	if (!m_pIsJumping && !m_pHasAir && !m_pHasMonster && !m_pIsAttack)
 	{
 		// 기본 공기흡입
 		if (!m_pNowEating)
@@ -540,8 +543,12 @@ void CPlayer::SKeyDown(float fTime)
 			// 공격함수 추가
 			//m_pAnimation->ChangeAnimation("KirbySplitStar");
 			// 여기서 좌측 scale 증가시켜야 함 
+			m_pIsAttack = true;
 			m_pMesh->SetRelativeScale(MONSTERSPLIT_SCALE, STAND_SCALE, 1.f);
 			m_pAnimation->ChangeAnimation("KirbySplitStar");
+			m_pAnimation->CreateNotify("KirbySplitStar", "AttackStar", 3);
+			m_pAnimation->AddNotifyFunction("KirbySplitStar", "AttackStar", this, &CPlayer::Fire);
+
 			m_pHasMonster = false;
 			// 특정 frame에 fire 함수 등록시키고 
 
@@ -571,15 +578,24 @@ void CPlayer::SKeyUp(float fTime)
 	}
 	else if (m_pNowEating)
 	{
+		if (!m_pIsAttack) {
+			m_pBody->SetExtent(STAND_SCALE, STAND_SCALE);
 
-		m_pBody->SetExtent(STAND_SCALE, STAND_SCALE);
+
+			m_pMesh->SetRelativeScale(STAND_SCALE, STAND_SCALE, 1.f);
+			m_pAnimation->ChangeAnimation("KirbyEatOver");
+			m_pAnimation->CreateNotify("KirbyEatOver", "EatAirFail", 3);
+			m_pAnimation->AddNotifyFunction<CPlayer>("KirbyEatOver", "EatAirFail", this, &CPlayer::EatAirFail);
+			m_IsMove = false;
 
 
-		m_pMesh->SetRelativeScale(STAND_SCALE, STAND_SCALE, 1.f);
-		m_pAnimation->ChangeAnimation("KirbyEatOver");
-		m_pAnimation->CreateNotify("KirbyEatOver", "EatAirFail", 3);
-		m_pAnimation->AddNotifyFunction<CPlayer>("KirbyEatOver", "EatAirFail", this, &CPlayer::EatAirFail);
-		m_IsMove = false;
+			Vector3 Temp = pPos;
+			Temp.x += 50.f;
+			CEffect*	pEffect = m_pScene->SpawnObject<CEffect>(Temp,
+				Vector3(0.f, 0.f, 0.f));
+			pEffect->Effect_SplitAir();
+			SAFE_RELEASE(pEffect);
+		}
 	}
 }
 
@@ -703,6 +719,13 @@ void CPlayer::SpitAir(float fTime)
 	//m_pHasAir = false;
 	m_pIsJumping = false;
 
+	Vector3 Temp = pPos;
+	pPos.x = 50.f;
+	CEffect*	pEffect = m_pScene->SpawnObject<CEffect>(Temp,
+		Vector3(0.f, 0.f, 0.f));
+	pEffect->Effect_SplitAir();
+	SAFE_RELEASE(pEffect);
+
 	m_pMass = STAND_MASS;
 	m_pMesh->SetRelativeScale(STAND_SCALE, STAND_SCALE, 1.f);
 }
@@ -793,6 +816,10 @@ void CPlayer::ApplySkill(int state)
 	case Ice:
 		break;
 	}
+}
+
+void CPlayer::StarAttack(float fTime)
+{
 }
 
 void CPlayer::DigestMonster(float fScale, float fTime)
@@ -1123,6 +1150,18 @@ void CPlayer::OnBlock(CColliderBase * pSrc, CColliderBase * pDest, float fTime)
 	// 현재 가고 있는 방향 반대면 입력 들어올 수 있게 해야 함
 }
 
+void CPlayer::BlockedByObstacle(CColliderBase * pSrc, CColliderBase * pDest, float fTime)
+{
+	//if (pDest->GetName() == "MapObstacle")
+	//{
+	//	
+	//}
+	//else
+	//{
+	//	return;
+	//}
+}
+
 void CPlayer::StruckedByMonster(CColliderBase * pSrc, CColliderBase * pDest, float fTime)
 {
 
@@ -1149,7 +1188,7 @@ void CPlayer::StruckedByMonster(CColliderBase * pSrc, CColliderBase * pDest, flo
 			m_SaveState = m_pEatMonster->GetSkillType();
 
 			m_pFishingMonster = false;
-
+			m_pEatMonster->SetEatingEnd(true);
 
 			return;
 		}
@@ -1190,13 +1229,23 @@ void CPlayer::NotOnTheMap(CColliderBase * pSrc, CColliderBase * pDest, float fTi
 	// 맵에서 발바닥 뗌
 	OutputDebugString(TEXT("OUT \n"));
 	m_pIsJumping = true;
+	m_pIsFootOnFloor = false;
 }
 
 void CPlayer::OnTheMap(CColliderBase * pSrc, CColliderBase * pDest, float fTime)
 {
 	// 맵바닥에 발 붙이고 있는 상태
 	m_pIsJumping = false;
-	OutputDebugString(TEXT("발 붙이고 있는중 \n"));
+	int random = rand() % 360 + 1;
+	m_pIsFootOnFloor = true;
+
+
+	Vector3 Temp = pPos;
+	Temp.x += 90.f;
+	CEffect*	pEffect = m_pScene->SpawnObject<CEffect>(pPos, Vector3(0.f, 0.f, 180.f));
+	pEffect->SetEffectRotationY(m_pMesh->GetRelativeRot().y);
+	pEffect->Effect_JumpEffect();
+	SAFE_RELEASE(pEffect);
 }
 
 float CPlayer::Lerp(float value1, float value2, float amount)

@@ -55,6 +55,11 @@ void CStartButton::Begin()
 void CStartButton::Update(float fTime)
 {
 	CGameObject::Update(fTime);
+
+	if (GetAsyncKeyState(VK_SPACE) & 0x8000)
+	{
+		ClickCallback(fTime);
+	}
 }
 
 void CStartButton::Render(float fTime)

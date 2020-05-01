@@ -44,6 +44,7 @@ private:
 	bool m_pNowEating;  // s키로 빨아들이고 있는 상태
 	bool m_pJumpKeyInputIng; // jump key 누르고 있는 상태
 	bool m_pFishingMonster; //  Blackhole상태
+	bool m_pIsAttack; // 공격하는 중인지
 
 	float StageMinX;
 	float StageMaxX;
@@ -56,6 +57,7 @@ private:
 	bool JumpAnimationChangeOnce;
 	bool IsPlayAnimation;
 
+	bool m_pIsFootOnFloor;
 private:
 	class CStaticMeshComponent*	m_pMesh;
 	class CSceneComponent*		m_pRotPivot;
@@ -121,6 +123,7 @@ public:
 	void ComputeJump(float fTime);
 	void JumpEnd();
 	void ApplySkill(int state);
+	void StarAttack(float fTime);
 
 	void CamLimit(float fTime);
 
@@ -146,6 +149,7 @@ public:
 	void SetHasMonsterFalse(float fTime);
 public:
 	void OnBlock(class CColliderBase* pSrc, class CColliderBase* pDest, float fTime);
+	void BlockedByObstacle(class CColliderBase* pSrc, class CColliderBase* pDest, float fTime);
 	void StruckedByMonster(class CColliderBase* pSrc, class CColliderBase* pDest, float fTime);
 	void OnTheMap(class CColliderBase* pSrc, class CColliderBase* pDest, float fTime);
 	void NotOnTheMap(class CColliderBase* pSrc, class CColliderBase* pDest, float fTime);

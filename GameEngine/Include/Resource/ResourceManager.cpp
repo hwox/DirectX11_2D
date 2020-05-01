@@ -247,34 +247,34 @@ bool CResourceManager::Init()
 void CResourceManager::ChangeScene()
 {
 	// 기본으로 설정된 리소스들은 모두 카운트를 1씩 증가해준다.
-	list<string>::iterator	iter;
-	list<string>::iterator	iterEnd = m_DefaultMeshList.end();
+	//list<string>::iterator	iter;
+	//list<string>::iterator	iterEnd = m_DefaultMeshList.end();
 
-	for(iter = m_DefaultMeshList.begin(); iter != iterEnd; ++iter)
-	{
-		FindMesh(*iter);
-	}
+	//for(iter = m_DefaultMeshList.begin(); iter != iterEnd; ++iter)
+	//{
+	//	FindMesh(*iter);
+	//}
 
-	iterEnd = m_DefaultTextureList.end();
+	//iterEnd = m_DefaultTextureList.end();
 
-	for (iter = m_DefaultTextureList.begin(); iter != iterEnd; ++iter)
-	{
-		FindTexture(*iter);
-	}
+	//for (iter = m_DefaultTextureList.begin(); iter != iterEnd; ++iter)
+	//{
+	//	FindTexture(*iter);
+	//}
 
-	iterEnd = m_DefaultRenderStateList.end();
+	//iterEnd = m_DefaultRenderStateList.end();
 
-	for (iter = m_DefaultRenderStateList.begin(); iter != iterEnd; ++iter)
-	{
-		FindRenderState(*iter);
-	}
+	//for (iter = m_DefaultRenderStateList.begin(); iter != iterEnd; ++iter)
+	//{
+	//	FindRenderState(*iter);
+	//}
 
-	iterEnd = m_DefaultMaterialList.end();
+	//iterEnd = m_DefaultMaterialList.end();
 
-	for (iter = m_DefaultMaterialList.begin(); iter != iterEnd; ++iter)
-	{
-		FindMaterial(*iter);
-	}
+	//for (iter = m_DefaultMaterialList.begin(); iter != iterEnd; ++iter)
+	//{
+	//	FindMaterial(*iter);
+	//}
 
 	unordered_map<size_t, class CMesh*>::iterator	iterMesh = m_mapMesh.begin();
 	unordered_map<size_t, class CMesh*>::iterator	iterMeshEnd = m_mapMesh.end();
@@ -340,21 +340,21 @@ void CResourceManager::ChangeScene()
 		}
 	}
 
-	unordered_map<size_t, class CAnimation2DSequence*>::iterator	iterAnim = m_mapAnim2DSequence.begin();
-	unordered_map<size_t, class CAnimation2DSequence*>::iterator	iterAnimEnd = m_mapAnim2DSequence.end();
+	//unordered_map<size_t, class CAnimation2DSequence*>::iterator	iterAnim = m_mapAnim2DSequence.begin();
+	//unordered_map<size_t, class CAnimation2DSequence*>::iterator	iterAnimEnd = m_mapAnim2DSequence.end();
 
-	for (; iterAnim != iterAnimEnd;)
-	{
-		if (iterAnim->second->Release() == 0)
-		{
-			iterAnim = m_mapAnim2DSequence.erase(iterAnim);
-		}
+	//for (; iterAnim != iterAnimEnd;)
+	//{
+	//	if (iterAnim->second->Release() == 0)
+	//	{
+	//		iterAnim = m_mapAnim2DSequence.erase(iterAnim);
+	//	}
 
-		else
-		{
-			++iterAnim;
-		}
-	}
+	//	else
+	//	{
+	//		++iterAnim;
+	//	}
+	//}
 }
 
 bool CResourceManager::CreateMesh(const string& strInputLayoutName, const string & strName,
