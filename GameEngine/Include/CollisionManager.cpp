@@ -48,7 +48,7 @@ bool CCollisionManager::Init()
 
 	CreateProfile("Static", "Static");
 
-	CreateSection(Vector3(0.f, 0.f, 0.f), Vector3(5000.f, 5000.f, 1.f));
+	CreateSection(Vector3(0.f, 0.f, 0.f), Vector3(10000.f, 5000.f, 1.f));
 
 	return true;
 }

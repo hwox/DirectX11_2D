@@ -124,4 +124,5 @@ void CEffect::JumpEffect_RandomRotation()
 void CEffect::PlayEnd(float fTime)
 {
 	Kill();
+	OutputDebugString(TEXT("аж╟е \n"));
 }

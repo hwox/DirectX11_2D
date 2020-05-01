@@ -318,12 +318,11 @@ void CPlayer::SetPlayerAnimation()
 
 void CPlayer::MoveSide(float fScale, float fTime)
 {
-
 	if (m_IsMove) {
 		if (fScale != 0.f)
 		{
 			if (!JumpUp && !JumpDown) {
-				if (!m_pHasAir /*&& !m_pNowEating*/ && !m_pHasMonster)
+				if (!m_pHasAir /*&& !m_pNowEating*/ && !m_pHasMonster && !m_pIsAttack)
 				{
 					WalkStateAnimation(m_KirbyState);
 
@@ -345,7 +344,7 @@ void CPlayer::MoveSide(float fScale, float fTime)
 		else
 		{
 			if (!JumpUp && !JumpDown) {
-				if (!m_pHasAir && !m_pNowEating && !m_pHasMonster)
+				if (!m_pHasAir && !m_pNowEating && !m_pHasMonster && !m_pIsAttack)
 				{
 					IdleStateAnimation(m_KirbyState);
 				}
@@ -389,6 +388,13 @@ void CPlayer::Fire(float fTime)
 	//pFireSound->SetSound("Demasia", "Demasia.mp3");
 
 	//SAFE_RELEASE(pFireSound);
+}
+
+void CPlayer::FireEnd(float fTime)
+{
+	m_pIsAttack = false;
+	m_IsMove = true;
+//	m_pMesh->SetRelativeScale(STAND_SCALE, STAND_SCALE, 1.f);
 }
 
 void CPlayer::Delete(float fTime)
@@ -548,8 +554,11 @@ void CPlayer::SKeyDown(float fTime)
 			m_pAnimation->ChangeAnimation("KirbySplitStar");
 			m_pAnimation->CreateNotify("KirbySplitStar", "AttackStar", 3);
 			m_pAnimation->AddNotifyFunction("KirbySplitStar", "AttackStar", this, &CPlayer::Fire);
+			m_pAnimation->CreateNotify("KirbySplitStar", "AttackStarEnd", 12);
+			m_pAnimation->AddNotifyFunction("KirbySplitStar", "AttackStarEnd", this, &CPlayer::FireEnd);
 
 			m_pHasMonster = false;
+			m_pNowEating = false;
 			// 특정 frame에 fire 함수 등록시키고 
 
 			return;
@@ -586,7 +595,7 @@ void CPlayer::SKeyUp(float fTime)
 			m_pAnimation->ChangeAnimation("KirbyEatOver");
 			m_pAnimation->CreateNotify("KirbyEatOver", "EatAirFail", 3);
 			m_pAnimation->AddNotifyFunction<CPlayer>("KirbyEatOver", "EatAirFail", this, &CPlayer::EatAirFail);
-			m_IsMove = false;
+			//m_IsMove = false;
 
 
 			Vector3 Temp = pPos;
@@ -595,6 +604,7 @@ void CPlayer::SKeyUp(float fTime)
 				Vector3(0.f, 0.f, 0.f));
 			pEffect->Effect_SplitAir();
 			SAFE_RELEASE(pEffect);
+
 		}
 	}
 }
@@ -713,11 +723,6 @@ void CPlayer::SpitAir(float fTime)
 	m_pAnimation->CreateNotify("KirbyEatOver", "SetHasAirFalse", 3);
 	m_pAnimation->AddNotifyFunction<CPlayer>("KirbyEatOver", "SetHasAirFalse", this, &CPlayer::SetHasAirFalse);
 
-	//m_IsMove = false;
-	//}
-
-	//m_pHasAir = false;
-	m_pIsJumping = false;
 
 	Vector3 Temp = pPos;
 	pPos.x = 50.f;
@@ -728,6 +733,8 @@ void CPlayer::SpitAir(float fTime)
 
 	m_pMass = STAND_MASS;
 	m_pMesh->SetRelativeScale(STAND_SCALE, STAND_SCALE, 1.f);
+
+//	m_pHasAir = false;
 }
 
 
@@ -958,9 +965,12 @@ void CPlayer::IdleStateAnimation(int state)
 
 void CPlayer::MonsterIdleStateAnimation(int state)
 {
+//	m_pMesh->SetRelativeScale(STAND_SCALE, STAND_SCALE, 1.f);
 	switch (state)
 	{
 	case Stand:
+		m_pMesh->SetRelativeScale(EATMONSTER_SCALE, EATMONSTER_SCALE, 1.f);
+		m_pBody->SetRelativeScale(EATMONSTER_SCALE, EATMONSTER_SCALE, 1.f);
 		m_pAnimation->ChangeAnimation("KirbyMonsterIdle");
 		break;
 	case Beam:
@@ -1132,6 +1142,8 @@ void CPlayer::DisablePlayAnimation(float fTime)
 void CPlayer::SetHasAirFalse(float fTime)
 {
 	m_pHasAir = false;
+	m_pNowEating = false;
+	m_pIsJumping = false;
 	IdleStateAnimation(m_KirbyState);
 }
 
@@ -1189,7 +1201,7 @@ void CPlayer::StruckedByMonster(CColliderBase * pSrc, CColliderBase * pDest, flo
 
 			m_pFishingMonster = false;
 			m_pEatMonster->SetEatingEnd(true);
-
+			//m_pNowEating = false; 
 			return;
 		}
 		m_pEatMonster = (CMonster*)(pDest->GetOwner());

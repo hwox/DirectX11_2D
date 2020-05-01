@@ -86,6 +86,7 @@ public:
 	void MoveSide(float fScale, float fTime);
 	void RotationZ(float fScale, float fTime);
 	void Fire(float fTime);
+	void FireEnd(float fTime);
 	void Delete(float fTime);
 	void AnimAttackNotify(float fTime);
 	void AttackSpeedUp(float fTime);

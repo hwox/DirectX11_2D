@@ -4,6 +4,7 @@
 #include "Component/TileMap.h"
 #include "Component/ColliderRect.h"
 #include "MapObstacle.h"
+#include "MagicMirror.h"
 
 CStage1Map::CStage1Map()
 {
@@ -73,6 +74,9 @@ bool CStage1Map::Init()
 	m_BackImage->SetRelativeScale(10000.f, 1200.f, 1.f);
 
 
+	CMagicMirror*  pMirror  = m_pScene->SpawnObject<CMagicMirror>(Vector3(7670.f, 230.f, 0.f));
+	SAFE_RELEASE(pMirror);
+
 	MakeMapObstacle();
 
 	return true;
@@ -124,7 +128,6 @@ Obstacle2->SetObstacleColliderPivot(0.5f, 0.f, 0.f);
 	Obstacle3->SetObstacleProfileType(1);
 	m_MapObstacleList.push_back(Obstacle3);
 	SAFE_RELEASE(Obstacle3);
-
 
 
 

@@ -1,5 +1,9 @@
 #pragma once
-#include "E:\200425_ver\Engine\Include\Scene\GameMode.h"
+//#include "E:\200425_ver\Engine\Include\Scene\GameMode.h"
+
+#include "Scene/GameMode.h"
+
+
 class CStage1Mode :
 	public CGameMode
 {
