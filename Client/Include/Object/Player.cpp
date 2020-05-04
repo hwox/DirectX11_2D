@@ -310,6 +310,22 @@ void CPlayer::SetPlayerAnimation()
 	m_pAnimation->AddAnimation2DSequence("BeamIdle");
 	m_pAnimation->AddAnimation2DSequence("BeamJumpIng");
 	m_pAnimation->AddAnimation2DSequence("BeamDamage");
+	m_pAnimation->AddAnimation2DSequence("BeamSplitAir");
+	m_pAnimation->AddAnimation2DSequence("BeamAttack");
+	m_pAnimation->AddAnimation2DSequence("BeamJumpEnd");
+
+
+	////////////////////////////////////////////////////////////
+
+	m_pAnimation->AddAnimation2DSequence("CutterAttack");
+	m_pAnimation->AddAnimation2DSequence("CutterDigestion");	
+	m_pAnimation->AddAnimation2DSequence("CutterJumpDown");
+	m_pAnimation->AddAnimation2DSequence("CutterWalk");
+	m_pAnimation->AddAnimation2DSequence("CutterSplitAir");
+	m_pAnimation->AddAnimation2DSequence("CutterJumpIng");
+	m_pAnimation->AddAnimation2DSequence("CutterJumpUp");
+	m_pAnimation->AddAnimation2DSequence("CutterIdle");
+
 
 }
 
@@ -321,12 +337,11 @@ void CPlayer::MoveSide(float fScale, float fTime)
 			if (!JumpUp && !JumpDown) {
 				if (!m_pHasAir /*&& !m_pNowEating*/ && !m_pHasMonster && !m_pIsAttack)
 				{
-					WalkStateAnimation(m_KirbyState);
-
+					WalkStateAnimation();
 				}
 				else if (m_pHasMonster)
 				{
-					MonsterWalkStateAnimation(m_KirbyState);
+					MonsterWalkStateAnimation();
 				}
 			}
 
@@ -357,11 +372,11 @@ void CPlayer::MoveSide(float fScale, float fTime)
 			if (!JumpUp && !JumpDown) {
 				if (!m_pHasAir && !m_pNowEating && !m_pHasMonster && !m_pIsAttack)
 				{
-					IdleStateAnimation(m_KirbyState);
+					IdleStateAnimation();
 				}
 				else if (m_pHasMonster)
 				{
-					MonsterIdleStateAnimation(m_KirbyState);
+					MonsterIdleStateAnimation();
 				}
 			}
 		}
@@ -410,6 +425,7 @@ void CPlayer::FireEnd(float fTime)
 	m_pIsAttack = false;
 	m_IsMove = true;
 	//	m_pMesh->SetRelativeScale(STAND_SCALE, STAND_SCALE, 1.f);
+	m_pNowEating = false;
 }
 
 void CPlayer::DownKey(float fScale, float fTime)
@@ -424,7 +440,7 @@ void CPlayer::DownKey(float fScale, float fTime)
 			if (!m_pHasAir)
 			{
 				if (IsPlayAnimation) {
-					IdleDownStateAnimation(m_KirbyState);
+					IdleDownStateAnimation();
 					OutputDebugString(TEXT("들어오면 안되는 곳 \n"));
 				}
 			}
@@ -447,7 +463,7 @@ void CPlayer::DownKey(float fScale, float fTime)
 		{
 			if (bMove)
 			{
-				IdleStateAnimation(m_KirbyState);
+				IdleStateAnimation();
 				bMove = false;
 			}
 		}
@@ -458,13 +474,13 @@ void CPlayer::DownKey(float fScale, float fTime)
 void CPlayer::ReturnToIdle(float fTime)
 {
 	m_pMesh->SetRelativeScale(STAND_SCALE, STAND_SCALE, 1.f);
-	IdleStateAnimation(m_KirbyState);
+	IdleStateAnimation();
 }
 
 void CPlayer::ReturnToMonsterIdle(float fTime)
 {
 	m_pMesh->SetRelativeScale(EATMONSTER_SCALE, EATMONSTER_SCALE, 1.f);
-	MonsterIdleStateAnimation(m_KirbyState);
+	MonsterIdleStateAnimation();
 }
 
 void CPlayer::EnableMove(float fTime)
@@ -569,12 +585,12 @@ void CPlayer::AKeyDown(float fTime)
 		if (!JumpAnimationChangeOnce) {
 			if (!m_pHasMonster && !m_pHasAir)
 			{
-				JumpUpStateAnimation(m_KirbyState);
+				JumpUpStateAnimation();
 				JumpAnimationChangeOnce = true;
 			}
 			else if (m_pHasMonster)
 			{
-				MonsterJumpUpStateAnimation(m_KirbyState);
+				MonsterJumpUpStateAnimation();
 				JumpAnimationChangeOnce = true;
 			}
 		}
@@ -632,7 +648,7 @@ void CPlayer::UpKeyDoubleDown(float fTime)
 {
 	if (!m_pHasAir)
 	{
-		JumpIngStateAnimation(m_KirbyState);
+		JumpIngStateAnimation();
 		m_pHasAir = true;
 		m_pMass = FAT_MASS;
 		m_pMesh->SetRelativeScale(EAT_SCALE, EAT_SCALE, 1.f);
@@ -653,14 +669,14 @@ void CPlayer::SpitAir(float fTime)
 
 	m_pMass = STAND_MASS;
 	m_pMesh->SetRelativeScale(STAND_SCALE, STAND_SCALE, 1.f);
-
+	m_pNowEating = false;
 	//	m_pHasAir = false;
 }
 
 
 void CPlayer::EatAirFail(float fTime)
 {
-	IdleStateAnimation(m_KirbyState);
+	IdleStateAnimation();
 	m_pNowEating = false;
 	m_IsMove = true; // 이거 하는동안에 움직이지 말라고 
 	m_pHasAir = false;
@@ -691,11 +707,11 @@ void CPlayer::ComputeJump(float fTime)
 			if (JumpAnimationChangeOnce) {
 				if (!m_pHasMonster && !m_pHasAir)
 				{
-					JumpDownStateAnimation(m_KirbyState);
+					JumpDownStateAnimation();
 				}
 				else if (m_pHasMonster)
 				{
-					MonsterJumpDownStateAnimation(m_KirbyState);
+					MonsterJumpDownStateAnimation();
 				}
 				JumpAnimationChangeOnce = false;
 			}
@@ -758,7 +774,6 @@ void CPlayer::DigestMonster(float fScale, float fTime)
 		if (m_pHasMonster)
 		{
 			m_pAnimation->ChangeAnimation("KirbyDigest");
-
 			m_pHasMonster = false;
 			m_KirbyState = m_SaveState;
 			m_SaveState = 0;
@@ -819,9 +834,9 @@ void CPlayer::SetStageMinMax(float minx, float maxx, float miny, float maxy)
 	StageMaxY = maxy;
 }
 
-void CPlayer::WalkStateAnimation(int state)
+void CPlayer::WalkStateAnimation()
 {
-	switch (state)
+	switch (m_KirbyState)
 	{
 	case Stand:
 		m_pAnimation->ChangeAnimation("KirbyWalk");
@@ -834,6 +849,9 @@ void CPlayer::WalkStateAnimation(int state)
 		m_pBody->SetRelativeScale(STAND_SCALE, STAND_SCALE, 1.f);
 		break;
 	case Cutter:
+		m_pAnimation->ChangeAnimation("CutterWalk");
+		m_pMesh->SetRelativeScale(STAND_SCALE + 20.f, STAND_SCALE + 20.f, 1.f);
+		m_pBody->SetRelativeScale(STAND_SCALE, STAND_SCALE, 1.f);
 		break;
 	case Ice:
 		break;
@@ -842,9 +860,9 @@ void CPlayer::WalkStateAnimation(int state)
 	}
 }
 
-void CPlayer::MonsterWalkStateAnimation(int state)
+void CPlayer::MonsterWalkStateAnimation()
 {
-	switch (state)
+	switch (m_KirbyState)
 	{
 	case Stand:
 		m_pAnimation->ChangeAnimation("KirbyMonsterWalk");
@@ -862,9 +880,9 @@ void CPlayer::MonsterWalkStateAnimation(int state)
 	}
 }
 
-void CPlayer::IdleStateAnimation(int state)
+void CPlayer::IdleStateAnimation()
 {
-	switch (state)
+	switch (m_KirbyState)
 	{
 	case Stand:
 		m_pMesh->SetRelativeScale(STAND_SCALE, STAND_SCALE, 1.f);
@@ -875,6 +893,8 @@ void CPlayer::IdleStateAnimation(int state)
 		m_pAnimation->ChangeAnimation("BeamIdle");
 		break;
 	case Cutter:
+		m_pMesh->SetRelativeScale(STAND_SCALE + 20.f, STAND_SCALE + 20.f, 1.f);
+		m_pAnimation->ChangeAnimation("CutterIdle");
 		break;
 	case Ice:
 		break;
@@ -883,10 +903,10 @@ void CPlayer::IdleStateAnimation(int state)
 	}
 }
 
-void CPlayer::MonsterIdleStateAnimation(int state)
+void CPlayer::MonsterIdleStateAnimation()
 {
 	//	m_pMesh->SetRelativeScale(STAND_SCALE, STAND_SCALE, 1.f);
-	switch (state)
+	switch (m_KirbyState)
 	{
 	case Stand:
 		m_pMesh->SetRelativeScale(EATMONSTER_SCALE, EATMONSTER_SCALE, 1.f);
@@ -904,9 +924,9 @@ void CPlayer::MonsterIdleStateAnimation(int state)
 	}
 }
 
-void CPlayer::IdleDownStateAnimation(int state)
+void CPlayer::IdleDownStateAnimation()
 {
-	switch (state)
+	switch (m_KirbyState)
 	{
 	case Stand:
 		m_pAnimation->ChangeAnimation("KirbyIdleDown");
@@ -915,6 +935,7 @@ void CPlayer::IdleDownStateAnimation(int state)
 		m_pAnimation->ChangeAnimation("BeamIdleDown");
 		break;
 	case Cutter:
+		//m_pAnimation->ChangeAnimation("KirbyIdleDown");
 		break;
 	case Ice:
 		break;
@@ -923,9 +944,9 @@ void CPlayer::IdleDownStateAnimation(int state)
 	}
 }
 
-void CPlayer::JumpDownStateAnimation(int state)
+void CPlayer::JumpDownStateAnimation()
 {
-	switch (state)
+	switch (m_KirbyState)
 	{
 	case Stand:
 		m_pAnimation->ChangeAnimation("KirbyJumpDown");
@@ -936,6 +957,8 @@ void CPlayer::JumpDownStateAnimation(int state)
 		m_pAnimation->SetReturnSequenceName("BeamJumpDown", "BeamIdle");
 		break;
 	case Cutter:
+		m_pAnimation->ChangeAnimation("CutterJumpDown");
+		m_pAnimation->SetReturnSequenceName("CutterJumpDown", "CutterIdle");
 		break;
 	case Ice:
 		break;
@@ -944,9 +967,9 @@ void CPlayer::JumpDownStateAnimation(int state)
 	}
 }
 
-void CPlayer::MonsterJumpDownStateAnimation(int state)
+void CPlayer::MonsterJumpDownStateAnimation()
 {
-	switch (state)
+	switch (m_KirbyState)
 	{
 	case Stand:
 		m_pAnimation->ChangeAnimation("KirbyMonsterJump");
@@ -964,9 +987,9 @@ void CPlayer::MonsterJumpDownStateAnimation(int state)
 	}
 }
 
-void CPlayer::JumpUpStateAnimation(int state)
+void CPlayer::JumpUpStateAnimation()
 {
-	switch (state)
+	switch (m_KirbyState)
 	{
 	case Stand:
 		m_pAnimation->ChangeAnimation("KirbyJumpUp");
@@ -975,6 +998,7 @@ void CPlayer::JumpUpStateAnimation(int state)
 		m_pAnimation->ChangeAnimation("BeamJumpUp");
 		break;
 	case Cutter:
+		m_pAnimation->ChangeAnimation("CutterJumpUp");
 		break;
 	case Ice:
 		break;
@@ -983,9 +1007,9 @@ void CPlayer::JumpUpStateAnimation(int state)
 	}
 }
 
-void CPlayer::MonsterJumpUpStateAnimation(int state)
+void CPlayer::MonsterJumpUpStateAnimation()
 {
-	switch (state)
+	switch (m_KirbyState)
 	{
 	case Stand:
 		m_pMesh->SetRelativeScale(EATMONSTER_SCALE, EATMONSTER_SCALE*1.2, 1.f);
@@ -1003,9 +1027,9 @@ void CPlayer::MonsterJumpUpStateAnimation(int state)
 	}
 }
 
-void CPlayer::DamageStateAnimation(int state)
+void CPlayer::DamageStateAnimation()
 {
-	switch (state)
+	switch (m_KirbyState)
 	{
 	case Stand:
 		m_pAnimation->ChangeAnimation("KirbyDamage");
@@ -1021,6 +1045,8 @@ void CPlayer::DamageStateAnimation(int state)
 
 		break;
 	case Cutter:
+		////m_pAnimation->ChangeAnimation("BeamDamage");
+		//m_pAnimation->SetReturnSequenceName("BeamDamage", "CutterIdle");
 		break;
 	case Ice:
 		break;
@@ -1029,9 +1055,9 @@ void CPlayer::DamageStateAnimation(int state)
 	}
 }
 
-void CPlayer::JumpIngStateAnimation(int state)
+void CPlayer::JumpIngStateAnimation()
 {
-	switch (state)
+	switch (m_KirbyState)
 	{
 	case Stand:
 		m_pMesh->SetRelativeScale(EATMONSTER_SCALE, EATMONSTER_SCALE*1.2, 1.f);
@@ -1042,6 +1068,30 @@ void CPlayer::JumpIngStateAnimation(int state)
 		m_pAnimation->ChangeAnimation("BeamJumpIng");
 		break;
 	case Cutter:
+		m_pMesh->SetRelativeScale(EATMONSTER_SCALE, EATMONSTER_SCALE*1.2, 1.f);
+		m_pAnimation->ChangeAnimation("CutterJumpIng");
+		break;
+	case Ice:
+		break;
+	default:
+		OutputDebugString(TEXT("State : Something wrong"));
+	}
+}
+
+void CPlayer::DigestionStateAnimation()
+{
+	switch (m_KirbyState)
+	{
+	case Stand:
+		m_pMesh->SetRelativeScale(STAND_SCALE * 2.5f, STAND_SCALE, 1.f);
+		m_pAnimation->ChangeAnimation("KirbyDigestMonster");
+		break;
+	case Beam:
+
+		break;
+	case Cutter:
+		m_pMesh->SetRelativeScale(STAND_SCALE * 2.5f, STAND_SCALE, 1.f);
+		m_pAnimation->ChangeAnimation("CutterDigestion");
 		break;
 	case Ice:
 		break;
@@ -1118,13 +1168,10 @@ void CPlayer::StruckedByMonster(CColliderBase * pSrc, CColliderBase * pDest, flo
 			// 들어와서 충돌됨 
 			m_pEatMonster->Enable(false);
 			m_pHasMonster = true;
-			m_pMesh->SetRelativeScale(STAND_SCALE * 2.5f, STAND_SCALE, 1.f);
 
-
-			m_pAnimation->ChangeAnimation("KirbyDigestMonster");
 			//m_pAnimation->CreateNotify("KirbyDigestMonster", "ChangeToMonsterIdle", 7);
 			//m_pAnimation->AddNotifyFunction<CPlayer>("KirbyDigestMonster", "ChangeToMonsterIdle", this, &CPlayer::ReturnToMonsterIdle);
-
+			DigestionStateAnimation();
 
 			m_SaveState = m_pEatMonster->GetSkillType();
 
@@ -1157,9 +1204,7 @@ void CPlayer::StruckedByMonster(CColliderBase * pSrc, CColliderBase * pDest, flo
 		DisableMove(fTime);
 
 
-		DamageStateAnimation(m_KirbyState);
-		//DamageStateAnimation(0);
-		//DamageStateAnimation(1);
+		DamageStateAnimation();
 
 		m_pMovement->BackStep(GetWorldAxis(AXIS_X));
 	}
@@ -1213,6 +1258,9 @@ void CPlayer::CreateNotifyList()
 
 	m_pAnimation->CreateNotify("KirbyDigestMonster", "ChangeToMonsterIdle", 7);
 	m_pAnimation->AddNotifyFunction<CPlayer>("KirbyDigestMonster", "ChangeToMonsterIdle", this, &CPlayer::ReturnToMonsterIdle);
+
+	m_pAnimation->CreateNotify("CutterDigestion", "CutterChangeToMonsterIdle", 3);
+	m_pAnimation->AddNotifyFunction<CPlayer>("CutterDigestion", "CutterChangeToMonsterIdle", this, &CPlayer::ReturnToMonsterIdle);
 
 	m_pAnimation->CreateNotify("KirbyDamage", "DamageEnd", 7);
 	m_pAnimation->AddNotifyFunction<CPlayer>("KirbyDamage", "DamageEnd", this, &CPlayer::EnableMove);

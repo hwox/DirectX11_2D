@@ -79,7 +79,7 @@ bool CStage1Mode::Init()
 void CStage1Mode::SpawnMonster()
 {
 
-	CWaddleDee*	pMinion = m_pScene->SpawnObject<CWaddleDee>(Vector3(1600.f, 230.f, 0.f));
+	CWaddleDee*	pMinion = m_pScene->SpawnObject<CWaddleDee>(Vector3(3900.f, 230.f, 0.f));
 
 	SAFE_RELEASE(pMinion);
 
@@ -89,7 +89,7 @@ void CStage1Mode::SpawnMonster()
 	SAFE_RELEASE(pMinion2);
 
 
-	CLeap*	pLeap = m_pScene->SpawnObject<CLeap>(Vector3(4000.f, 500.f, 0.f));
+	CLeap*	pLeap = m_pScene->SpawnObject<CLeap>(Vector3(6300.f, 500.f, 0.f));
 	SAFE_RELEASE(pLeap);
 }
 
@@ -103,6 +103,7 @@ void CStage1Mode::SetCollidrProfile()
 	GET_SINGLE(CCollisionManager)->CreateChannel("Map", CT_BLOCK);
 	GET_SINGLE(CCollisionManager)->CreateChannel("MapObject", CT_BLOCK);
 	GET_SINGLE(CCollisionManager)->CreateChannel("SceneChange", CT_BLOCK);
+	GET_SINGLE(CCollisionManager)->CreateChannel("MapBlock", CT_BLOCK);
 
 
 
@@ -122,6 +123,7 @@ void CStage1Mode::SetCollidrProfile()
 	GET_SINGLE(CCollisionManager)->UpdateProfileChannel("Monster", "Map", CT_IGNORE);
 	GET_SINGLE(CCollisionManager)->UpdateProfileChannel("Monster", "PlayerMap", CT_IGNORE);
 	GET_SINGLE(CCollisionManager)->UpdateProfileChannel("Monster", "SceneChange", CT_IGNORE);
+	GET_SINGLE(CCollisionManager)->UpdateProfileChannel("Monster", "MapBlock", CT_IGNORE);
 
 
 
@@ -141,6 +143,7 @@ void CStage1Mode::SetCollidrProfile()
 	GET_SINGLE(CCollisionManager)->UpdateProfileChannel("MonsterProjectile", "MonsterProjectile", CT_IGNORE);
 	GET_SINGLE(CCollisionManager)->UpdateProfileChannel("MonsterProjectile", "PlayerMap", CT_IGNORE);
 	GET_SINGLE(CCollisionManager)->UpdateProfileChannel("MonsterProjectile", "SceneChange", CT_IGNORE);
+	GET_SINGLE(CCollisionManager)->UpdateProfileChannel("MonsterProjectile", "MapBlock", CT_IGNORE);
 
 
 
@@ -151,6 +154,7 @@ void CStage1Mode::SetCollidrProfile()
 	GET_SINGLE(CCollisionManager)->UpdateProfileChannel("Map", "Monster", CT_IGNORE);
 	GET_SINGLE(CCollisionManager)->UpdateProfileChannel("Map", "PlayerProjectile", CT_IGNORE);
 	GET_SINGLE(CCollisionManager)->UpdateProfileChannel("Map", "SceneChange", CT_IGNORE);
+	GET_SINGLE(CCollisionManager)->UpdateProfileChannel("Map", "MapBlock", CT_IGNORE);
 
 
 	GET_SINGLE(CCollisionManager)->CreateProfile("MapObject", "MapObject");
@@ -158,6 +162,17 @@ void CStage1Mode::SetCollidrProfile()
 	GET_SINGLE(CCollisionManager)->UpdateProfileChannel("MapObject", "MapObject", CT_IGNORE);
 	//GET_SINGLE(CCollisionManager)->UpdateProfileChannel("MapObject", "Player", CT_IGNORE);
 	GET_SINGLE(CCollisionManager)->UpdateProfileChannel("MapObject", "SceneChange", CT_IGNORE);
+	GET_SINGLE(CCollisionManager)->UpdateProfileChannel("MapObject", "MapBlock", CT_IGNORE);
+	//GET_SINGLE(CCollisionManager)->UpdateProfileChannel("MapObject", "Map", CT_IGNORE);
+
+
+	GET_SINGLE(CCollisionManager)->CreateProfile("MapBlock", "MapBlock");
+	GET_SINGLE(CCollisionManager)->UpdateProfileChannel("MapBlock", "Map", CT_IGNORE);
+	GET_SINGLE(CCollisionManager)->UpdateProfileChannel("MapBlock", "MapObject", CT_IGNORE);
+	//GET_SINGLE(CCollisionManager)->UpdateProfileChannel("MapObject", "Player", CT_IGNORE);
+	GET_SINGLE(CCollisionManager)->UpdateProfileChannel("MapBlock", "SceneChange", CT_IGNORE);
+	GET_SINGLE(CCollisionManager)->UpdateProfileChannel("MapBlock", "Monster", CT_IGNORE);
+	GET_SINGLE(CCollisionManager)->UpdateProfileChannel("MapBlock", "MonsterProjectile", CT_IGNORE);
 	//GET_SINGLE(CCollisionManager)->UpdateProfileChannel("MapObject", "Map", CT_IGNORE);
 
 
@@ -176,6 +191,7 @@ void CStage1Mode::SetCollidrProfile()
 	GET_SINGLE(CCollisionManager)->UpdateProfileChannel("SceneChange", "SceneChange", CT_IGNORE);
 	GET_SINGLE(CCollisionManager)->UpdateProfileChannel("SceneChange", "PlayerProjectile", CT_IGNORE);
 	GET_SINGLE(CCollisionManager)->UpdateProfileChannel("SceneChange", "MonsterProjectile", CT_IGNORE);
-	GET_SINGLE(CCollisionManager)->UpdateProfileChannel("SceneChange", "Monster", CT_IGNORE);
+	GET_SINGLE(CCollisionManager)->UpdateProfileChannel("SceneChange", "MonsterProjectile", CT_IGNORE);
+	GET_SINGLE(CCollisionManager)->UpdateProfileChannel("SceneChange", "MapBlock", CT_IGNORE);
 
 }

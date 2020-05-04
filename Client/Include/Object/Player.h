@@ -111,7 +111,6 @@ public:
 	void UpKeyDoubleDown(float fTime);
 
 	void DownKey(float fScale, float fTime);
-	//void DownKeyDown(float fTime);
 	void DigestMonster(float fScale, float fTime);
 
 
@@ -129,17 +128,18 @@ public:
 	void SetStageMinMax(float minx, float maxx, float miny, float maxy);
 
 
-	void WalkStateAnimation(int state);
-	void MonsterWalkStateAnimation(int state);
-	void IdleStateAnimation(int state);
-	void MonsterIdleStateAnimation(int state);
-	void IdleDownStateAnimation(int state);
-	void JumpDownStateAnimation(int state);
-	void MonsterJumpDownStateAnimation(int state);
-	void JumpUpStateAnimation(int state);
-	void MonsterJumpUpStateAnimation(int state);
-	void DamageStateAnimation(int state);
-	void JumpIngStateAnimation(int state);
+	void WalkStateAnimation();
+	void MonsterWalkStateAnimation();
+	void IdleStateAnimation();
+	void MonsterIdleStateAnimation();
+	void IdleDownStateAnimation();
+	void JumpDownStateAnimation();
+	void MonsterJumpDownStateAnimation();
+	void JumpUpStateAnimation();
+	void MonsterJumpUpStateAnimation();
+	void DamageStateAnimation();
+	void JumpIngStateAnimation();
+	void DigestionStateAnimation();
 
 	void EnablePlayAnimation(float fTime);
 	void DisablePlayAnimation(float fTime);

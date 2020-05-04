@@ -42,6 +42,7 @@ bool CBullet::Init()
 
 
 	m_pAnimation->AddAnimation2DSequence("StarBullet");
+	m_pAnimation->AddAnimation2DSequence("CutterBullet");
 
 
 	CStaticMesh*	pMesh = (CStaticMesh*)GET_SINGLE(CResourceManager)->FindMesh("TexRect");
@@ -109,27 +110,31 @@ void CBullet::OnBlock(CColliderBase * pSrc, CColliderBase * pDest, float fTime)
 {
 
 	// 몬스터는 좀더 뒤에서 터져야 되는데 얘가 그냥 그 앞에서 터져버려서 {} 안에 따로 만들었음ㅠ
-
-	if (pDest->GetName() == "MonsterBody")
+	if (pDest->GetName() == "MapObstacleBody")
+	{
+		CEffect*	pEffect = m_pScene->SpawnObject<CEffect>(GetWorldPos(),
+			Vector3(0.f, 0.f, GetRelativeRot().z));
+		OutputDebugString(TEXT("Map Obstacle \n"));
+		SAFE_RELEASE(pEffect);
+	}
+	else if (pDest->GetName() == "MonsterBody")
 	{
 		Vector3 pPos = GetWorldPos();
-		pPos.x +=80.f;
+		pPos.x += 80.f;
 		CEffect*	pEffect = m_pScene->SpawnObject<CEffect>(pPos,
 			Vector3(0.f, 0.f, GetRelativeRot().z));
 		pEffect->Effect_BulletEffect();
 		// 몬스터
 		CMonster*	pMonster = (CMonster*)(pDest->GetOwner());
 		pMonster->SetAttackedByStar(true);
+		OutputDebugString(TEXT("Map Obstacle \n"));
 		SAFE_RELEASE(pEffect);
 		//SAFE_RELEASE(pMonster);
 	}
-	else if (pDest->GetName() == "MapObstacleBody")
+
+	else
 	{
-		CEffect*	pEffect = m_pScene->SpawnObject<CEffect>(GetWorldPos(),
-			Vector3(0.f, 0.f, GetRelativeRot().z));
-		// 오브젝트
-		// 그 즉시 터지게
-		SAFE_RELEASE(pEffect);
+
 	}
 
 

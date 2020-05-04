@@ -68,6 +68,7 @@ void CStartGameMode::CreateAnimation2DSequence()
 {
 	Player_Stand_Texture_Create();
 	Player_Skill_Beam_Texture_Create();
+	Player_Skill_Cutter_Texture_Create();
 	Monster_Texture_Create();
 	Effect_Texture_Create();
 	Else_Texture_Create();
@@ -620,7 +621,7 @@ void CStartGameMode::Player_Skill_Beam_Texture_Create()
 	{
 		TCHAR	strFileName[MAX_PATH] = {};
 
-		wsprintf(strFileName, TEXT("Player/Skill/Beam/Beam_Jump_Ing/Beam_Jump_Ing_%d.png"), i);
+		wsprintf(strFileName, TEXT("Player/Skill/Beam/Bean_Jump_Ing/Beam_Jump_Ing_%d.png"), i);
 
 		char	strKey[256] = {};
 		sprintf_s(strKey, "BeamJumpIng%d", i);
@@ -630,6 +631,70 @@ void CStartGameMode::Player_Skill_Beam_Texture_Create()
 
 	GET_SINGLE(CResourceManager)->SetAnimation2DSequenceFrameInfoAll("BeamJumpIng", Vector2(0.f, 0.f),
 		Vector2(30.f, 35.f));
+
+	///////////////////////////////////////////////////////////////
+
+
+			////////////////////    Beam Jump End    ///////////////////////
+
+	GET_SINGLE(CResourceManager)->CreateAnimation2DSequence("BeamJumpEnd", false, 0.8f, 5);
+
+	for (int i = 0; i <= 4; ++i)
+	{
+		TCHAR	strFileName[MAX_PATH] = {};
+
+		wsprintf(strFileName, TEXT("Player/Skill/Beam/Beam_Jump_End/Beam_Jump_End_%d.png"), i);
+
+		char	strKey[256] = {};
+		sprintf_s(strKey, "BeamJumpEnd%d", i);
+
+		GET_SINGLE(CResourceManager)->AddAnimation2DSequenceTexture("BeamJumpEnd", strKey, strFileName);
+	}
+
+	GET_SINGLE(CResourceManager)->SetAnimation2DSequenceFrameInfoAll("BeamJumpEnd", Vector2(0.f, 0.f),
+		Vector2(30.f, 35.f));
+
+	///////////////////////////////////////////////////////////////
+
+	////////////////////    Beam Attack    ///////////////////////
+
+	GET_SINGLE(CResourceManager)->CreateAnimation2DSequence("BeamAttack", false, 3.0f, 35);
+
+	for (int i = 0; i <= 34; ++i)
+	{
+		TCHAR	strFileName[MAX_PATH] = {};
+
+		wsprintf(strFileName, TEXT("Player/Skill/Beam/Beam_Attack/Beam_Attack_%d.png"), i);
+
+		char	strKey[256] = {};
+		sprintf_s(strKey, "BeamAttack%d", i);
+
+		GET_SINGLE(CResourceManager)->AddAnimation2DSequenceTexture("BeamAttack", strKey, strFileName);
+	}
+
+	GET_SINGLE(CResourceManager)->SetAnimation2DSequenceFrameInfoAll("BeamAttack", Vector2(0.f, 0.f),
+		Vector2(75.f, 90.f));
+
+	///////////////////////////////////////////////////////////////
+
+	////////////////////    Beam SplitAir    ///////////////////////
+
+	GET_SINGLE(CResourceManager)->CreateAnimation2DSequence("BeamSplitAir", false, 0.8f, 6);
+
+	for (int i = 0; i <= 5; ++i)
+	{
+		TCHAR	strFileName[MAX_PATH] = {};
+
+		wsprintf(strFileName, TEXT("Player/Skill/Beam/Beam_SplitAir/Beam_SplitAir_%d.png"), i);
+
+		char	strKey[256] = {};
+		sprintf_s(strKey, "BeamSplitAir%d", i);
+
+		GET_SINGLE(CResourceManager)->AddAnimation2DSequenceTexture("BeamSplitAir", strKey, strFileName);
+	}
+
+	GET_SINGLE(CResourceManager)->SetAnimation2DSequenceFrameInfoAll("BeamSplitAir", Vector2(0.f, 0.f),
+		Vector2(25.f, 30.f));
 
 	///////////////////////////////////////////////////////////////
 
@@ -711,7 +776,7 @@ void CStartGameMode::Player_Skill_Cutter_Texture_Create()
 	{
 		TCHAR	strFileName[MAX_PATH] = {};
 
-		wsprintf(strFileName, TEXT("Player/Skill/Cutter/Cutter_Jump_Down/Cutter_Digestion_%d.png"), i);
+		wsprintf(strFileName, TEXT("Player/Skill/Cutter/Cutter_Jump_Down/Cutter_Jump_Down_%d.png"), i);
 
 		char	strKey[256] = {};
 		sprintf_s(strKey, "CutterJumpDown%d", i);
@@ -745,6 +810,48 @@ void CStartGameMode::Player_Skill_Cutter_Texture_Create()
 
 	///////////////////////////////////////////////////////////////
 
+		////////////////////    Cutter SplitAir      ///////////////////////
+
+	GET_SINGLE(CResourceManager)->CreateAnimation2DSequence("CutterSplitAir", false, 1.f, 3);
+
+	for (int i = 0; i <= 2; ++i)
+	{
+		TCHAR	strFileName[MAX_PATH] = {};
+
+		wsprintf(strFileName, TEXT("Player/Skill/Cutter/Cutter_SplitAir/Cutter_SplitAir_%d.png"), i);
+
+		char	strKey[256] = {};
+		sprintf_s(strKey, "CutterSplitAir%d", i);
+
+		GET_SINGLE(CResourceManager)->AddAnimation2DSequenceTexture("CutterSplitAir", strKey, strFileName);
+	}
+
+	GET_SINGLE(CResourceManager)->SetAnimation2DSequenceFrameInfoAll("CutterSplitAir", Vector2(0.f, 0.f),
+		Vector2(30.f, 30.f));
+
+	///////////////////////////////////////////////////////////////
+
+			////////////////////    Cutter JumpIng      ///////////////////////
+
+	GET_SINGLE(CResourceManager)->CreateAnimation2DSequence("CutterJumpIng", true, 1.f, 6);
+
+	for (int i = 0; i <= 5; ++i)
+	{
+		TCHAR	strFileName[MAX_PATH] = {};
+
+		wsprintf(strFileName, TEXT("Player/Skill/Cutter/Cutter_Jump_Ing/Cutter_Jump_Ing_%d.png"), i);
+
+		char	strKey[256] = {};
+		sprintf_s(strKey, "CutterJumpIng%d", i);
+
+		GET_SINGLE(CResourceManager)->AddAnimation2DSequenceTexture("CutterJumpIng", strKey, strFileName);
+	}
+
+	GET_SINGLE(CResourceManager)->SetAnimation2DSequenceFrameInfoAll("CutterJumpIng", Vector2(0.f, 0.f),
+		Vector2(30.f, 35.f));
+
+	///////////////////////////////////////////////////////////////
+
 		////////////////////    Cutter Jump Up      ///////////////////////
 
 	GET_SINGLE(CResourceManager)->CreateAnimation2DSequence("CutterJumpUp", false, 1.f, 1);
@@ -763,6 +870,27 @@ void CStartGameMode::Player_Skill_Cutter_Texture_Create()
 
 	GET_SINGLE(CResourceManager)->SetAnimation2DSequenceFrameInfoAll("CutterJumpUp", Vector2(0.f, 0.f),
 		Vector2(25.f, 30.f));
+
+	///////////////////////////////////////////////////////////////
+
+			////////////////////    Cutter Idle      ///////////////////////
+
+	GET_SINGLE(CResourceManager)->CreateAnimation2DSequence("CutterIdle", false, 1.f, 1);
+
+	for (int i = 0; i <= 0; ++i)
+	{
+		TCHAR	strFileName[MAX_PATH] = {};
+
+		wsprintf(strFileName, TEXT("Player/Skill/Cutter/Cutter_Idle/Cutter_Idle_0.png"));
+
+		char	strKey[256] = {};
+		sprintf_s(strKey, "CutterIdle%d", i);
+
+		GET_SINGLE(CResourceManager)->AddAnimation2DSequenceTexture("CutterIdle", strKey, strFileName);
+	}
+
+	GET_SINGLE(CResourceManager)->SetAnimation2DSequenceFrameInfoAll("CutterIdle", Vector2(0.f, 0.f),
+		Vector2(25.f, 25.f));
 
 	///////////////////////////////////////////////////////////////
 }

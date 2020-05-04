@@ -164,6 +164,115 @@ void CStage1Map::MakeMapObstacle()
 
 
 
+	CMapObstacle*	Obstacle4 = m_pScene->SpawnObject<CMapObstacle>();
+
+	Obstacle4->SetObstaclePosition(4850.f, 260.f, 1.f);
+	Obstacle4->SetObstacleColliderExtent(570.f, 170.f);
+	Obstacle4->SetObstacleColliderPivot(0.5f, 0.f, 0.f);
+	Obstacle4->SetObstacleProfileType(1);
+	m_MapObstacleList.push_back(Obstacle4);
+	SAFE_RELEASE(Obstacle4);
+
+
+	CMapObstacle*	Obstacle4_top = m_pScene->SpawnObject<CMapObstacle>();
+
+	Obstacle4_top->SetObstaclePosition(4850.f, 420.f, 1.f);
+	Obstacle4_top->SetObstacleColliderExtent(570.f, 30.f);
+	Obstacle4_top->SetObstacleColliderPivot(0.5f, 0.f, 0.f);
+	Obstacle4_top->SetObstacleProfileType(2);
+	Obstacle4_top->SetYPosition(420.f);
+	m_MapObstacleList.push_back(Obstacle4_top);
+	SAFE_RELEASE(Obstacle4_top);
+
+
+	CMapObstacle*	Obstacle5 = m_pScene->SpawnObject<CMapObstacle>();
+
+	Obstacle5->SetObstaclePosition(5250.f, 220.f, 1.f);
+	Obstacle5->SetObstacleColliderExtent(200.f,300.f);
+	Obstacle5->SetObstacleColliderPivot(0.5f, 0.f, 0.f);
+	Obstacle5->SetObstacleProfileType(1);
+	m_MapObstacleList.push_back(Obstacle5);
+	SAFE_RELEASE(Obstacle5);
+
+
+	CMapObstacle*	Obstacle5_top = m_pScene->SpawnObject<CMapObstacle>();
+
+	Obstacle5_top->SetObstaclePosition(5250.f, 540.f, 1.f);
+	Obstacle5_top->SetObstacleColliderExtent(200.f, 30.f);
+	Obstacle5_top->SetObstacleColliderPivot(0.5f, 0.f, 0.f);
+	Obstacle5_top->SetObstacleProfileType(2);
+	Obstacle5_top->SetYPosition(540.f);
+	m_MapObstacleList.push_back(Obstacle5_top);
+	SAFE_RELEASE(Obstacle5_top);
+
+
+	CMapObstacle*	DrainObstacle = m_pScene->SpawnObject<CMapObstacle>();
+
+	DrainObstacle->SetObstaclePosition(4800.f, 580.f, 1.f);
+	DrainObstacle->SetObstacleColliderExtent(200.f,800.f);
+	DrainObstacle->SetObstacleColliderPivot(0.5f, 0.f, 0.f);
+	DrainObstacle->SetObstacleProfileType(1);
+	m_MapObstacleList.push_back(DrainObstacle);
+	SAFE_RELEASE(DrainObstacle);
+
+
+
+
+
+	CMapObstacle*	Obstacle6 = m_pScene->SpawnObject<CMapObstacle>();
+
+	Obstacle6->SetObstaclePosition(5450.f, 250.f, 1.f);
+	Obstacle6->SetObstacleColliderExtent(200.f, 70.f);
+	Obstacle6->SetObstacleColliderPivot(0.5f, 0.f, 0.f);
+	Obstacle6->SetObstacleProfileType(1);
+	m_MapObstacleList.push_back(Obstacle6);
+	SAFE_RELEASE(Obstacle6);
+
+
+	CMapObstacle*	Obstacle6_top = m_pScene->SpawnObject<CMapObstacle>();
+
+	Obstacle6_top->SetObstaclePosition(5450.f, 330.f, 1.f);
+	Obstacle6_top->SetObstacleColliderExtent(200.f, 30.f);
+	Obstacle6_top->SetObstacleColliderPivot(0.5f, 0.f, 0.f);
+	Obstacle6_top->SetObstacleProfileType(2);
+	Obstacle6_top->SetYPosition(330.f);
+	m_MapObstacleList.push_back(Obstacle6_top);
+	SAFE_RELEASE(Obstacle6_top);
+
+
+	CMapObstacle*	Obstacle7 = m_pScene->SpawnObject<CMapObstacle>();
+
+	Obstacle7->SetObstaclePosition(6750.f, 250.f, 1.f);
+	Obstacle7->SetObstacleColliderExtent(200.f, 100.f);
+	Obstacle7->SetObstacleColliderPivot(0.5f, 0.f, 0.f);
+	Obstacle7->SetObstacleProfileType(1);
+	m_MapObstacleList.push_back(Obstacle7);
+	SAFE_RELEASE(Obstacle7);
+
+
+	CMapObstacle*	Obstacle7_top = m_pScene->SpawnObject<CMapObstacle>();
+
+	Obstacle7_top->SetObstaclePosition(6750.f, 360.f, 1.f);
+	Obstacle7_top->SetObstacleColliderExtent(200.f, 20.f);
+	Obstacle7_top->SetObstacleColliderPivot(0.5f, 0.f, 0.f);
+	Obstacle7_top->SetObstacleProfileType(2);
+	Obstacle7_top->SetYPosition(360.f);
+	m_MapObstacleList.push_back(Obstacle7_top);
+	SAFE_RELEASE(Obstacle7_top);
+
+
+
+
+	CMapObstacle*	Obstacle8 = m_pScene->SpawnObject<CMapObstacle>();
+
+	Obstacle8->SetObstaclePosition(7700.f, 650.f, 1.f);
+	Obstacle8->SetObstacleColliderExtent(800.f, 90.f);
+	Obstacle8->SetObstacleColliderPivot(0.5f, 0.f, 0.f);
+	Obstacle8->SetObstacleProfileType(1);
+	m_MapObstacleList.push_back(Obstacle8);
+	SAFE_RELEASE(Obstacle8);
+
+
 	CMapObstacle*	Floor = m_pScene->SpawnObject<CMapObstacle>();
 
 	Floor->SetObstaclePosition(4000.f, 100.f, 1.f);
