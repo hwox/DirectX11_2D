@@ -11,10 +11,10 @@ public:
 
 private:
 	class CColliderRect*		ObstacleCollider;
-	class CColliderRect*		ObstacleTopCollider; // 위에 걸을 수 있는거 
 	class CStaticMeshComponent*	m_pMesh;
 	class CProjectileMovementComponent*	m_pMovement;
 
+	float m_pY;
 protected:
 
 public:
@@ -30,7 +30,8 @@ public:
 	virtual void SetObstacleColliderPivot(float x, float y, float z);
 	virtual void SetObstacleProfileType(int type);
 
-
+	virtual float GetYPosition();
+	virtual void SetYPosition(float y);
 public:
 	void OnBlock(class CColliderBase* pSrc, class CColliderBase* pDest, float fTime);
 };

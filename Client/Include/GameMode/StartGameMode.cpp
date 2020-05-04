@@ -551,7 +551,7 @@ void CStartGameMode::Player_Skill_Beam_Texture_Create()
 
 	////////////////////    Beam Walk      ///////////////////////
 
-	GET_SINGLE(CResourceManager)->CreateAnimation2DSequence("BeamWalk", true, 1.0f, 12);
+	GET_SINGLE(CResourceManager)->CreateAnimation2DSequence("BeamWalk", true, 1.2f, 12);
 
 	for (int i = 0; i <= 11; ++i)
 	{
@@ -620,7 +620,7 @@ void CStartGameMode::Player_Skill_Beam_Texture_Create()
 	{
 		TCHAR	strFileName[MAX_PATH] = {};
 
-		wsprintf(strFileName, TEXT("Player/Skill/Beam/Bean_Jump_Ing/Bean_Jump_Ing_%d.png"), i);
+		wsprintf(strFileName, TEXT("Player/Skill/Beam/Beam_Jump_Ing/Beam_Jump_Ing_%d.png"), i);
 
 		char	strKey[256] = {};
 		sprintf_s(strKey, "BeamJumpIng%d", i);
@@ -635,10 +635,142 @@ void CStartGameMode::Player_Skill_Beam_Texture_Create()
 
 }
 
+void CStartGameMode::Player_Skill_Cutter_Texture_Create()
+{
+
+
+
+		////////////////////    Cutter Attack      ///////////////////////
+
+	GET_SINGLE(CResourceManager)->CreateAnimation2DSequence("CutterAttack", true, 1.0f, 6);
+
+	for (int i = 0; i <= 5; ++i)
+	{
+		TCHAR	strFileName[MAX_PATH] = {};
+
+		wsprintf(strFileName, TEXT("Player/Skill/Cutter/Cutter_Attack/Cutter_Attack_%d.png"), i);
+
+		char	strKey[256] = {};
+		sprintf_s(strKey, "CutterAttack%d", i);
+
+		GET_SINGLE(CResourceManager)->AddAnimation2DSequenceTexture("CutterAttack", strKey, strFileName);
+	}
+
+	GET_SINGLE(CResourceManager)->SetAnimation2DSequenceFrameInfoAll("CutterAttack", Vector2(0.f, 0.f),
+		Vector2(30.f, 30.f));
+
+	///////////////////////////////////////////////////////////////
+
+			////////////////////    Cutter Bullet      ///////////////////////
+
+	GET_SINGLE(CResourceManager)->CreateAnimation2DSequence("CutterBullet", true, 0.6f, 4);
+
+	for (int i = 0; i <= 3; ++i)
+	{
+		TCHAR	strFileName[MAX_PATH] = {};
+
+		wsprintf(strFileName, TEXT("Player/Skill/Cutter/Cutter_Bullet/Cutter_Bullet_%d.png"), i);
+
+		char	strKey[256] = {};
+		sprintf_s(strKey, "CutterBullet%d", i);
+
+		GET_SINGLE(CResourceManager)->AddAnimation2DSequenceTexture("CutterBullet", strKey, strFileName);
+	}
+
+	GET_SINGLE(CResourceManager)->SetAnimation2DSequenceFrameInfoAll("CutterBullet", Vector2(0.f, 0.f),
+		Vector2(31.f, 22.f));
+
+	///////////////////////////////////////////////////////////////
+
+	////////////////////    Cutter Digestion      ///////////////////////
+
+	GET_SINGLE(CResourceManager)->CreateAnimation2DSequence("CutterDigestion", false, 0.6f, 4);
+
+	for (int i = 0; i <= 3; ++i)
+	{
+		TCHAR	strFileName[MAX_PATH] = {};
+
+		wsprintf(strFileName, TEXT("Player/Skill/Cutter/Cutter_Digestion/Cutter_Digestion_%d.png"), i);
+
+		char	strKey[256] = {};
+		sprintf_s(strKey, "CutterDigestion%d", i);
+
+		GET_SINGLE(CResourceManager)->AddAnimation2DSequenceTexture("CutterDigestion", strKey, strFileName);
+	}
+
+	GET_SINGLE(CResourceManager)->SetAnimation2DSequenceFrameInfoAll("CutterDigestion", Vector2(0.f, 0.f),
+		Vector2(30.f, 30.f));
+
+	///////////////////////////////////////////////////////////////
+
+		////////////////////    Cutter jump Down      ///////////////////////
+
+	GET_SINGLE(CResourceManager)->CreateAnimation2DSequence("CutterJumpDown", false, 0.6f, 6);
+
+	for (int i = 0; i <= 5; ++i)
+	{
+		TCHAR	strFileName[MAX_PATH] = {};
+
+		wsprintf(strFileName, TEXT("Player/Skill/Cutter/Cutter_Jump_Down/Cutter_Digestion_%d.png"), i);
+
+		char	strKey[256] = {};
+		sprintf_s(strKey, "CutterJumpDown%d", i);
+
+		GET_SINGLE(CResourceManager)->AddAnimation2DSequenceTexture("CutterJumpDown", strKey, strFileName);
+	}
+
+	GET_SINGLE(CResourceManager)->SetAnimation2DSequenceFrameInfoAll("CutterJumpDown", Vector2(0.f, 0.f),
+		Vector2(25.f, 27.f));
+
+	///////////////////////////////////////////////////////////////
+
+	////////////////////    Cutter Walk      ///////////////////////
+
+	GET_SINGLE(CResourceManager)->CreateAnimation2DSequence("CutterWalk", false, 1.f, 10);
+
+	for (int i = 0; i <= 9; ++i)
+	{
+		TCHAR	strFileName[MAX_PATH] = {};
+
+		wsprintf(strFileName, TEXT("Player/Skill/Cutter/Cutter_Walk/Cutter_Walk_%d.png"), i);
+
+		char	strKey[256] = {};
+		sprintf_s(strKey, "CutterWalk%d", i);
+
+		GET_SINGLE(CResourceManager)->AddAnimation2DSequenceTexture("CutterWalk", strKey, strFileName);
+	}
+
+	GET_SINGLE(CResourceManager)->SetAnimation2DSequenceFrameInfoAll("CutterWalk", Vector2(0.f, 0.f),
+		Vector2(25.f, 27.f));
+
+	///////////////////////////////////////////////////////////////
+
+		////////////////////    Cutter Jump Up      ///////////////////////
+
+	GET_SINGLE(CResourceManager)->CreateAnimation2DSequence("CutterJumpUp", false, 1.f, 1);
+
+	for (int i = 0; i <= 0; ++i)
+	{
+		TCHAR	strFileName[MAX_PATH] = {};
+
+		wsprintf(strFileName, TEXT("Player/Skill/Cutter/Cutter_jump_up.png"));
+
+		char	strKey[256] = {};
+		sprintf_s(strKey, "CutterJumpUp%d", i);
+
+		GET_SINGLE(CResourceManager)->AddAnimation2DSequenceTexture("CutterJumpUp", strKey, strFileName);
+	}
+
+	GET_SINGLE(CResourceManager)->SetAnimation2DSequenceFrameInfoAll("CutterJumpUp", Vector2(0.f, 0.f),
+		Vector2(25.f, 30.f));
+
+	///////////////////////////////////////////////////////////////
+}
+
 void CStartGameMode::Monster_Texture_Create()
 {
 
-	////////////////////    Monster Idle      ///////////////////////
+	////////////////////    WaddleDee Idle      ///////////////////////
 
 	GET_SINGLE(CResourceManager)->CreateAnimation2DSequence("WaddleDeeIdle", true, 1.f, 4);
 
@@ -659,7 +791,7 @@ void CStartGameMode::Monster_Texture_Create()
 
 	///////////////////////////////////////////////////////////////
 
-	////////////////////    Monster Damage      ///////////////////////
+	////////////////////    WaddleDee Damage      ///////////////////////
 
 	GET_SINGLE(CResourceManager)->CreateAnimation2DSequence("WaddleDeeDamage", true, 0.3f, 2);
 
@@ -680,7 +812,7 @@ void CStartGameMode::Monster_Texture_Create()
 
 	///////////////////////////////////////////////////////////////
 
-		////////////////////    Monster Move      ///////////////////////
+		////////////////////    WaddleDee Move      ///////////////////////
 
 	GET_SINGLE(CResourceManager)->CreateAnimation2DSequence("WaddleDeeMove", true, 1.f, 8);
 
@@ -719,6 +851,74 @@ void CStartGameMode::Monster_Texture_Create()
 
 	GET_SINGLE(CResourceManager)->SetAnimation2DSequenceFrameInfoAll("WaddleDeeBlackhole", Vector2(0.f, 0.f),
 		Vector2(25.f, 25.f));
+
+	///////////////////////////////////////////////////////////////
+
+
+
+
+	////////////////////   Leap Idle(Move)     ///////////////////////
+
+	GET_SINGLE(CResourceManager)->CreateAnimation2DSequence("LeapIdle", true, 0.5f, 4);
+
+	for (int i = 0; i <= 3; ++i)
+	{
+		TCHAR	strFileName[MAX_PATH] = {};
+
+		wsprintf(strFileName, TEXT("Monster/Leap_Idle/Leap_Idle_%d.png"), i);
+
+		char	strKey[256] = {};
+		sprintf_s(strKey, "LeapIdle%d", i);
+
+		GET_SINGLE(CResourceManager)->AddAnimation2DSequenceTexture("LeapIdle", strKey, strFileName);
+	}
+
+	GET_SINGLE(CResourceManager)->SetAnimation2DSequenceFrameInfoAll("LeapIdle", Vector2(0.f, 0.f),
+		Vector2(27.f, 20.f));
+
+	///////////////////////////////////////////////////////////////
+
+
+	////////////////////   Leap Attack     ///////////////////////
+
+	GET_SINGLE(CResourceManager)->CreateAnimation2DSequence("LeapAttack", true, 0.5f, 2);
+
+	for (int i = 0; i <= 1; ++i)
+	{
+		TCHAR	strFileName[MAX_PATH] = {};
+
+		wsprintf(strFileName, TEXT("Monster/Leap_Attack/Leap_Attack_%d.png"), i);
+
+		char	strKey[256] = {};
+		sprintf_s(strKey, "LeapAttack%d", i);
+
+		GET_SINGLE(CResourceManager)->AddAnimation2DSequenceTexture("LeapAttack", strKey, strFileName);
+	}
+
+	GET_SINGLE(CResourceManager)->SetAnimation2DSequenceFrameInfoAll("LeapAttack", Vector2(0.f, 0.f),
+		Vector2(23.f, 20.f));
+
+	///////////////////////////////////////////////////////////////
+
+
+	////////////////////   Leap Damage     ///////////////////////
+
+	GET_SINGLE(CResourceManager)->CreateAnimation2DSequence("LeapDamage", true, 0.5f, 2);
+
+	for (int i = 0; i <= 1; ++i)
+	{
+		TCHAR	strFileName[MAX_PATH] = {};
+
+		wsprintf(strFileName, TEXT("Monster/Leap_Attack/Leap_Attack_%d.png"), i);
+
+		char	strKey[256] = {};
+		sprintf_s(strKey, "LeapDamage%d", i);
+
+		GET_SINGLE(CResourceManager)->AddAnimation2DSequenceTexture("LeapDamage", strKey, strFileName);
+	}
+
+	GET_SINGLE(CResourceManager)->SetAnimation2DSequenceFrameInfoAll("LeapDamage", Vector2(0.f, 0.f),
+		Vector2(29.f, 27.f));
 
 	///////////////////////////////////////////////////////////////
 }
@@ -819,6 +1019,29 @@ void CStartGameMode::Effect_Texture_Create()
 		Vector2(20.f, 20.f));
 
 	///////////////////////////////////////////////////////////////////////////
+
+
+	//////////////////////    Leap Bullet Effect   ///////////////////
+
+	GET_SINGLE(CResourceManager)->CreateAnimation2DSequence("LeapAttackEffect", true, 0.4f, 2);
+
+	for (int i = 1; i <= 2; ++i)
+	{
+		TCHAR	strFileName[MAX_PATH] = {};
+
+		wsprintf(strFileName, TEXT("Player/Effect/Leap_AttackEffect/Leap_AttackEffect_%d.png"), i);
+
+		char	strKey[256] = {};
+		sprintf_s(strKey, "LeapAttackEffect%d", i - 1);
+
+		GET_SINGLE(CResourceManager)->AddAnimation2DSequenceTexture("LeapAttackEffect", strKey, strFileName);
+	}
+
+	GET_SINGLE(CResourceManager)->SetAnimation2DSequenceFrameInfoAll("LeapAttackEffect", Vector2(0.f, 0.f),
+		Vector2(16.f, 11.f));
+
+	///////////////////////////////////////////////////////////////////////////
+
 }
 
 void CStartGameMode::Else_Texture_Create()

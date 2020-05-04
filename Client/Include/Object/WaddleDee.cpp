@@ -93,6 +93,8 @@ bool CWaddleDee::Init()
 
 	Skill_Type = 1;
 
+	m_pBody->EnableOverlap(true);
+	//m_pBody->CollisionMouse(false);
 	SetSkillType(Skill_Type);
 
 
@@ -139,7 +141,10 @@ void CWaddleDee::Update(float fTime)
 					m_pMesh->SetRelativeRotationY(180.f);
 					break;
 				}
-				m_pMovement->AddMovement(GetWorldAxis(AXIS_X)*-1);
+
+				if (!IsCantGo) {
+					m_pMovement->AddMovement(GetWorldAxis(AXIS_X)*-1);
+				}
 			}
 		}
 	}
@@ -166,7 +171,7 @@ void CWaddleDee::SetPlayerInfo(CGameObject * pObj)
 
 void CWaddleDee::SetColliderMode(int mode)
 {
-	CMonster::SetColliderMode(mode);
+	
 }
 
 void CWaddleDee::SetSkillType(int type)
@@ -184,14 +189,15 @@ void CWaddleDee::OnBlock(class CColliderBase* pSrc, class CColliderBase* pDest, 
 {
 	CMonster::OnBlock(pSrc, pDest, fTime);
 
-	//if (pDest->GetCollisionProfile()->strName == "PlayerAirZone")
-	//{
-	//	// airzone이랑 충돌하면 빨려들어가야 함 
-	//	m_pAnimation->ChangeAnimation("WaddleDeeBlackhole");
+	if (pDest == nullptr)
+		return;
 
-	//	GET_SINGLE(CScheduler)->AddSchedule<CWaddleDee>("BackEnd", false, 1.5f, this, &CWaddleDee::AfterCollisionWithAirZone);
-	//}
-	//else 
+	if (pDest->GetCollisionProfile()->strName == "MapObject")
+	{
+		IsCantGo = true;
+		return;
+	}
+
 	if (IsEating) {
 
 		if (EatingEnd)
@@ -208,8 +214,8 @@ void CWaddleDee::OnBlock(class CColliderBase* pSrc, class CColliderBase* pDest, 
 			OutputDebugString(TEXT("있어서는 안될 상황 ^ㅁ^;; \n"));
 			return;
 		}
-	/*	m_pAnimation->ChangeAnimation("WaddleDeeDamage");
-		GET_SINGLE(CScheduler)->AddSchedule<CWaddleDee>("AttackedByStar", false, 0.2f, this, &CWaddleDee::AfterCollisionWithAirZone);*/
+		/*	m_pAnimation->ChangeAnimation("WaddleDeeDamage");
+			GET_SINGLE(CScheduler)->AddSchedule<CWaddleDee>("AttackedByStar", false, 0.2f, this, &CWaddleDee::AfterCollisionWithAirZone);*/
 		AfterCollisionWithAirZone();
 		m_pBody->Kill();
 	}
@@ -220,6 +226,11 @@ void CWaddleDee::OnBlock(class CColliderBase* pSrc, class CColliderBase* pDest, 
 		m_pMovement->BackStep(GetWorldAxis(AXIS_X)*-1);
 		GET_SINGLE(CScheduler)->AddSchedule<CWaddleDee>("BackEnd", false, 0.5f, this, &CWaddleDee::AfterCollisionWithPlayer);
 	}
+}
+
+void CWaddleDee::OnBlockOut(CColliderBase * pSrc, CColliderBase * pDest, float fTime)
+{
+	IsCantGo = false;
 }
 
 void CWaddleDee::AfterCollisionWithPlayer()

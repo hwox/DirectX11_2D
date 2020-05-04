@@ -35,5 +35,7 @@ public:
 	void JumpEffect_RandomRotation();
 
 	void PlayEnd(float fTime);
+
+	void CreateNotifyLift();
 };
 

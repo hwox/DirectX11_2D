@@ -17,7 +17,7 @@
 #include "Monster.h"
 #include "..\Object\PlayerLife.h"
 #include "Effect.h"
-
+#include "MapObstacle.h"
 
 #define STAND_SCALE				130.f
 #define JUMP_SCALE				200.f
@@ -64,7 +64,7 @@ CPlayer::CPlayer()
 	m_pHasAir = false;
 	m_pIsJumping = false;
 	m_pNowEating = false;
-
+	m_pCantGo = false;
 	JumpAnimationChangeOnce = false;
 }
 
@@ -112,11 +112,12 @@ bool CPlayer::Init()
 	m_pBody->SetExtent(STAND_SCALE, STAND_SCALE);
 	m_pBody->SetPivot(0.5f, 0.f, 0.f);
 	m_pBody->AddBlockCallback<CPlayer>(this, &CPlayer::StruckedByMonster);
-	//m_pBody->AddBlockCallback<CPlayer>(this, &CPlayer::BlockedByObstacle);
+	m_pBody->AddBeginOverlapCallback<CPlayer>(this, &CPlayer::BlockedByObstacleBegin);
+	m_pBody->AddEndOverlapCallback<CPlayer>(this, &CPlayer::BlockedByObstacleEnd);
 	m_pBody->SetCollisionProfile("Player");
+	m_pBody->EnableOverlap(true);
 
-
-	m_pMapBody->SetExtent(STAND_SCALE + 20.f, 50.f);
+	m_pMapBody->SetExtent(STAND_SCALE - 60.f, 50.f);
 	m_pMapBody->SetPivot(0.5f, 0.f, 0.f);
 	m_pMapBody->AddBlockCallback<CPlayer>(this, &CPlayer::OnTheMap);
 	m_pMapBody->AddEndOverlapCallback<CPlayer>(this, &CPlayer::NotOnTheMap);
@@ -154,7 +155,7 @@ bool CPlayer::Init()
 	m_pMovement = CGameObject::CreateComponent<CCharacterMovementComponent>("Movement");
 	m_pMovement->SetUpdateComponent(m_pMesh);
 
-
+	m_pBottomY = INIT_YPOS;
 	m_pMesh->SetRelativePos(1000.f, INIT_YPOS, 0.f);
 	m_pMesh->SetRelativeScale(STAND_SCALE, STAND_SCALE, 1.f);
 	m_pMesh->SetPivot(0.5f, 0.f, 0.f);
@@ -166,6 +167,7 @@ bool CPlayer::Init()
 
 	m_pMovement->SetMoveSpeed(STAND_SPEED);
 
+	CreateNotifyList();
 	return true;
 }
 
@@ -226,8 +228,8 @@ void CPlayer::PlayerKeySetting()
 	GET_SINGLE(CInput)->AddAxisKey("Move", DIK_LEFT, -1.f);
 	GET_SINGLE(CInput)->BindAxis<CPlayer>("Move", this, &CPlayer::MoveSide);
 
-	GET_SINGLE(CInput)->AddActionKey("Fire", DIK_SPACE);
-	GET_SINGLE(CInput)->BindAction<CPlayer>("Fire", AKS_PRESS, this, &CPlayer::Fire);
+	//GET_SINGLE(CInput)->AddActionKey("Fire", DIK_SPACE);
+	//GET_SINGLE(CInput)->BindAction<CPlayer>("Fire", AKS_PRESS, this, &CPlayer::Fire);
 
 	////////////////////////////////////////////////////////////////////////////
 
@@ -274,13 +276,6 @@ void CPlayer::PlayerKeySetting()
 
 	////////////////////////////////////////////////////////////////////////////
 
-
-
-	GET_SINGLE(CInput)->AddActionKey("DeleteChild", DIK_RETURN);
-	GET_SINGLE(CInput)->BindAction<CPlayer>("DeleteChild", AKS_PRESS, this, &CPlayer::Delete);
-
-	GET_SINGLE(CInput)->AddActionKey("AttackSpeedUp", DIK_1);
-	GET_SINGLE(CInput)->BindAction<CPlayer>("AttackSpeedUp", AKS_PRESS, this, &CPlayer::AttackSpeedUp);
 }
 
 void CPlayer::SetPlayerAnimation()
@@ -313,6 +308,8 @@ void CPlayer::SetPlayerAnimation()
 	m_pAnimation->AddAnimation2DSequence("BeamJumpDown");
 	m_pAnimation->AddAnimation2DSequence("BeamIdleDown");
 	m_pAnimation->AddAnimation2DSequence("BeamIdle");
+	m_pAnimation->AddAnimation2DSequence("BeamJumpIng");
+	m_pAnimation->AddAnimation2DSequence("BeamDamage");
 
 }
 
@@ -332,13 +329,27 @@ void CPlayer::MoveSide(float fScale, float fTime)
 					MonsterWalkStateAnimation(m_KirbyState);
 				}
 			}
+
+			if (!m_pCantGo) {
+				m_pMovement->AddMovement(GetWorldAxis(AXIS_X));
+			}
+			else if (dir != fScale)
+			{
+				m_pMovement->AddMovement(GetWorldAxis(AXIS_X));
+				m_pCantGo = false;
+			}
 			if (fScale < 0.f)
+			{
 				m_pMesh->SetRelativeRotationY(180.f);
-
+				dir = -1;
+			}
 			else
+			{
 				m_pMesh->SetRelativeRotationY(0.f);
+				dir = 1;
+			}
 
-			m_pMovement->AddMovement(GetWorldAxis(AXIS_X));
+
 		}
 
 		else
@@ -388,65 +399,17 @@ void CPlayer::Fire(float fTime)
 	//pFireSound->SetSound("Demasia", "Demasia.mp3");
 
 	//SAFE_RELEASE(pFireSound);
+
+	m_SaveState = 0;
+
+	m_pHasAir = false;
 }
 
 void CPlayer::FireEnd(float fTime)
 {
 	m_pIsAttack = false;
 	m_IsMove = true;
-//	m_pMesh->SetRelativeScale(STAND_SCALE, STAND_SCALE, 1.f);
-}
-
-void CPlayer::Delete(float fTime)
-{
-	/*CGameObject*	pChild = m_vecChild[0];
-
-	if (pChild)
-		DeleteChild(pChild);*/
-
-	DeleteChild("Child");
-}
-
-void CPlayer::AnimAttackNotify(float fTime)
-{
-	CBullet*	pBullet = m_pScene->SpawnObject<CBullet>(GetWorldPos() + GetWorldAxis(AXIS_Y) * 200.f,
-		GetRelativeRot());
-
-	CProjectileMovementComponent*	pMovement = pBullet->FindObjectComponent<CProjectileMovementComponent>();
-
-	pMovement->SetDistance(STAND_SPEED);
-
-	SAFE_RELEASE(pMovement);
-
-	CColliderRect* pBody = pBullet->GetBody();
-
-	pBody->SetCollisionProfile("PlayerProjectile");
-
-	SAFE_RELEASE(pBullet);
-}
-
-void CPlayer::AttackSpeedUp(float fTime)
-{
-	CAnimation2DSequence* pSequence = m_pAnimation->FindAnimSequence("MinionKick");
-
-	if (pSequence)
-	{
-		pSequence->SetPlayScale(1.5f);
-		SAFE_RELEASE(pSequence);
-
-		GET_SINGLE(CScheduler)->AddSchedule<CPlayer>("AttackSpeedUp", false, 5.f, this, &CPlayer::AttackBufEnd);
-	}
-}
-
-void CPlayer::AttackBufEnd()
-{
-	CAnimation2DSequence* pSequence = m_pAnimation->FindAnimSequence("MinionKick");
-
-	if (pSequence)
-	{
-		pSequence->SetPlayScale(1.f);
-		SAFE_RELEASE(pSequence);
-	}
+	//	m_pMesh->SetRelativeScale(STAND_SCALE, STAND_SCALE, 1.f);
 }
 
 void CPlayer::DownKey(float fScale, float fTime)
@@ -476,8 +439,6 @@ void CPlayer::DownKey(float fScale, float fTime)
 
 					m_pAnimation->ChangeAnimation("KirbyDigest");
 					m_pAnimation->SetReturnSequenceName("KirbyDigest", "KirbyIdle");
-					//	m_pAnimation->CreateNotify("KirbyDigest", "ChangeToIdle", 6);
-					//	m_pAnimation->AddNotifyFunction<CPlayer>("KirbyDigest", "ChangeToIdle", this, &CPlayer::EnablePlayAnimation);
 
 				}
 			}
@@ -494,8 +455,6 @@ void CPlayer::DownKey(float fScale, float fTime)
 
 }
 
-
-// sequence Notify가 다 호출 안되는데..? 
 void CPlayer::ReturnToIdle(float fTime)
 {
 	m_pMesh->SetRelativeScale(STAND_SCALE, STAND_SCALE, 1.f);
@@ -521,14 +480,12 @@ void CPlayer::DisableMove(float fTime)
 
 void CPlayer::SKeyDown(float fTime)
 {
-	if (!m_pIsJumping && !m_pHasAir && !m_pHasMonster && !m_pIsAttack)
+	if (/*!m_pIsJumping && */!m_pHasAir && !m_pHasMonster && !m_pIsAttack)
 	{
 		// 기본 공기흡입
 		if (!m_pNowEating)
 		{
 			m_pAnimation->ChangeAnimation("KirbyEat");
-			m_pAnimation->CreateNotify("KirbyEat", "EatOver", 14);
-			m_pAnimation->AddNotifyFunction<CPlayer>("KirbyEat", "EatOver", this, &CPlayer::SKeyUp);
 			m_pNowEating = true;
 			m_pMesh->SetRelativeScale(EAT_SCALE, EAT_SCALE, 1.f);
 
@@ -546,21 +503,13 @@ void CPlayer::SKeyDown(float fTime)
 		if (m_pHasMonster)
 		{
 			// 공격
-			// 공격함수 추가
-			//m_pAnimation->ChangeAnimation("KirbySplitStar");
-			// 여기서 좌측 scale 증가시켜야 함 
+
 			m_pIsAttack = true;
 			m_pMesh->SetRelativeScale(MONSTERSPLIT_SCALE, STAND_SCALE, 1.f);
 			m_pAnimation->ChangeAnimation("KirbySplitStar");
-			m_pAnimation->CreateNotify("KirbySplitStar", "AttackStar", 3);
-			m_pAnimation->AddNotifyFunction("KirbySplitStar", "AttackStar", this, &CPlayer::Fire);
-			m_pAnimation->CreateNotify("KirbySplitStar", "AttackStarEnd", 12);
-			m_pAnimation->AddNotifyFunction("KirbySplitStar", "AttackStarEnd", this, &CPlayer::FireEnd);
 
 			m_pHasMonster = false;
-			m_pNowEating = false;
-			// 특정 frame에 fire 함수 등록시키고 
-
+			m_pNowEating = false;  // 그냥 한 번 더 해주는중 
 			return;
 		}
 		if (m_pIsJumping)
@@ -593,8 +542,8 @@ void CPlayer::SKeyUp(float fTime)
 
 			m_pMesh->SetRelativeScale(STAND_SCALE, STAND_SCALE, 1.f);
 			m_pAnimation->ChangeAnimation("KirbyEatOver");
-			m_pAnimation->CreateNotify("KirbyEatOver", "EatAirFail", 3);
-			m_pAnimation->AddNotifyFunction<CPlayer>("KirbyEatOver", "EatAirFail", this, &CPlayer::EatAirFail);
+			//m_pAnimation->CreateNotify("KirbyEatOver", "EatAirFail", 3);
+			//m_pAnimation->AddNotifyFunction<CPlayer>("KirbyEatOver", "EatAirFail", this, &CPlayer::EatAirFail);
 			//m_IsMove = false;
 
 
@@ -648,12 +597,6 @@ void CPlayer::AKeyDown(float fTime)
 	}
 	else if (m_pIsJumping)
 	{
-		//if (press_time < JUMP_AMOUNT)
-		//{
-		//	press_time += (fTime)*10.f;
-		//	jump_time = press_time;
-		//}
-
 		if (m_pHasAir)
 		{
 			// 위로 누를 수록 점프
@@ -661,7 +604,6 @@ void CPlayer::AKeyDown(float fTime)
 		}
 		else if (!m_pHasAir)
 		{
-
 
 		}
 
@@ -676,12 +618,6 @@ void CPlayer::AKeyUp(float fTime)
 
 void CPlayer::UpKeyDown(float fTime)
 {
-	/*if (!m_pIsJumping && !m_pNowEating && !m_pHasAir)
-	{
-		m_pAnimation->ChangeAnimation("KirbyJump");
-		m_pAnimation->SetReturnSequenceName("KirbyJump", "KirbyJumpIng");
-	}*/
-
 	// 여기는 그냥 air 상태거나 그럴 때 위로 가는  용도로만
 	if (m_pIsJumping || m_pHasAir)
 	{
@@ -690,16 +626,13 @@ void CPlayer::UpKeyDown(float fTime)
 	}
 
 	JumpDown = true;
-
-
 }
 
 void CPlayer::UpKeyDoubleDown(float fTime)
 {
 	if (!m_pHasAir)
 	{
-		m_pAnimation->ChangeAnimation("KirbyJump");
-		m_pAnimation->SetReturnSequenceName("KirbyJump", "KirbyJumpIng");
+		JumpIngStateAnimation(m_KirbyState);
 		m_pHasAir = true;
 		m_pMass = FAT_MASS;
 		m_pMesh->SetRelativeScale(EAT_SCALE, EAT_SCALE, 1.f);
@@ -707,22 +640,9 @@ void CPlayer::UpKeyDoubleDown(float fTime)
 }
 
 
-void CPlayer::ToEatAirState(float fTime)
-{
-}
-
 void CPlayer::SpitAir(float fTime)
 {
-	//if (m_pIsJumping && m_pHasAir) {
-	//	m_pAnimation->ChangeAnimation("KirbyJumpEnd");
-	//	m_pAnimation->SetReturnSequenceName("KirbyJumpEnd", "KirbyIdle");
-	//}
-	//else if (m_pHasAir && !m_pIsJumping) {
 	m_pAnimation->ChangeAnimation("KirbyEatOver");
-	//m_pAnimation->SetReturnSequenceName("KirbyEatOver", "KirbyIdle");
-	m_pAnimation->CreateNotify("KirbyEatOver", "SetHasAirFalse", 3);
-	m_pAnimation->AddNotifyFunction<CPlayer>("KirbyEatOver", "SetHasAirFalse", this, &CPlayer::SetHasAirFalse);
-
 
 	Vector3 Temp = pPos;
 	pPos.x = 50.f;
@@ -734,22 +654,20 @@ void CPlayer::SpitAir(float fTime)
 	m_pMass = STAND_MASS;
 	m_pMesh->SetRelativeScale(STAND_SCALE, STAND_SCALE, 1.f);
 
-//	m_pHasAir = false;
+	//	m_pHasAir = false;
 }
 
-
-void CPlayer::Yup(float fTime)
-{
-	//m_pMovement->AddMovement(GetWorldAxis(AXIS_Y));
-}
 
 void CPlayer::EatAirFail(float fTime)
 {
 	IdleStateAnimation(m_KirbyState);
 	m_pNowEating = false;
 	m_IsMove = true; // 이거 하는동안에 움직이지 말라고 
-
+	m_pHasAir = false;
+	m_pIsJumping = false; // 추가된거 이거 
+	OutputDebugString(TEXT("Eat Air False 호출 \n"));
 }
+
 
 void CPlayer::EatMonsterSuccess()
 {
@@ -766,40 +684,45 @@ void CPlayer::ComputeJump(float fTime)
 	//if (pPos.y >= INIT_YPOS ) // 나중에 땅바닥에 뭐 밟고 있는지로 체크해
 	if (press_time >= 0.f)
 	{
-		m_pMovement->SetMoveSpeed(700.f);
-		m_pMovement->AddMovement(GetWorldAxis(AXIS_Y) * -m_pMass);
-		press_time -= (fTime)*20.f;
-		if (JumpAnimationChangeOnce) {
-			if (!m_pHasMonster && !m_pHasAir)
-			{
-				JumpDownStateAnimation(m_KirbyState);
+		if (!m_pIsFootOnFloor) {
+			m_pMovement->SetMoveSpeed(700.f);
+			m_pMovement->AddMovement(GetWorldAxis(AXIS_Y) * -m_pMass);
+			press_time -= (fTime)*20.f;
+			if (JumpAnimationChangeOnce) {
+				if (!m_pHasMonster && !m_pHasAir)
+				{
+					JumpDownStateAnimation(m_KirbyState);
+				}
+				else if (m_pHasMonster)
+				{
+					MonsterJumpDownStateAnimation(m_KirbyState);
+				}
 				JumpAnimationChangeOnce = false;
 			}
-			else if (m_pHasMonster)
-			{
-				MonsterJumpDownStateAnimation(m_KirbyState);
-				JumpAnimationChangeOnce = false;
-
-			}
+		}
+		else if (m_pIsFootOnFloor)
+		{
+			JumpEnd();
 		}
 	}
 	else
 	{
-		JumpDown = false;
-		JumpUp = false;
-		press_time = 0;
-		SetWorldPos(pPos.x, INIT_YPOS, pPos.z);
-		m_pMovement->SetMoveSpeed(STAND_SPEED);
+		if (!m_pIsFootOnFloor)
+		{
+			press_time += 1.f;
+			return;
+		}
+		JumpEnd();
 	}
 }
 
 void CPlayer::JumpEnd()
 {
-	// 두 가지 경우 같은데
-	// 만약에 점프하다가 공기 먹는거 안할거면 하나임
-	// 하지 말자
-
-	m_pIsJumping = false;
+	JumpDown = false;
+	JumpUp = false;
+	press_time = 0;
+	SetWorldPos(pPos.x, m_pBottomY, pPos.z);
+	m_pMovement->SetMoveSpeed(STAND_SPEED);
 
 }
 
@@ -831,13 +754,10 @@ void CPlayer::StarAttack(float fTime)
 
 void CPlayer::DigestMonster(float fScale, float fTime)
 {
-	if (fScale != 0) {
-		if (m_SaveState != 0)
+	if (fScale != 0 && m_SaveState != 0) {
+		if (m_pHasMonster)
 		{
-			//m_pMesh->SetRelativeScale(STAND_SCALE * 2.5f, STAND_SCALE*1.5f, 1.f);
 			m_pAnimation->ChangeAnimation("KirbyDigest");
-			m_pAnimation->CreateNotify("KirbyDigest", "ChangeToIdle", 6);
-			m_pAnimation->AddNotifyFunction<CPlayer>("KirbyDigest", "ChangeToIdle", this, &CPlayer::ReturnToIdle);
 
 			m_pHasMonster = false;
 			m_KirbyState = m_SaveState;
@@ -965,7 +885,7 @@ void CPlayer::IdleStateAnimation(int state)
 
 void CPlayer::MonsterIdleStateAnimation(int state)
 {
-//	m_pMesh->SetRelativeScale(STAND_SCALE, STAND_SCALE, 1.f);
+	//	m_pMesh->SetRelativeScale(STAND_SCALE, STAND_SCALE, 1.f);
 	switch (state)
 	{
 	case Stand:
@@ -1072,6 +992,7 @@ void CPlayer::MonsterJumpUpStateAnimation(int state)
 		m_pAnimation->ChangeAnimation("KirbyMonsterJumpUp");
 		break;
 	case Beam:
+
 		break;
 	case Cutter:
 		break;
@@ -1090,16 +1011,14 @@ void CPlayer::DamageStateAnimation(int state)
 		m_pAnimation->ChangeAnimation("KirbyDamage");
 		m_pAnimation->SetReturnSequenceName("KirbyDamage", "KirbyIdle");
 
-		m_pAnimation->CreateNotify("KirbyDamage", "DamageEnd", 7);
-		m_pAnimation->AddNotifyFunction<CPlayer>("KirbyDamage", "DamageEnd", this, &CPlayer::EnableMove);
+		//m_pAnimation->CreateNotify("KirbyDamage", "DamageEnd", 7);
+		//m_pAnimation->AddNotifyFunction<CPlayer>("KirbyDamage", "DamageEnd", this, &CPlayer::EnableMove);
 		break;
 	case Beam:
 
 		m_pAnimation->ChangeAnimation("BeamDamage");
 		m_pAnimation->SetReturnSequenceName("BeamDamage", "BeamIdle");
 
-		m_pAnimation->CreateNotify("BeamDamage", "BeamDamageEnd", 14);
-		m_pAnimation->AddNotifyFunction<CPlayer>("BeamDamage", "BeamDamageEnd", this, &CPlayer::EnableMove);
 		break;
 	case Cutter:
 		break;
@@ -1116,9 +1035,11 @@ void CPlayer::JumpIngStateAnimation(int state)
 	{
 	case Stand:
 		m_pMesh->SetRelativeScale(EATMONSTER_SCALE, EATMONSTER_SCALE*1.2, 1.f);
-		m_pAnimation->ChangeAnimation("KirbyMonsterJumpUp");
+		m_pAnimation->ChangeAnimation("KirbyJumpIng");
 		break;
 	case Beam:
+		m_pMesh->SetRelativeScale(EATMONSTER_SCALE, EATMONSTER_SCALE*1.2, 1.f);
+		m_pAnimation->ChangeAnimation("BeamJumpIng");
 		break;
 	case Cutter:
 		break;
@@ -1139,19 +1060,6 @@ void CPlayer::DisablePlayAnimation(float fTime)
 	IsPlayAnimation = true;
 }
 
-void CPlayer::SetHasAirFalse(float fTime)
-{
-	m_pHasAir = false;
-	m_pNowEating = false;
-	m_pIsJumping = false;
-	IdleStateAnimation(m_KirbyState);
-}
-
-void CPlayer::SetHasMonsterFalse(float fTime)
-{
-	m_pHasMonster = false;
-	IdleStateAnimation(m_KirbyState);
-}
 
 void CPlayer::OnBlock(CColliderBase * pSrc, CColliderBase * pDest, float fTime)
 {
@@ -1162,20 +1070,41 @@ void CPlayer::OnBlock(CColliderBase * pSrc, CColliderBase * pDest, float fTime)
 	// 현재 가고 있는 방향 반대면 입력 들어올 수 있게 해야 함
 }
 
-void CPlayer::BlockedByObstacle(CColliderBase * pSrc, CColliderBase * pDest, float fTime)
+void CPlayer::BlockedByObstacleBegin(CColliderBase * pSrc, CColliderBase * pDest, float fTime)
 {
-	//if (pDest->GetName() == "MapObstacle")
-	//{
-	//	
-	//}
-	//else
-	//{
-	//	return;
-	//}
+	if (pDest == nullptr)
+		return;
+	if (pDest->GetCollisionProfile()->strName == "MapObject")
+	{
+		if (!m_pCantGo) {
+			m_pCantGo = true;
+		}
+
+		return;
+	}
+
+}
+
+void CPlayer::BlockedByObstacleEnd(CColliderBase * pSrc, CColliderBase * pDest, float fTime)
+{
+	if (pDest == nullptr)
+		return;
+	if (pDest->GetCollisionProfile()->strName == "MapObject")
+	{
+		m_pCantGo = false;
+	}
 }
 
 void CPlayer::StruckedByMonster(CColliderBase * pSrc, CColliderBase * pDest, float fTime)
 {
+
+	if (pDest == nullptr)
+		return;
+
+	if (pDest->GetCollisionProfile()->strName == "MapObject")
+	{
+		return;
+	}
 
 	if (m_pNowEating)
 	{
@@ -1193,8 +1122,8 @@ void CPlayer::StruckedByMonster(CColliderBase * pSrc, CColliderBase * pDest, flo
 
 
 			m_pAnimation->ChangeAnimation("KirbyDigestMonster");
-			m_pAnimation->CreateNotify("KirbyDigestMonster", "ChangeToMonsterIdle", 7);
-			m_pAnimation->AddNotifyFunction<CPlayer>("KirbyDigestMonster", "ChangeToMonsterIdle", this, &CPlayer::ReturnToMonsterIdle);
+			//m_pAnimation->CreateNotify("KirbyDigestMonster", "ChangeToMonsterIdle", 7);
+			//m_pAnimation->AddNotifyFunction<CPlayer>("KirbyDigestMonster", "ChangeToMonsterIdle", this, &CPlayer::ReturnToMonsterIdle);
 
 
 			m_SaveState = m_pEatMonster->GetSkillType();
@@ -1239,14 +1168,18 @@ void CPlayer::StruckedByMonster(CColliderBase * pSrc, CColliderBase * pDest, flo
 void CPlayer::NotOnTheMap(CColliderBase * pSrc, CColliderBase * pDest, float fTime)
 {
 	// 맵에서 발바닥 뗌
-	OutputDebugString(TEXT("OUT \n"));
+
 	m_pIsJumping = true;
 	m_pIsFootOnFloor = false;
+
 }
 
 void CPlayer::OnTheMap(CColliderBase * pSrc, CColliderBase * pDest, float fTime)
 {
 	// 맵바닥에 발 붙이고 있는 상태
+
+	m_pBottomY = GetWorldPos().y;
+
 	m_pIsJumping = false;
 	int random = rand() % 360 + 1;
 	m_pIsFootOnFloor = true;
@@ -1258,6 +1191,35 @@ void CPlayer::OnTheMap(CColliderBase * pSrc, CColliderBase * pDest, float fTime)
 	pEffect->SetEffectRotationY(m_pMesh->GetRelativeRot().y);
 	pEffect->Effect_JumpEffect();
 	SAFE_RELEASE(pEffect);
+}
+
+void CPlayer::CreateNotifyList()
+{
+	m_pAnimation->CreateNotify("KirbyEatOver", "EatAirFail", 3);
+	m_pAnimation->AddNotifyFunction<CPlayer>("KirbyEatOver", "EatAirFail", this, &CPlayer::EatAirFail);
+
+	m_pAnimation->CreateNotify("KirbyEat", "EatOver", 14);
+	m_pAnimation->AddNotifyFunction<CPlayer>("KirbyEat", "EatOver", this, &CPlayer::SKeyUp);
+
+
+	m_pAnimation->CreateNotify("KirbySplitStar", "AttackStar", 3);
+	m_pAnimation->AddNotifyFunction("KirbySplitStar", "AttackStar", this, &CPlayer::Fire);
+	m_pAnimation->CreateNotify("KirbySplitStar", "AttackStarEnd", 12);
+	m_pAnimation->AddNotifyFunction("KirbySplitStar", "AttackStarEnd", this, &CPlayer::FireEnd);
+
+
+	m_pAnimation->CreateNotify("KirbyDigest", "ChangeToIdle", 6);
+	m_pAnimation->AddNotifyFunction<CPlayer>("KirbyDigest", "ChangeToIdle", this, &CPlayer::ReturnToIdle);
+
+	m_pAnimation->CreateNotify("KirbyDigestMonster", "ChangeToMonsterIdle", 7);
+	m_pAnimation->AddNotifyFunction<CPlayer>("KirbyDigestMonster", "ChangeToMonsterIdle", this, &CPlayer::ReturnToMonsterIdle);
+
+	m_pAnimation->CreateNotify("KirbyDamage", "DamageEnd", 7);
+	m_pAnimation->AddNotifyFunction<CPlayer>("KirbyDamage", "DamageEnd", this, &CPlayer::EnableMove);
+
+
+	m_pAnimation->CreateNotify("BeamDamage", "BeamDamageEnd", 14);
+	m_pAnimation->AddNotifyFunction<CPlayer>("BeamDamage", "BeamDamageEnd", this, &CPlayer::EnableMove);
 }
 
 float CPlayer::Lerp(float value1, float value2, float amount)

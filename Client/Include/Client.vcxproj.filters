@@ -126,6 +126,9 @@
     <ClCompile Include="GameMode\BossStage.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="Object\Leap.cpp">
+      <Filter>02. Object\Monster</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -208,6 +211,9 @@
     </ClInclude>
     <ClInclude Include="GameMode\BossStage.h">
       <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Object\Leap.h">
+      <Filter>02. Object\Monster</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

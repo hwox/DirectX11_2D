@@ -53,6 +53,9 @@ bool CEffect::Init()
 	m_pMesh->SetPivot(0.5f, 0.5f, 0.f);
 	m_pMesh->SetRelativeScale(120.f, 120.f, 1.f);
 
+
+	CreateNotifyLift();
+
 	return true;
 }
 
@@ -89,8 +92,6 @@ void CEffect::Effect_BulletEffect()
 {
 	BE_Move = true;
 	m_pAnimation->ChangeAnimation("StarBulletEffect");
-	m_pAnimation->CreateNotify("StarBulletEffect", "BulletEffectEnd", 4);
-	m_pAnimation->AddNotifyFunction<CEffect>("StarBulletEffect", "BulletEffectEnd", this, &CEffect::PlayEnd);
 }
 
 void CEffect::Effect_SplitAir()
@@ -98,8 +99,7 @@ void CEffect::Effect_SplitAir()
 	SA_Move = true;
 	m_pMesh->SetRelativeScale(50.f, 50.f, 1.f);
 	m_pAnimation->ChangeAnimation("SplitAirEffect");
-	m_pAnimation->CreateNotify("SplitAirEffect", "SplitAirEffectEnd", 5);
-	m_pAnimation->AddNotifyFunction<CEffect>("SplitAirEffect", "SplitAirEffectEnd", this, &CEffect::PlayEnd);
+
 }
 
 void CEffect::Effect_JumpEffect()
@@ -108,8 +108,7 @@ void CEffect::Effect_JumpEffect()
 	JE_Move = true;
 	m_pMesh->SetRelativeScale(50.f, 50.f, 1.f);
 	m_pAnimation->ChangeAnimation("JumpEffect");
-	m_pAnimation->CreateNotify("JumpEffect", "JumpEffectEnd", 3);
-	m_pAnimation->AddNotifyFunction<CEffect>("JumpEffect", "JumpEffectEnd", this, &CEffect::PlayEnd);
+
 }
 
 void CEffect::SetEffectRotationY(float value)
@@ -124,5 +123,17 @@ void CEffect::JumpEffect_RandomRotation()
 void CEffect::PlayEnd(float fTime)
 {
 	Kill();
-	OutputDebugString(TEXT("주거 \n"));
+	//OutputDebugString(TEXT("주거 \n"));
+}
+
+void CEffect::CreateNotifyLift()
+{
+	m_pAnimation->CreateNotify("StarBulletEffect", "BulletEffectEnd", 4);
+	m_pAnimation->AddNotifyFunction<CEffect>("StarBulletEffect", "BulletEffectEnd", this, &CEffect::PlayEnd);
+
+	m_pAnimation->CreateNotify("SplitAirEffect", "SplitAirEffectEnd", 5);
+	m_pAnimation->AddNotifyFunction<CEffect>("SplitAirEffect", "SplitAirEffectEnd", this, &CEffect::PlayEnd);
+
+	m_pAnimation->CreateNotify("JumpEffect", "JumpEffectEnd", 3);
+	m_pAnimation->AddNotifyFunction<CEffect>("JumpEffect", "JumpEffectEnd", this, &CEffect::PlayEnd);
 }

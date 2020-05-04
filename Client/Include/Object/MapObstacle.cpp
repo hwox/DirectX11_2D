@@ -9,12 +9,10 @@ CMapObstacle::CMapObstacle()
 	ObstacleCollider = nullptr;
 	m_pMesh = nullptr;
 	m_pMovement = nullptr;
-	ObstacleTopCollider = nullptr;
 }
 
 CMapObstacle::~CMapObstacle()
 {
-	SAFE_RELEASE(ObstacleTopCollider);
 	SAFE_RELEASE(ObstacleCollider);
 	SAFE_RELEASE(m_pMesh);
 	SAFE_RELEASE(m_pMovement);
@@ -27,7 +25,6 @@ bool CMapObstacle::Init()
 
 	m_pMesh = CGameObject::CreateComponent<CStaticMeshComponent>("Mesh");
 	ObstacleCollider = CreateComponent<CColliderRect>("MapObstacleBody");
-	ObstacleTopCollider = CreateComponent<CColliderRect>("MapObstacleBodyTop");
 
 	CStaticMesh*	pMesh = (CStaticMesh*)GET_SINGLE(CResourceManager)->FindMesh("TexRect");
 	m_pMesh->SetStaticMesh(pMesh);
@@ -52,16 +49,11 @@ bool CMapObstacle::Init()
 	m_pMesh->SetPivot(0.5f, 0.5f, 0.f);
 	m_pMesh->SetRelativeScale(100.f, 100.f, 1.f);
 
+	m_pY = GetWorldPos().y;
+
+
+
 	ObstacleCollider->SetPivot(0.5f, 0.5f, 0.f);
-
-
-	m_pMesh->AddChild(ObstacleTopCollider, TR_POS);
-	//ObstacleTopCollider->SetRelativeScale(400.f, 50.f, 1.f);
-	ObstacleTopCollider->SetCollisionProfile("Map");
-
-
-
-	//ObstacleCollider->AddBlockCallback<CMapObstacle>(this, &CMapObstacle::OnBlock);
 
 	return true;
 }
@@ -119,8 +111,27 @@ void CMapObstacle::SetObstacleProfileType(int type)
 		break;
 	}
 }
+float CMapObstacle::GetYPosition()
+{
+	return m_pY;
+}
+void CMapObstacle::SetYPosition(float y)
+{
+
+	m_pY = y;
+
+	//char temp[30];
+	//sprintf_s(temp, "%c  \n", m_pY);
+
+//	OutputDebugStringA(temp); 
+	
+}
 void CMapObstacle::OnBlock(class CColliderBase* pSrc, class CColliderBase* pDest, float fTime)
 {
-	OutputDebugString(TEXT("À½"));
+	if (pDest == nullptr)
+		return;
+
+
 }
+
 

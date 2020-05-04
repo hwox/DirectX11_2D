@@ -33,6 +33,7 @@ protected:
 	bool EatingEnd; // 다 먹혔음
 
 	bool AttackedByStar; // 별한테 공격당함
+	bool IsCantGo;
 private:
 	int			ColliderMode;
 	int			m_Hp;

@@ -21,6 +21,7 @@
 
 #include "..\Object\WaddleDee.h"
 #include "../Object/Title.h"
+#include "..\Object\Leap.h"
 
 #define STAGE1_MINX		0
 #define STAGE1_MAXX		9500
@@ -87,6 +88,9 @@ void CStage1Mode::SpawnMonster()
 
 	SAFE_RELEASE(pMinion2);
 
+
+	CLeap*	pLeap = m_pScene->SpawnObject<CLeap>(Vector3(4000.f, 500.f, 0.f));
+	SAFE_RELEASE(pLeap);
 }
 
 void CStage1Mode::SetCollidrProfile()
@@ -109,7 +113,7 @@ void CStage1Mode::SetCollidrProfile()
 	GET_SINGLE(CCollisionManager)->UpdateProfileChannel("Player", "PlayerProjectile", CT_IGNORE);
 	GET_SINGLE(CCollisionManager)->UpdateProfileChannel("Player", "Map", CT_IGNORE);
 	GET_SINGLE(CCollisionManager)->UpdateProfileChannel("Player", "PlayerMap", CT_IGNORE);
-	GET_SINGLE(CCollisionManager)->UpdateProfileChannel("Player", "MapObject", CT_IGNORE);
+	//GET_SINGLE(CCollisionManager)->UpdateProfileChannel("Player", "MapObject", CT_IGNORE);
 
 	GET_SINGLE(CCollisionManager)->CreateProfile("Monster", "Monster");
 	GET_SINGLE(CCollisionManager)->UpdateProfileChannel("Monster", "Monster", CT_IGNORE);
@@ -152,7 +156,7 @@ void CStage1Mode::SetCollidrProfile()
 	GET_SINGLE(CCollisionManager)->CreateProfile("MapObject", "MapObject");
 	GET_SINGLE(CCollisionManager)->UpdateProfileChannel("MapObject", "Map", CT_IGNORE);
 	GET_SINGLE(CCollisionManager)->UpdateProfileChannel("MapObject", "MapObject", CT_IGNORE);
-	GET_SINGLE(CCollisionManager)->UpdateProfileChannel("MapObject", "Player", CT_IGNORE);
+	//GET_SINGLE(CCollisionManager)->UpdateProfileChannel("MapObject", "Player", CT_IGNORE);
 	GET_SINGLE(CCollisionManager)->UpdateProfileChannel("MapObject", "SceneChange", CT_IGNORE);
 	//GET_SINGLE(CCollisionManager)->UpdateProfileChannel("MapObject", "Map", CT_IGNORE);
 

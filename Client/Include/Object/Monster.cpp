@@ -16,6 +16,7 @@ CMonster::CMonster()
 	IsChasePlayer = false;
 	ColliderMode = CM_RECT;
 	Skill_Type = 0;
+	IsCantGo = false;
 }
 
 CMonster::~CMonster()
@@ -195,6 +196,8 @@ bool CMonster::GetIsEating()
 
 void CMonster::OnBlock(class CColliderBase* pSrc, class CColliderBase* pDest, float fTime)
 {
+	if (pDest == nullptr)
+		return;
 
 	SetMonsterName(m_MonsterName);
 

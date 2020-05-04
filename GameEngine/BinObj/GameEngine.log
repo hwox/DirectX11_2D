@@ -1,38 +1,6 @@
-﻿  CollisionManager.cpp
+﻿  ColliderRect.cpp
 e:\200425_ver\gameengine\include\matrix.h(7): warning C4251: '_tagMatrix::m': struct 'DirectX::XMMATRIX'에서는 union '_tagMatrix'의 클라이언트에서 DLL 인터페이스를 사용하도록 지정해야 합니다.
   c:\program files (x86)\windows kits\10\include\10.0.18362.0\um\directxmath.h(432): note: 'DirectX::XMMATRIX' 선언을 참조하십시오.
-e:\200425_ver\gameengine\include\collisionmanager.h(18): warning C4251: 'CCollisionManager::m_ChannelList': class 'std::list<PCollisionChannel,std::allocator<_Ty>>'에서는 class 'CCollisionManager'의 클라이언트에서 DLL 인터페이스를 사용하도록 지정해야 합니다.
-          with
-          [
-              _Ty=PCollisionChannel
-          ]
-  e:\200425_ver\gameengine\include\collisionmanager.h(18): note: 'std::list<PCollisionChannel,std::allocator<_Ty>>' 선언을 참조하십시오.
-          with
-          [
-              _Ty=PCollisionChannel
-          ]
-e:\200425_ver\gameengine\include\collisionmanager.h(19): warning C4251: 'CCollisionManager::m_mapProfile': class 'std::unordered_map<size_t,PCollisionProfile,std::hash<_Kty>,std::equal_to<_Kty>,std::allocator<std::pair<const _Kty,_Ty>>>'에서는 class 'CCollisionManager'의 클라이언트에서 DLL 인터페이스를 사용하도록 지정해야 합니다.
-          with
-          [
-              _Kty=size_t,
-              _Ty=PCollisionProfile
-          ]
-  e:\200425_ver\gameengine\include\collisionmanager.h(19): note: 'std::unordered_map<size_t,PCollisionProfile,std::hash<_Kty>,std::equal_to<_Kty>,std::allocator<std::pair<const _Kty,_Ty>>>' 선언을 참조하십시오.
-          with
-          [
-              _Kty=size_t,
-              _Ty=PCollisionProfile
-          ]
-e:\200425_ver\gameengine\include\collisionmanager.h(20): warning C4251: 'CCollisionManager::m_ColliderList': class 'std::list<CColliderBase *,std::allocator<_Ty>>'에서는 class 'CCollisionManager'의 클라이언트에서 DLL 인터페이스를 사용하도록 지정해야 합니다.
-          with
-          [
-              _Ty=CColliderBase *
-          ]
-  e:\200425_ver\gameengine\include\collisionmanager.h(20): note: 'std::list<CColliderBase *,std::allocator<_Ty>>' 선언을 참조하십시오.
-          with
-          [
-              _Ty=CColliderBase *
-          ]
 e:\200425_ver\gameengine\include\ref.h(13): warning C4251: 'CRef::m_strName': class 'std::basic_string<char,std::char_traits<char>,std::allocator<char>>'에서는 class 'CRef'의 클라이언트에서 DLL 인터페이스를 사용하도록 지정해야 합니다.
   c:\program files (x86)\microsoft visual studio\2017\community\vc\tools\msvc\14.16.27023\include\xstring(4373): note: 'std::basic_string<char,std::char_traits<char>,std::allocator<char>>' 선언을 참조하십시오.
 e:\200425_ver\gameengine\include\component\scenecomponent.h(15): warning C4251: 'CSceneComponent::m_vecChild': class 'std::vector<CSceneComponent *,std::allocator<_Ty>>'에서는 class 'CSceneComponent'의 클라이언트에서 DLL 인터페이스를 사용하도록 지정해야 합니다.
@@ -80,7 +48,7 @@ e:\200425_ver\gameengine\include\component\colliderbase.h(28): warning C4251: 'C
           [
               _Ty=CColliderBase *
           ]
-  e:\200425_ver\gameengine\include\collisionmanager.h(20): note: 'std::list<CColliderBase *,std::allocator<_Ty>>' 선언을 참조하십시오.
+  e:\200425_ver\gameengine\include\component\colliderbase.h(28): note: 'std::list<CColliderBase *,std::allocator<_Ty>>' 선언을 참조하십시오.
           with
           [
               _Ty=CColliderBase *
@@ -90,7 +58,7 @@ e:\200425_ver\gameengine\include\component\colliderbase.h(29): warning C4251: 'C
           [
               _Ty=CColliderBase *
           ]
-  e:\200425_ver\gameengine\include\collisionmanager.h(20): note: 'std::list<CColliderBase *,std::allocator<_Ty>>' 선언을 참조하십시오.
+  e:\200425_ver\gameengine\include\component\colliderbase.h(28): note: 'std::list<CColliderBase *,std::allocator<_Ty>>' 선언을 참조하십시오.
           with
           [
               _Ty=CColliderBase *
@@ -105,61 +73,6 @@ e:\200425_ver\gameengine\include\component\colliderbase.h(30): warning C4251: 'C
           [
               _Ty=unsigned int
           ]
-e:\200425_ver\gameengine\include\input.h(120): warning C4251: 'CInput::m_tKeyInfo': struct '_tagKeyInfo'에서는 class 'CInput'의 클라이언트에서 DLL 인터페이스를 사용하도록 지정해야 합니다.
-  e:\200425_ver\gameengine\include\input.h(28): note: '_tagKeyInfo' 선언을 참조하십시오.
-e:\200425_ver\gameengine\include\input.h(122): warning C4251: 'CInput::m_mapAxis': class 'std::unordered_map<size_t,PKeyAxis,std::hash<_Kty>,std::equal_to<_Kty>,std::allocator<std::pair<const _Kty,_Ty>>>'에서는 class 'CInput'의 클라이언트에서 DLL 인터페이스를 사용하도록 지정해야 합니다.
-          with
-          [
-              _Kty=size_t,
-              _Ty=PKeyAxis
-          ]
-  e:\200425_ver\gameengine\include\input.h(122): note: 'std::unordered_map<size_t,PKeyAxis,std::hash<_Kty>,std::equal_to<_Kty>,std::allocator<std::pair<const _Kty,_Ty>>>' 선언을 참조하십시오.
-          with
-          [
-              _Kty=size_t,
-              _Ty=PKeyAxis
-          ]
-e:\200425_ver\gameengine\include\input.h(123): warning C4251: 'CInput::m_mapAction': class 'std::unordered_map<size_t,PKeyAction,std::hash<_Kty>,std::equal_to<_Kty>,std::allocator<std::pair<const _Kty,_Ty>>>'에서는 class 'CInput'의 클라이언트에서 DLL 인터페이스를 사용하도록 지정해야 합니다.
-          with
-          [
-              _Kty=size_t,
-              _Ty=PKeyAction
-          ]
-  e:\200425_ver\gameengine\include\input.h(123): note: 'std::unordered_map<size_t,PKeyAction,std::hash<_Kty>,std::equal_to<_Kty>,std::allocator<std::pair<const _Kty,_Ty>>>' 선언을 참조하십시오.
-          with
-          [
-              _Kty=size_t,
-              _Ty=PKeyAction
-          ]
-e:\200425_ver\gameengine\include\input.h(124): warning C4251: 'CInput::m_UseKeyList': class 'std::list<unsigned char,std::allocator<_Ty>>'에서는 class 'CInput'의 클라이언트에서 DLL 인터페이스를 사용하도록 지정해야 합니다.
-          with
-          [
-              _Ty=unsigned char
-          ]
-  e:\200425_ver\gameengine\include\input.h(124): note: 'std::list<unsigned char,std::allocator<_Ty>>' 선언을 참조하십시오.
-          with
-          [
-              _Ty=unsigned char
-          ]
-e:\200425_ver\gameengine\include\input.h(137): warning C4251: 'CInput::m_tMouseInfo': struct '_tagKeyInfo'에서는 class 'CInput'의 클라이언트에서 DLL 인터페이스를 사용하도록 지정해야 합니다.
-  e:\200425_ver\gameengine\include\input.h(28): note: '_tagKeyInfo' 선언을 참조하십시오.
-e:\200425_ver\gameengine\include\collisionmanager.cpp(43): warning C4244: '인수': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-e:\200425_ver\gameengine\include\collisionmanager.cpp(44): warning C4244: '인수': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-  CameraComponent.cpp
-e:\200425_ver\gameengine\include\matrix.h(7): warning C4251: '_tagMatrix::m': struct 'DirectX::XMMATRIX'에서는 union '_tagMatrix'의 클라이언트에서 DLL 인터페이스를 사용하도록 지정해야 합니다.
-  c:\program files (x86)\windows kits\10\include\10.0.18362.0\um\directxmath.h(432): note: 'DirectX::XMMATRIX' 선언을 참조하십시오.
-e:\200425_ver\gameengine\include\ref.h(13): warning C4251: 'CRef::m_strName': class 'std::basic_string<char,std::char_traits<char>,std::allocator<char>>'에서는 class 'CRef'의 클라이언트에서 DLL 인터페이스를 사용하도록 지정해야 합니다.
-  c:\program files (x86)\microsoft visual studio\2017\community\vc\tools\msvc\14.16.27023\include\xstring(4373): note: 'std::basic_string<char,std::char_traits<char>,std::allocator<char>>' 선언을 참조하십시오.
-e:\200425_ver\gameengine\include\component\scenecomponent.h(15): warning C4251: 'CSceneComponent::m_vecChild': class 'std::vector<CSceneComponent *,std::allocator<_Ty>>'에서는 class 'CSceneComponent'의 클라이언트에서 DLL 인터페이스를 사용하도록 지정해야 합니다.
-          with
-          [
-              _Ty=CSceneComponent *
-          ]
-  e:\200425_ver\gameengine\include\component\scenecomponent.h(15): note: 'std::vector<CSceneComponent *,std::allocator<_Ty>>' 선언을 참조하십시오.
-          with
-          [
-              _Ty=CSceneComponent *
-          ]
 e:\200425_ver\gameengine\include\component\transform.h(16): warning C4251: 'CTransform::m_vecChild': class 'std::vector<CTransform *,std::allocator<_Ty>>'에서는 class 'CTransform'의 클라이언트에서 DLL 인터페이스를 사용하도록 지정해야 합니다.
           with
           [
@@ -170,8 +83,6 @@ e:\200425_ver\gameengine\include\component\transform.h(16): warning C4251: 'CTra
           [
               _Ty=CTransform *
           ]
-e:\200425_ver\gameengine\include\component\cameracomponent.cpp(64): warning C4244: '인수': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-  코드를 생성하고 있습니다...
   GameEngine.vcxproj -> E:\200425_ver\GameEngine\Include\../Bin/GameEngine_Debug.dll
   0개 파일이 복사되었습니다.
   파일을 찾을 수 없습니다-*.inl

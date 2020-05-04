@@ -35,6 +35,7 @@ public:
 	virtual void GoToBlackHole(float fTime);
 public:
 	virtual void OnBlock(class CColliderBase* pSrc, class CColliderBase* pDest, float fTime);
+	virtual void OnBlockOut(class CColliderBase* pSrc, class CColliderBase* pDest, float fTime);
 
 };
 

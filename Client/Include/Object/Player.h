@@ -58,6 +58,10 @@ private:
 	bool IsPlayAnimation;
 
 	bool m_pIsFootOnFloor;
+	bool m_pCantGo;
+
+	float dir;
+	float m_pBottomY;
 private:
 	class CStaticMeshComponent*	m_pMesh;
 	class CSceneComponent*		m_pRotPivot;
@@ -87,12 +91,6 @@ public:
 	void RotationZ(float fScale, float fTime);
 	void Fire(float fTime);
 	void FireEnd(float fTime);
-	void Delete(float fTime);
-	void AnimAttackNotify(float fTime);
-	void AttackSpeedUp(float fTime);
-	void AttackBufEnd();
-
-
 
 
 	void ReturnToIdle(float fTime);
@@ -116,13 +114,13 @@ public:
 	//void DownKeyDown(float fTime);
 	void DigestMonster(float fScale, float fTime);
 
-	void ToEatAirState(float fTime); // 공기 먹은 애니메이션으로 전환
+
 	void SpitAir(float fTime);
-	void Yup(float fTime);
 	void EatAirFail(float fTime);
 	void EatMonsterSuccess();
 	void ComputeJump(float fTime);
 	void JumpEnd();
+
 	void ApplySkill(int state);
 	void StarAttack(float fTime);
 
@@ -146,15 +144,17 @@ public:
 	void EnablePlayAnimation(float fTime);
 	void DisablePlayAnimation(float fTime);
 
-	void SetHasAirFalse(float fTime);
-	void SetHasMonsterFalse(float fTime);
+
 public:
 	void OnBlock(class CColliderBase* pSrc, class CColliderBase* pDest, float fTime);
-	void BlockedByObstacle(class CColliderBase* pSrc, class CColliderBase* pDest, float fTime);
+	void BlockedByObstacleBegin(class CColliderBase* pSrc, class CColliderBase* pDest, float fTime);
+	void BlockedByObstacleEnd(class CColliderBase* pSrc, class CColliderBase* pDest, float fTime);
 	void StruckedByMonster(class CColliderBase* pSrc, class CColliderBase* pDest, float fTime);
 	void OnTheMap(class CColliderBase* pSrc, class CColliderBase* pDest, float fTime);
 	void NotOnTheMap(class CColliderBase* pSrc, class CColliderBase* pDest, float fTime);
 
+
+	void CreateNotifyList();
 public:
 	float Lerp(float value1, float value2, float amount);
 
