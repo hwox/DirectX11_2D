@@ -75,6 +75,7 @@ bool CStage1Map::Init()
 
 
 	CMagicMirror*  pMirror  = m_pScene->SpawnObject<CMagicMirror>(Vector3(7670.f, 230.f, 0.f));
+	pMirror->SetStageMode(1);
 	SAFE_RELEASE(pMirror);
 
 	MakeMapObstacle();

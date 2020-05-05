@@ -1,7 +1,5 @@
-e:\200425_ver\gameeditortest\binobj\gameeditortest.pch
 e:\200425_ver\gameeditortest\binobj\vc141.pdb
 e:\200425_ver\gameeditortest\binobj\vc141.idb
-e:\200425_ver\gameeditortest\binobj\pch.obj
 e:\200425_ver\gameeditortest\binobj\tilemapeditordlg.obj
 e:\200425_ver\gameeditortest\binobj\freecamera.obj
 e:\200425_ver\gameeditortest\binobj\editmapobject.obj
@@ -9,8 +7,10 @@ e:\200425_ver\gameeditortest\binobj\materialdlg.obj
 e:\200425_ver\gameeditortest\binobj\mainfrm.obj
 e:\200425_ver\gameeditortest\binobj\editgamemode.obj
 e:\200425_ver\gameeditortest\binobj\gameeditortestview.obj
-e:\200425_ver\gameeditortest\binobj\gameeditortestdoc.obj
 e:\200425_ver\gameeditortest\binobj\gameeditortest.obj
+e:\200425_ver\gameeditortest\binobj\gameeditortest.pch
+e:\200425_ver\gameeditortest\binobj\pch.obj
+e:\200425_ver\gameeditortest\binobj\gameeditortestdoc.obj
 e:\200425_ver\gameeditortest\bin\gameeditortest.ipdb
 e:\200425_ver\gameeditortest\bin\gameeditortest.iobj
 e:\200425_ver\gameeditortest\bin\gameeditortest.ilk

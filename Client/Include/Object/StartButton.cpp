@@ -5,7 +5,9 @@
 #include "Scene/SceneManager.h"
 #include "Scene/Scene.h"
 #include "..\GameMode\Stage1Mode.h"
-
+#include "..\GameMode\Stage2Mode.h"
+#include "..\GameMode\Stage3Mode.h"
+#include "..\GameMode\MenuMode.h"
 
 CStartButton::CStartButton()
 {
@@ -67,9 +69,28 @@ void CStartButton::Render(float fTime)
 	CGameObject::Render(fTime);
 }
 
+void CStartButton::SetT(int _t)
+{
+	t = _t;
+}
+
 void CStartButton::ClickCallback(float fTime)
 {
-	CScene*	pNextScene = GET_SINGLE(CSceneManager)->CreateNextScene();
+	if (t == 1)
+	{
+	
+		CScene*	pNextScene = GET_SINGLE(CSceneManager)->CreateNextScene();
 
-	pNextScene->SetGameMode<CStage1Mode>();
+		pNextScene->SetGameMode<CStage1Mode>();
+
+	}
+	else if (t == 2)
+	{	
+		CScene*	pNextScene = GET_SINGLE(CSceneManager)->CreateNextScene();
+		pNextScene->SetGameMode<CMenuMode>();
+	}
+
+	//CScene*	pNextScene = GET_SINGLE(CSceneManager)->CreateNextScene();
+	//
+	//pNextScene->SetGameMode<CStage1Mode>();
 }

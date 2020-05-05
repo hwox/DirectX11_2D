@@ -34,6 +34,7 @@ protected:
 
 	bool AttackedByStar; // 별한테 공격당함
 	bool IsCantGo;
+	bool AttackedBySkill; // 스킬한테 공격당함
 private:
 	int			ColliderMode;
 	int			m_Hp;
@@ -61,6 +62,8 @@ public:
 
 	virtual void SetAttackedByStar(bool onoff);
 	virtual bool GetAttackedByStar();
+	virtual void SetAttackedBySkill(bool onoff);
+	virtual bool GetAttackedBySkill();
 	virtual void SetEatingEnd(bool onoff);
 	virtual bool GetEatingEnd();
 	virtual void GoToBlackHole(float fTime);

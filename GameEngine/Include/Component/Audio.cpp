@@ -33,6 +33,17 @@ CAudio::~CAudio()
 	SAFE_RELEASE(m_pSound);
 }
 
+bool CAudio::IsPlay() const
+{
+	if (!m_pSound)
+		return false;
+
+	bool	bPlaying = false;
+	m_pSound->GetChannel()->isPlaying(&bPlaying);
+
+	return bPlaying;
+}
+
 void CAudio::SetSound(const string & strName)
 {
 	SAFE_RELEASE(m_pSound);
@@ -42,8 +53,7 @@ void CAudio::SetSound(const string & strName)
 
 void CAudio::SetSound(const string & strName, bool bLoop, const char * pFileName, const string & strPathName)
 {
-	if (!GET_SINGLE(CResourceManager)->LoadSound(strName, bLoop, pFileName, strPathName))
-		return;
+	GET_SINGLE(CResourceManager)->LoadSound(strName, bLoop, pFileName, strPathName);
 
 	SAFE_RELEASE(m_pSound);
 
@@ -68,9 +78,6 @@ void CAudio::Play()
 void CAudio::Pause()
 {
 	GET_SINGLE(CResourceManager)->Pause(m_pSound, m_strChannelGroup);
-
-	if (!m_pSound->GetChannel())
-		return;
 }
 
 void CAudio::Stop()

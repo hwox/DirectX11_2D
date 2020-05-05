@@ -247,98 +247,98 @@ bool CResourceManager::Init()
 void CResourceManager::ChangeScene()
 {
 	// 기본으로 설정된 리소스들은 모두 카운트를 1씩 증가해준다.
-	//list<string>::iterator	iter;
-	//list<string>::iterator	iterEnd = m_DefaultMeshList.end();
+	list<string>::iterator	iter;
+	list<string>::iterator	iterEnd = m_DefaultMeshList.end();
 
-	//for(iter = m_DefaultMeshList.begin(); iter != iterEnd; ++iter)
-	//{
-	//	FindMesh(*iter);
-	//}
-
-	//iterEnd = m_DefaultTextureList.end();
-
-	//for (iter = m_DefaultTextureList.begin(); iter != iterEnd; ++iter)
-	//{
-	//	FindTexture(*iter);
-	//}
-
-	//iterEnd = m_DefaultRenderStateList.end();
-
-	//for (iter = m_DefaultRenderStateList.begin(); iter != iterEnd; ++iter)
-	//{
-	//	FindRenderState(*iter);
-	//}
-
-	//iterEnd = m_DefaultMaterialList.end();
-
-	//for (iter = m_DefaultMaterialList.begin(); iter != iterEnd; ++iter)
-	//{
-	//	FindMaterial(*iter);
-	//}
-
-	unordered_map<size_t, class CMesh*>::iterator	iterMesh = m_mapMesh.begin();
-	unordered_map<size_t, class CMesh*>::iterator	iterMeshEnd = m_mapMesh.end();
-
-	for (; iterMesh != iterMeshEnd;)
+	for(iter = m_DefaultMeshList.begin(); iter != iterEnd; ++iter)
 	{
-		if (iterMesh->second->Release() == 0)
-		{
-			iterMesh = m_mapMesh.erase(iterMesh);
-		}
-
-		else
-		{
-			++iterMesh;
-		}
+		FindMesh(*iter);
 	}
 
-	unordered_map<size_t, class CTexture*>::iterator	iterT = m_mapTexture.begin();
-	unordered_map<size_t, class CTexture*>::iterator	iterTEnd = m_mapTexture.end();
+	iterEnd = m_DefaultTextureList.end();
 
-	for (; iterT != iterTEnd;)
+	for (iter = m_DefaultTextureList.begin(); iter != iterEnd; ++iter)
 	{
-		if (iterT->second->Release() == 0)
-		{
-			iterT = m_mapTexture.erase(iterT);
-		}
-
-		else
-		{
-			++iterT;
-		}
+		FindTexture(*iter);
 	}
 
-	unordered_map<size_t, class CMaterial*>::iterator	iterMtrl = m_mapMaterial.begin();
-	unordered_map<size_t, class CMaterial*>::iterator	iterMtrlEnd = m_mapMaterial.end();
+	iterEnd = m_DefaultRenderStateList.end();
 
-	for (; iterMtrl != iterMtrlEnd;)
+	for (iter = m_DefaultRenderStateList.begin(); iter != iterEnd; ++iter)
 	{
-		if (iterMtrl->second->Release() == 0)
-		{
-			iterMtrl = m_mapMaterial.erase(iterMtrl);
-		}
-
-		else
-		{
-			++iterMtrl;
-		}
+		FindRenderState(*iter);
 	}
 
-	unordered_map<size_t, class CRenderState*>::iterator	iterRS = m_mapRenderState.begin();
-	unordered_map<size_t, class CRenderState*>::iterator	iterRSEnd = m_mapRenderState.end();
+	iterEnd = m_DefaultMaterialList.end();
 
-	for (; iterRS != iterRSEnd;)
+	for (iter = m_DefaultMaterialList.begin(); iter != iterEnd; ++iter)
 	{
-		if (iterRS->second->Release() == 0)
-		{
-			iterRS = m_mapRenderState.erase(iterRS);
-		}
-
-		else
-		{
-			++iterRS;
-		}
+		FindMaterial(*iter);
 	}
+
+	//unordered_map<size_t, class CMesh*>::iterator	iterMesh = m_mapMesh.begin();
+	//unordered_map<size_t, class CMesh*>::iterator	iterMeshEnd = m_mapMesh.end();
+
+	//for (; iterMesh != iterMeshEnd;)
+	//{
+	//	if (iterMesh->second->Release() == 0)
+	//	{
+	//		iterMesh = m_mapMesh.erase(iterMesh);
+	//	}
+
+	//	else
+	//	{
+	//		++iterMesh;
+	//	}
+	//}
+
+	//unordered_map<size_t, class CTexture*>::iterator	iterT = m_mapTexture.begin();
+	//unordered_map<size_t, class CTexture*>::iterator	iterTEnd = m_mapTexture.end();
+
+	//for (; iterT != iterTEnd;)
+	//{
+	//	if (iterT->second->Release() == 0)
+	//	{
+	//		iterT = m_mapTexture.erase(iterT);
+	//	}
+
+	//	else
+	//	{
+	//		++iterT;
+	//	}
+	//}
+
+	//unordered_map<size_t, class CMaterial*>::iterator	iterMtrl = m_mapMaterial.begin();
+	//unordered_map<size_t, class CMaterial*>::iterator	iterMtrlEnd = m_mapMaterial.end();
+
+	//for (; iterMtrl != iterMtrlEnd;)
+	//{
+	//	if (iterMtrl->second->Release() == 0)
+	//	{
+	//		iterMtrl = m_mapMaterial.erase(iterMtrl);
+	//	}
+
+	//	else
+	//	{
+	//		++iterMtrl;
+	//	}
+	//}
+
+	//unordered_map<size_t, class CRenderState*>::iterator	iterRS = m_mapRenderState.begin();
+	//unordered_map<size_t, class CRenderState*>::iterator	iterRSEnd = m_mapRenderState.end();
+
+	//for (; iterRS != iterRSEnd;)
+	//{
+	//	if (iterRS->second->Release() == 0)
+	//	{
+	//		iterRS = m_mapRenderState.erase(iterRS);
+	//	}
+
+	//	else
+	//	{
+	//		++iterRS;
+	//	}
+	//}
 
 	//unordered_map<size_t, class CAnimation2DSequence*>::iterator	iterAnim = m_mapAnim2DSequence.begin();
 	//unordered_map<size_t, class CAnimation2DSequence*>::iterator	iterAnimEnd = m_mapAnim2DSequence.end();

@@ -15,7 +15,7 @@ CBullet::CBullet()
 	m_pMesh = nullptr;
 	m_pMovement = nullptr;
 
-	b_Type = BT_DEFAULT;
+	b_Type = STAND;
 }
 
 CBullet::~CBullet()
@@ -43,6 +43,7 @@ bool CBullet::Init()
 
 	m_pAnimation->AddAnimation2DSequence("StarBullet");
 	m_pAnimation->AddAnimation2DSequence("CutterBullet");
+	m_pAnimation->AddAnimation2DSequence("LeapAttackEffect");
 
 
 	CStaticMesh*	pMesh = (CStaticMesh*)GET_SINGLE(CResourceManager)->FindMesh("TexRect");
@@ -85,7 +86,24 @@ void CBullet::Update(float fTime)
 {
 	CGameObject::Update(fTime);
 
-	m_pMovement->AddMovement(GetWorldAxis(AXIS_X) * 500.f);
+	switch (b_Type)
+	{
+	case STAND:
+		m_pMovement->AddMovement(GetWorldAxis(AXIS_X) * 500.f);
+		m_pBody->SetCollisionProfile("PlayerProjectile");
+		break;
+	case CUTTER:
+		// Cutter Skill Bullet
+		m_pMovement->AddMovement(GetWorldAxis(AXIS_X) * 700.f);
+		m_fActiveTime = 2.0f;
+		break;
+	case LEAP:
+		// Leap Bullet
+
+		m_pBody->SetCollisionProfile("MonsterProjectile");
+		break;
+	}
+	
 }
 
 void CBullet::Render(float fTime)
@@ -100,6 +118,38 @@ void CBullet::SetDisableTime(float dTime)
 float CBullet::GetDisableTime()
 {
 	return 0.0f;
+}
+void CBullet::SetBulletType(int type)
+{
+	b_Type = type;
+	BulletSetting();
+}
+int CBullet::GetBulletType()
+{
+	return b_Type;
+}
+void CBullet::BulletSetting()
+{
+	switch (b_Type)
+	{
+	case STAND:
+		m_pAnimation->ChangeAnimation("StarBullet");
+		m_pBody->SetCollisionProfile("PlayerProjectile");
+		m_pMovement->SetDistance(500.f);
+		break;
+	case CUTTER:
+		m_pAnimation->ChangeAnimation("CutterBullet");
+		m_pMesh->SetRelativeScale(120.f, 70.f, 0.f);
+		m_pBody->SetExtent(120.f, 70.f);
+		m_pBody->SetCollisionProfile("PlayerProjectile");
+		m_pMovement->SetDistance(700.f);
+		break;
+	case LEAP:
+		m_pAnimation->ChangeAnimation("LeapAttackEffect");
+		m_pMesh->SetRelativeScale(70.f, 70.f, 0.f);
+		m_pBody->SetExtent(70.f, 70.f);
+		break;
+	}
 }
 void CBullet::SetRelativeRotationY(float value)
 {

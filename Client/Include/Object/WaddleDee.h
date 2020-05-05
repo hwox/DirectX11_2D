@@ -32,6 +32,8 @@ public:
 	virtual bool GetIsEating();
 	virtual bool Respawn();
 
+	virtual void SetAttackedBySkill(bool onoff);
+
 	virtual void GoToBlackHole(float fTime);
 public:
 	virtual void OnBlock(class CColliderBase* pSrc, class CColliderBase* pDest, float fTime);

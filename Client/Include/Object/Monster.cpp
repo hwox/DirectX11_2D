@@ -17,6 +17,8 @@ CMonster::CMonster()
 	ColliderMode = CM_RECT;
 	Skill_Type = 0;
 	IsCantGo = false;
+	AttackedBySkill = false;
+	AttackedByStar = false;
 }
 
 CMonster::~CMonster()
@@ -69,6 +71,16 @@ void CMonster::SetAttackedByStar(bool onoff)
 bool CMonster::GetAttackedByStar()
 {
 	return AttackedByStar;
+}
+
+void CMonster::SetAttackedBySkill(bool onoff)
+{
+	AttackedByStar = onoff;
+}
+
+bool CMonster::GetAttackedBySkill()
+{
+	return AttackedBySkill;
 }
 
 void CMonster::SetEatingEnd(bool onoff)

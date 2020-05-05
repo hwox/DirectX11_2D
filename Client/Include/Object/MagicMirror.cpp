@@ -5,7 +5,10 @@
 #include "Resource/Animation2DSequence.h"
 
 #include "Component/ColliderRect.h"
-
+#include "Stage2Map.h"
+#include "..\GameMode\Stage2Mode.h"
+#include "..\GameMode\Stage1Mode.h"
+#include "..\GameMode\Stage3Mode.h"
 
 
 CMagicMirror::CMagicMirror()
@@ -49,9 +52,12 @@ bool CMagicMirror::Init()
 	m_pMesh->SetRelativeScale(150.f, 220.f, 1.f);
 	m_pMesh->SetPivot(0.5f, 0.f, 0.f);
 
-	m_pBody->SetExtent(150.f, 250.f);
+	m_pBody->SetExtent(50.f, 250.f);
 	m_pBody->SetPivot(0.5f, 0.f, 0.f);
 	m_pBody->SetCollisionProfile("SceneChange");
+	m_pBody->AddBlockCallback<CMagicMirror>(this, &CMagicMirror::OnBlock);
+
+
 	return true;
 }
 
@@ -69,3 +75,36 @@ void CMagicMirror::Render(float fTime)
 {
 	CGameObject::Render(fTime);
 }
+
+void CMagicMirror::SetStageMode(int Mode)
+{
+	StageMode = Mode;
+}
+
+int CMagicMirror::GetStageMode()
+{
+	return StageMode;
+}
+
+void CMagicMirror::OnBlock(CColliderBase * pSrc, CColliderBase * pDest, float fTime)
+{
+
+	switch (StageMode)
+	{
+	case 1:
+	{
+		CScene*	pNextScene = GET_SINGLE(CSceneManager)->CreateNextScene();
+
+		pNextScene->SetGameMode<CStage3Mode>();
+
+
+		//SAFE_RELEASE(pNextScene);
+	}
+		break;
+	case 2:
+		break;
+	case 3:
+		break;
+	}
+}
+

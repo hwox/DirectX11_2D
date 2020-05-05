@@ -115,10 +115,18 @@ void CWaddleDee::Update(float fTime)
 		m_Player = GetScene()->GetGameMode()->GetPlayer();
 
 	Vector3 pPos = m_Player->GetWorldPos();
-	NearPlayerCheck(pPos);
+	if(!AttackedBySkill && !AttackedByStar)
+		NearPlayerCheck(pPos);
+
+
+	if (AttackedBySkill)
+	{
+		m_bActive = false;
+		return;
+	}
 
 	// 기본으로 움직이기 
-	if (!IsEating) {
+	if (!IsEating && !AttackedBySkill) {
 		if (!IsChasePlayer)
 		{
 			m_pAnimation->ChangeAnimation("WaddleDeeIdle");
@@ -152,6 +160,8 @@ void CWaddleDee::Update(float fTime)
 	{
 		GoToBlackHole(fTime);
 	}
+
+	
 }
 
 void CWaddleDee::Render(float fTime)
@@ -192,6 +202,9 @@ void CWaddleDee::OnBlock(class CColliderBase* pSrc, class CColliderBase* pDest, 
 	if (pDest == nullptr)
 		return;
 
+	if (AttackedBySkill)
+		return;
+
 	if (pDest->GetCollisionProfile()->strName == "MapObject")
 	{
 		IsCantGo = true;
@@ -202,6 +215,7 @@ void CWaddleDee::OnBlock(class CColliderBase* pSrc, class CColliderBase* pDest, 
 
 		if (EatingEnd)
 		{
+			//m_bActive = false;
 			m_pBody->Kill();
 			return;
 		}
@@ -216,8 +230,10 @@ void CWaddleDee::OnBlock(class CColliderBase* pSrc, class CColliderBase* pDest, 
 		}
 		/*	m_pAnimation->ChangeAnimation("WaddleDeeDamage");
 			GET_SINGLE(CScheduler)->AddSchedule<CWaddleDee>("AttackedByStar", false, 0.2f, this, &CWaddleDee::AfterCollisionWithAirZone);*/
-		AfterCollisionWithAirZone();
+		//AfterCollisionWithAirZone();
 		m_pBody->Kill();
+		Enable(false);
+		//m_bActive = false;
 	}
 	else {
 
@@ -236,7 +252,10 @@ void CWaddleDee::OnBlockOut(CColliderBase * pSrc, CColliderBase * pDest, float f
 void CWaddleDee::AfterCollisionWithPlayer()
 {
 	m_pMovement->BackStepEnd();
-	m_pAnimation->ChangeAnimation("WaddleIdle");
+
+	if(!AttackedBySkill)	
+		 m_pAnimation->ChangeAnimation("WaddleIdle");
+
 	IsBackStep = false;
 }
 
@@ -259,6 +278,12 @@ bool CWaddleDee::GetIsEating()
 bool CWaddleDee::Respawn()
 {
 	return CMonster::Respawn();
+}
+
+void CWaddleDee::SetAttackedBySkill(bool onoff)
+{
+	CMonster::SetAttackedBySkill(onoff);
+	m_pAnimation->ChangeAnimation("WaddleDeeDamage");
 }
 
 void CWaddleDee::GoToBlackHole(float fTime)

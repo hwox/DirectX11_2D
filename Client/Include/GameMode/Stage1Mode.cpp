@@ -40,7 +40,7 @@ bool CStage1Mode::Init()
 {
 	CGameMode::Init();
 
-
+	CreateMaterial();
 	SetCollidrProfile();
 
 
@@ -53,11 +53,11 @@ bool CStage1Mode::Init()
 	pObj->SetStageMinMax(STAGE1_MINX, STAGE1_MAXX, STAGE1_MINY, STAGE1_MAXY);
 	SetPlayer(pObj);
 
-	//CBGMObj*	pBGMObj = m_pScene->SpawnObject<CBGMObj>("BGMObj");
+	CBGMObj*	pBGMObj = m_pScene->SpawnObject<CBGMObj>("BGMObj");
+	pBGMObj->SetStageBGM(1);
+	pObj->AddChild(pBGMObj, TR_ROT | TR_POS);
 
-	//pObj->AddChild(pBGMObj, TR_ROT | TR_POS);
-
-	//SAFE_RELEASE(pBGMObj);
+	SAFE_RELEASE(pBGMObj);
 
 	SAFE_RELEASE(pObj);
 
@@ -194,4 +194,184 @@ void CStage1Mode::SetCollidrProfile()
 	GET_SINGLE(CCollisionManager)->UpdateProfileChannel("SceneChange", "MonsterProjectile", CT_IGNORE);
 	GET_SINGLE(CCollisionManager)->UpdateProfileChannel("SceneChange", "MapBlock", CT_IGNORE);
 
+}
+bool CStage1Mode::CreateMaterial()
+{
+	GET_SINGLE(CResourceManager)->CreateMaterial("PlayerMtrl");
+
+	CMaterial*	pMaterial = GET_SINGLE(CResourceManager)->FindMaterial("PlayerMtrl");
+
+	pMaterial->SetSubsetShader(STANDARD_TEX_SHADER);
+	pMaterial->SetTexture(0, "Player", TEXT("teemo.png"));
+	pMaterial->SetRenderState("AlphaBlend");
+	pMaterial->SetMaterialShaderStyle(MSS_ALPHA);
+
+	SAFE_RELEASE(pMaterial);
+
+	GET_SINGLE(CResourceManager)->CreateMaterial("PlayerAnimMtrl");
+
+	pMaterial = GET_SINGLE(CResourceManager)->FindMaterial("PlayerAnimMtrl");
+
+	pMaterial->SetSubsetShader(STANDARD_ANIM2D_SHADER);
+	//pMaterial->SetTexture(0, "Player", TEXT("teemo.png"));
+	pMaterial->SetRenderState("AlphaBlend");
+	pMaterial->SetMaterialShaderStyle(MSS_ALPHA);
+
+	SAFE_RELEASE(pMaterial);
+
+
+	GET_SINGLE(CResourceManager)->CreateMaterial("MonsterAnimMtrl");
+
+	pMaterial = GET_SINGLE(CResourceManager)->FindMaterial("MonsterAnimMtrl");
+
+	pMaterial->SetSubsetShader(STANDARD_ANIM2D_SHADER);
+	pMaterial->SetRenderState("AlphaBlend");
+	pMaterial->SetMaterialShaderStyle(MSS_ALPHA);
+
+	SAFE_RELEASE(pMaterial);
+
+
+	GET_SINGLE(CResourceManager)->CreateMaterial("PlayerAnimOutLineMtrl");
+
+	pMaterial = GET_SINGLE(CResourceManager)->FindMaterial("PlayerAnimOutLineMtrl");
+
+	pMaterial->SetSubsetShader(STANDARD_ANIM2D_OUTLINE_SHADER);
+	//pMaterial->SetTexture(0, "Player", TEXT("teemo.png"));
+	pMaterial->SetRenderState("AlphaBlend");
+	pMaterial->SetMaterialShaderStyle(MSS_ALPHA);
+	pMaterial->CreateCBufferNode(OUTLINE_CBUFFER, 11, sizeof(OutLineCBuffer));
+
+	SAFE_RELEASE(pMaterial);
+
+
+	GET_SINGLE(CResourceManager)->CreateMaterial("TestPixelMtrl");
+
+	pMaterial = GET_SINGLE(CResourceManager)->FindMaterial("TestPixelMtrl");
+
+	pMaterial->SetSubsetShader(STANDARD_TEX_SHADER);
+	pMaterial->SetTexture(0, "TestPixel", TEXT("PixelCollision.png"));
+
+	SAFE_RELEASE(pMaterial);
+
+	GET_SINGLE(CResourceManager)->CreateMaterial("MainMapTileMaterial");
+
+	pMaterial = GET_SINGLE(CResourceManager)->FindMaterial("MainMapTileMaterial");
+
+	pMaterial->SetSubsetShader(TILEMAP_SHADER);
+	pMaterial->SetTexture(0, "MainMapTile", TEXT("Tile.bmp"));
+
+	SAFE_RELEASE(pMaterial);
+
+	GET_SINGLE(CResourceManager)->CreateMaterial("MainMapIsoTileMaterial");
+
+	pMaterial = GET_SINGLE(CResourceManager)->FindMaterial("MainMapIsoTileMaterial");
+
+	pMaterial->SetSubsetShader(TILEMAP_SHADER);
+
+	vector<const TCHAR*>	vecPath;
+
+	for (int i = 0; i <= TILE_COUNT; ++i)
+	{
+		TCHAR* pPath = new TCHAR[MAX_PATH];
+
+		wsprintf(pPath, TEXT("Map\\Tile_Test_%d.png"), i);
+
+		vecPath.push_back(pPath);
+	}
+
+	pMaterial->SetTexture(10, "MainMapIsoTile", vecPath);
+	pMaterial->SetRenderState(RENDERSTATE_ALPHABLEND);
+
+	for (size_t i = 0; i < vecPath.size(); ++i)
+	{
+		SAFE_DELETE_ARRAY(vecPath[i]);
+	}
+
+	SAFE_RELEASE(pMaterial);
+
+	GET_SINGLE(CResourceManager)->CreateMaterial("BulletMaterial");
+
+	pMaterial = GET_SINGLE(CResourceManager)->FindMaterial("BulletMaterial");
+
+	pMaterial->SetSubsetShader(TILEMAP_SHADER);
+	pMaterial->SetTexture(0, "Bullet", TEXT("teemo.png"));
+	pMaterial->SetRenderState("AlphaBlend");
+	pMaterial->SetMaterialShaderStyle(MSS_ALPHA);
+	pMaterial->EnableInstancing();
+	//pMaterial->AddRef();
+
+	SAFE_RELEASE(pMaterial);
+
+	GET_SINGLE(CResourceManager)->CreateMaterial("BulletAnimMtrl");
+
+	pMaterial = GET_SINGLE(CResourceManager)->FindMaterial("BulletAnimMtrl");
+
+	pMaterial->SetSubsetShader(STANDARD_ANIM2D_SHADER);
+	pMaterial->SetRenderState("AlphaBlend");
+	pMaterial->SetMaterialShaderStyle(MSS_ALPHA);
+	pMaterial->AddRef();
+	SAFE_RELEASE(pMaterial);
+
+
+	GET_SINGLE(CResourceManager)->CreateMaterial("StageBackMaterial");
+
+	pMaterial = GET_SINGLE(CResourceManager)->FindMaterial("StageBackMaterial");
+
+	pMaterial->SetSubsetShader(STANDARD_TEX_SHADER);
+	pMaterial->SetTexture(0, "StageBG", TEXT("stagebackground.png"));
+	pMaterial->SetRenderState("AlphaBlend");
+	pMaterial->SetMaterialShaderStyle(MSS_ENVIRONMENT);
+
+	SAFE_RELEASE(pMaterial);
+
+
+	GET_SINGLE(CResourceManager)->CreateMaterial("Stage1Material");
+
+	pMaterial = GET_SINGLE(CResourceManager)->FindMaterial("Stage1Material");
+
+	pMaterial->SetSubsetShader(STANDARD_TEX_SHADER);
+	pMaterial->SetTexture(0, "Stage1BG", TEXT("stage_1.png"));
+	pMaterial->SetRenderState("AlphaBlend");
+	pMaterial->SetMaterialShaderStyle(MSS_ENVIRONMENT);
+
+	SAFE_RELEASE(pMaterial);
+
+
+	GET_SINGLE(CResourceManager)->CreateMaterial("Stage2Material");
+
+	pMaterial = GET_SINGLE(CResourceManager)->FindMaterial("Stage2Material");
+
+	pMaterial->SetSubsetShader(STANDARD_TEX_SHADER);
+	pMaterial->SetTexture(0, "Stage2BG", TEXT("stage_2.png"));
+	pMaterial->SetRenderState("AlphaBlend");
+	pMaterial->SetMaterialShaderStyle(MSS_ENVIRONMENT);
+
+	SAFE_RELEASE(pMaterial);
+
+
+	GET_SINGLE(CResourceManager)->CreateMaterial("Stage3Material");
+
+	pMaterial = GET_SINGLE(CResourceManager)->FindMaterial("Stage3Material");
+
+	pMaterial->SetSubsetShader(STANDARD_TEX_SHADER);
+	pMaterial->SetTexture(0, "Stage3BG", TEXT("stage_3.png"));
+	pMaterial->SetRenderState("AlphaBlend");
+	pMaterial->SetMaterialShaderStyle(MSS_ENVIRONMENT);
+
+	SAFE_RELEASE(pMaterial);
+
+
+	GET_SINGLE(CResourceManager)->CreateMaterial("ObstacleMaterial");
+
+	pMaterial = GET_SINGLE(CResourceManager)->FindMaterial("ObstacleMaterial");
+	pMaterial->SetSubsetShader(STANDARD_TEX_SHADER);
+	pMaterial->SetTexture(0, "Obstacle", TEXT("Tile_Test_0.png"));
+	pMaterial->SetRenderState("AlphaBlend");
+	pMaterial->SetMaterialShaderStyle(MSS_ENVIRONMENT);
+
+	SAFE_RELEASE(pMaterial);
+
+
+
+	return true;
 }

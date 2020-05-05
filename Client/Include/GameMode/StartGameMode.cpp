@@ -31,35 +31,16 @@ bool CStartGameMode::Init()
 	CreateAnimation2DSequence();
 
 	CStartMap*	pMap = m_pScene->SpawnObject<CStartMap>();
-
+	SetPlayer(pMap);
 	SAFE_RELEASE(pMap);
 
-	//for (int i = 0; i <= 12; ++i)
-	/*{
-		TCHAR	strFileName[MAX_PATH] = {};
-
-		wsprintf(strFileName, TEXT("Mouse/Default/%d.png"), i);
-
-		char	strKey[256] = {};
-		sprintf_s(strKey, "MouseDefault%d", i);
-
-		GET_SINGLE(CResourceManager)->AddAnimation2DSequenceTexture("MouseDefault", strKey, strFileName);
-	}
-*/
-//GET_SINGLE(CResourceManager)->SetAnimation2DSequenceFrameInfoAll("MouseDefault", Vector2(0.f, 0.f),
-	//Vector2(32.f, 31.f));
-
-//GET_SINGLE(CInput)->CreateAnim2D();
-//GET_SINGLE(CInput)->AddAnim2DSequence("MouseDefault");
-//GET_SINGLE(CInput)->AlphaBlendEnable();
-
 	CStartButton*	pStartButton = m_pScene->SpawnObject<CStartButton>();
-
+	pStartButton->SetT(1);
 	SAFE_RELEASE(pStartButton);
 
-	//CBGMObj*	pBGMObj = m_pScene->SpawnObject<CBGMObj>("BGMObj");
-
-	//SAFE_RELEASE(pBGMObj);
+	CBGMObj*	pBGMObj = m_pScene->SpawnObject<CBGMObj>("BGMObj");
+	pBGMObj->SetStageBGM(0);
+	SAFE_RELEASE(pBGMObj);
 
 	return true;
 }
@@ -707,7 +688,7 @@ void CStartGameMode::Player_Skill_Cutter_Texture_Create()
 
 		////////////////////    Cutter Attack      ///////////////////////
 
-	GET_SINGLE(CResourceManager)->CreateAnimation2DSequence("CutterAttack", true, 1.0f, 6);
+	GET_SINGLE(CResourceManager)->CreateAnimation2DSequence("CutterAttack", false, 0.8f, 6);
 
 	for (int i = 0; i <= 5; ++i)
 	{
@@ -1170,6 +1151,7 @@ void CStartGameMode::Effect_Texture_Create()
 
 	///////////////////////////////////////////////////////////////////////////
 
+
 }
 
 void CStartGameMode::Else_Texture_Create()
@@ -1236,6 +1218,15 @@ bool CStartGameMode::CreateMaterial()
 
 	SAFE_RELEASE(pMaterial);
 
+	GET_SINGLE(CResourceManager)->CreateMaterial("TitleAnimMtrl");
+
+	 pMaterial = GET_SINGLE(CResourceManager)->FindMaterial("TitleAnimMtrl");
+
+	pMaterial->SetSubsetShader(STANDARD_ANIM2D_SHADER);
+	pMaterial->SetRenderState("AlphaBlend");
+	pMaterial->SetMaterialShaderStyle(MSS_ALPHA);
+
+	SAFE_RELEASE(pMaterial);
 
 	GET_SINGLE(CResourceManager)->CreateMaterial("MonsterAnimMtrl");
 

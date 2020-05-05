@@ -15,6 +15,7 @@ private:
 	class CColliderRect*		m_pBody;
 
 
+	int StageMode;
 protected:
 
 
@@ -25,5 +26,12 @@ public:
 	virtual void Update(float fTime);
 	virtual void Render(float fTime);
 
+
+	virtual void SetStageMode(int Mode);
+	virtual int GetStageMode();
+
+
+public:
+	void OnBlock(class CColliderBase* pSrc, class CColliderBase* pDest, float fTime);
 };
 

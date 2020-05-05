@@ -129,6 +129,24 @@
     <ClCompile Include="Object\Leap.cpp">
       <Filter>02. Object\Monster</Filter>
     </ClCompile>
+    <ClCompile Include="GameMode\Stage2Mode.cpp">
+      <Filter>01. GameMode\Stage</Filter>
+    </ClCompile>
+    <ClCompile Include="Object\EffectSoundObj.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Object\Stage2Map.cpp">
+      <Filter>02. Object\Map</Filter>
+    </ClCompile>
+    <ClCompile Include="Object\Stage3Map.cpp">
+      <Filter>02. Object\Map</Filter>
+    </ClCompile>
+    <ClCompile Include="GameMode\Stage3Mode.cpp">
+      <Filter>01. GameMode\Stage</Filter>
+    </ClCompile>
+    <ClCompile Include="GameMode\MenuMode.cpp">
+      <Filter>01. GameMode\Stage</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -197,9 +215,6 @@
     <ClInclude Include="Object\StartMap.h">
       <Filter>02. Object\Map</Filter>
     </ClInclude>
-    <ClInclude Include="GameMode\Stage1Mode.h">
-      <Filter>01. GameMode\Stage</Filter>
-    </ClInclude>
     <ClInclude Include="Object\MapObstacle.h">
       <Filter>02. Object\Map</Filter>
     </ClInclude>
@@ -214,6 +229,27 @@
     </ClInclude>
     <ClInclude Include="Object\Leap.h">
       <Filter>02. Object\Monster</Filter>
+    </ClInclude>
+    <ClInclude Include="GameMode\Stage2Mode.h">
+      <Filter>01. GameMode\Stage</Filter>
+    </ClInclude>
+    <ClInclude Include="Object\EffectSoundObj.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Object\Stage2Map.h">
+      <Filter>02. Object\Map</Filter>
+    </ClInclude>
+    <ClInclude Include="GameMode\Stage3Mode.h">
+      <Filter>01. GameMode\Stage</Filter>
+    </ClInclude>
+    <ClInclude Include="Object\Stage3Map.h">
+      <Filter>02. Object\Map</Filter>
+    </ClInclude>
+    <ClInclude Include="GameMode\Stage1Mode.h">
+      <Filter>01. GameMode\Stage</Filter>
+    </ClInclude>
+    <ClInclude Include="GameMode\MenuMode.h">
+      <Filter>01. GameMode\Stage</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

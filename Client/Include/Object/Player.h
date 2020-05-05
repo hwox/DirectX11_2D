@@ -76,6 +76,9 @@ private:
 	class CMonster*				m_pEatMonster;
 	class CStaticMeshComponent*	BackImage;
 
+	//class CEffectSoundObj*		m_pJPSound;
+//	class CEffectSoundObj*		m_pPlayerEffect;
+
 
 public:
 	virtual bool Init();
@@ -91,7 +94,7 @@ public:
 	void RotationZ(float fScale, float fTime);
 	void Fire(float fTime);
 	void FireEnd(float fTime);
-
+	void Attack(float fTime);
 
 	void ReturnToIdle(float fTime);
 	void ReturnToMonsterIdle(float fTime);
@@ -144,6 +147,8 @@ public:
 	void EnablePlayAnimation(float fTime);
 	void DisablePlayAnimation(float fTime);
 
+	void AfterBeamAttack(float fTime);
+	void AfterCutterAttack(float fTime);
 
 public:
 	void OnBlock(class CColliderBase* pSrc, class CColliderBase* pDest, float fTime);

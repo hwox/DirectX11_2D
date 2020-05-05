@@ -176,11 +176,3 @@ enum NAV_TYPE
 	NT_3D,
 	NT_END
 };
-
-enum BULLET_TYPE
-{
-	BT_DEFAULT,
-	BT_PLAYER,
-	BT_BOSS,
-	BT_MONSTER //  일단 그냥 뭐가 쓸 지 모르니까 monster로 퉁쳐놓기
-};

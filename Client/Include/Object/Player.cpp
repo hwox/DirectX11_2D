@@ -18,6 +18,8 @@
 #include "..\Object\PlayerLife.h"
 #include "Effect.h"
 #include "MapObstacle.h"
+#include "EffectSoundObj.h"
+
 
 #define STAND_SCALE				130.f
 #define JUMP_SCALE				200.f
@@ -29,6 +31,10 @@
 #define FAT_MASS				10.f
 
 #define STAND_SPEED				500.f
+
+#define BEAM_ATTACK_X			300.f
+#define BEAM_ATTACK_Y			600.f
+
 
 CPlayer::CPlayer()
 {
@@ -276,6 +282,12 @@ void CPlayer::PlayerKeySetting()
 
 	////////////////////////////////////////////////////////////////////////////
 
+
+	GET_SINGLE(CInput)->AddActionKey("SkillAttack", DIK_V);
+	GET_SINGLE(CInput)->BindAction<CPlayer>("SkillAttack", AKS_PRESS, this, &CPlayer::Attack);
+
+
+
 }
 
 void CPlayer::SetPlayerAnimation()
@@ -408,12 +420,12 @@ void CPlayer::Fire(float fTime)
 
 	SAFE_RELEASE(pBullet);
 
-	//CEffectSoundObj*	pFireSound = m_pScene->SpawnObject<CEffectSoundObj>(GetWorldPos() + GetWorldAxis(AXIS_Y) * 200.f,
-	//	Vector3(0.f, 0.f, GetRelativeRot().z));
+	CEffectSoundObj*	pFireSound = m_pScene->SpawnObject<CEffectSoundObj>(GetWorldPos() + GetWorldAxis(AXIS_Y) * 200.f,
+		Vector3(0.f, 0.f, GetRelativeRot().z));
 
-	//pFireSound->SetSound("Demasia", "Demasia.mp3");
+	pFireSound->SetSound("Demasia", "Demasia.mp3");
 
-	//SAFE_RELEASE(pFireSound);
+	SAFE_RELEASE(pFireSound);
 
 	m_SaveState = 0;
 
@@ -426,6 +438,41 @@ void CPlayer::FireEnd(float fTime)
 	m_IsMove = true;
 	//	m_pMesh->SetRelativeScale(STAND_SCALE, STAND_SCALE, 1.f);
 	m_pNowEating = false;
+}
+
+void CPlayer::Attack(float fTime)
+{
+	if (!m_pIsJumping && !m_pHasAir && !m_pHasMonster && !m_pIsAttack && m_KirbyState != Stand)
+	{
+		// 공격
+		m_pIsAttack = true;
+		switch (m_KirbyState)
+		{
+		case Beam:
+			m_pMesh->SetRelativeScale(BEAM_ATTACK_X, BEAM_ATTACK_Y, 1.f);
+			m_pAnimation->ChangeAnimation("BeamAttack");
+			SetWorldPos(pPos - Vector3(0.f, 250.f, 0.f));
+			m_pBody->SetRelativePos(60.f, 250.f, 0.f);
+			m_pHasMonster = false;
+			m_pNowEating = false;  // 그냥 한 번 더 해주는중 
+			break;
+		case Cutter:
+			m_pAnimation->ChangeAnimation("CutterAttack");
+			m_pMesh->SetRelativeScale(STAND_SCALE, STAND_SCALE, 1.f);
+
+
+			CBullet*	pBullet = m_pScene->SpawnObject<CBullet>(GetWorldPos() + GetWorldAxis(AXIS_Y) * 150.f,
+				Vector3(0.f, 0.f, GetRelativeRot().z));
+			pBullet->SetRelativeRotationY(m_pMesh->GetRelativeRot().y);
+			pBullet->SetBulletType(1);
+
+			SAFE_RELEASE(pBullet);
+
+			m_pHasMonster = false;
+			m_pNowEating = false;  // 그냥 한 번 더 해주는중 
+			break;
+		}
+	}
 }
 
 void CPlayer::DownKey(float fScale, float fTime)
@@ -475,6 +522,7 @@ void CPlayer::ReturnToIdle(float fTime)
 {
 	m_pMesh->SetRelativeScale(STAND_SCALE, STAND_SCALE, 1.f);
 	IdleStateAnimation();
+	m_IsMove = true;
 }
 
 void CPlayer::ReturnToMonsterIdle(float fTime)
@@ -518,8 +566,6 @@ void CPlayer::SKeyDown(float fTime)
 		}
 		if (m_pHasMonster)
 		{
-			// 공격
-
 			m_pIsAttack = true;
 			m_pMesh->SetRelativeScale(MONSTERSPLIT_SCALE, STAND_SCALE, 1.f);
 			m_pAnimation->ChangeAnimation("KirbySplitStar");
@@ -777,6 +823,8 @@ void CPlayer::DigestMonster(float fScale, float fTime)
 			m_pHasMonster = false;
 			m_KirbyState = m_SaveState;
 			m_SaveState = 0;
+			m_pNowEating = false;
+			m_IsMove = false;
 		}
 	}
 }
@@ -1110,6 +1158,26 @@ void CPlayer::DisablePlayAnimation(float fTime)
 	IsPlayAnimation = true;
 }
 
+void CPlayer::AfterBeamAttack(float fTime)
+{
+	OutputDebugString(TEXT("Beam Attack"));
+	
+	IdleStateAnimation();
+	m_pIsAttack = false;
+	m_pMesh->SetRelativeScale(STAND_SCALE, STAND_SCALE, 1.f);
+	SetWorldPos(pPos + Vector3(0.f, 250.f, 0.f));
+	m_pBody->SetRelativePos(0.f, 0.f, 0.f);
+}
+
+void CPlayer::AfterCutterAttack(float fTime)
+{
+	OutputDebugString(TEXT("Cutter Attack"));
+	IdleStateAnimation();
+
+	m_pIsAttack = false;
+
+}
+
 
 void CPlayer::OnBlock(CColliderBase * pSrc, CColliderBase * pDest, float fTime)
 {
@@ -1153,6 +1221,17 @@ void CPlayer::StruckedByMonster(CColliderBase * pSrc, CColliderBase * pDest, flo
 
 	if (pDest->GetCollisionProfile()->strName == "MapObject")
 	{
+		return;
+	}
+
+	if (m_pIsAttack)
+	{
+		// 주거라 ㅡㅡ 
+		CMonster*	pMonster = (CMonster*)(pDest->GetOwner());
+		pMonster->SetAttackedBySkill(true);
+		OutputDebugString(TEXT("Map Obstacle \n"));
+	//	SAFE_RELEASE(pMonster);
+
 		return;
 	}
 
@@ -1203,6 +1282,12 @@ void CPlayer::StruckedByMonster(CColliderBase * pSrc, CColliderBase * pDest, flo
 		}
 		DisableMove(fTime);
 
+		CEffectSoundObj*	pFireSound = m_pScene->SpawnObject<CEffectSoundObj>(GetWorldPos(),
+			Vector3(0.f, 0.f, GetRelativeRot().z));
+
+		pFireSound->SetSound("DamagedByMonster", "Effect\\Real_Damaged.wav");
+
+		SAFE_RELEASE(pFireSound);
 
 		DamageStateAnimation();
 
@@ -1213,7 +1298,8 @@ void CPlayer::StruckedByMonster(CColliderBase * pSrc, CColliderBase * pDest, flo
 void CPlayer::NotOnTheMap(CColliderBase * pSrc, CColliderBase * pDest, float fTime)
 {
 	// 맵에서 발바닥 뗌
-
+	if (pDest == nullptr)
+		return;
 	m_pIsJumping = true;
 	m_pIsFootOnFloor = false;
 
@@ -1222,7 +1308,8 @@ void CPlayer::NotOnTheMap(CColliderBase * pSrc, CColliderBase * pDest, float fTi
 void CPlayer::OnTheMap(CColliderBase * pSrc, CColliderBase * pDest, float fTime)
 {
 	// 맵바닥에 발 붙이고 있는 상태
-
+	if (pDest == nullptr)
+		return;
 	m_pBottomY = GetWorldPos().y;
 
 	m_pIsJumping = false;
@@ -1253,7 +1340,7 @@ void CPlayer::CreateNotifyList()
 	m_pAnimation->AddNotifyFunction("KirbySplitStar", "AttackStarEnd", this, &CPlayer::FireEnd);
 
 
-	m_pAnimation->CreateNotify("KirbyDigest", "ChangeToIdle", 6);
+	m_pAnimation->CreateNotify("KirbyDigest", "ChangeToIdle", 5);
 	m_pAnimation->AddNotifyFunction<CPlayer>("KirbyDigest", "ChangeToIdle", this, &CPlayer::ReturnToIdle);
 
 	m_pAnimation->CreateNotify("KirbyDigestMonster", "ChangeToMonsterIdle", 7);
@@ -1268,6 +1355,13 @@ void CPlayer::CreateNotifyList()
 
 	m_pAnimation->CreateNotify("BeamDamage", "BeamDamageEnd", 14);
 	m_pAnimation->AddNotifyFunction<CPlayer>("BeamDamage", "BeamDamageEnd", this, &CPlayer::EnableMove);
+
+
+	m_pAnimation->CreateNotify("BeamAttack", "BeamAttackEnd", 34);
+	m_pAnimation->AddNotifyFunction<CPlayer>("BeamAttack", "BeamAttackEnd", this, &CPlayer::AfterBeamAttack);
+
+	m_pAnimation->CreateNotify("CutterAttack", "CutterAttackEnd", 5);
+	m_pAnimation->AddNotifyFunction<CPlayer>("CutterAttack", "CutterAttackEnd", this, &CPlayer::AfterCutterAttack);
 }
 
 float CPlayer::Lerp(float value1, float value2, float amount)

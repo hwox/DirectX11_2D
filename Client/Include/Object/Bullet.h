@@ -2,6 +2,13 @@
 
 #include "Object/GameObject.h"
 
+enum BULLET_TYPE
+{
+	STAND,
+	CUTTER,
+	LEAP
+};
+
 
 class CBullet :
 	public CGameObject
@@ -32,11 +39,13 @@ public:
 	void SetDisableTime(float dTime);
 	float GetDisableTime();
 
-	void SetRelativeRotationY(float value);
+	virtual void SetBulletType(int type);
+	virtual int GetBulletType();
+	virtual void BulletSetting();
 
+	void SetRelativeRotationY(float value);
 
 	void OnBlock(class CColliderBase* pSrc, class CColliderBase* pDest, float fTime);
 
-//	virtual void SetBulletType()
 };
 

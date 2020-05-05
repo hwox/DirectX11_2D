@@ -25,5 +25,6 @@ private:
 	//void Effect_Texture_Create();
 	//void Else_Texture_Create();
 	//bool CreateMaterial();
+	bool CreateMaterial();
 };
 

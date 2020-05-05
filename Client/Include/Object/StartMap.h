@@ -13,6 +13,8 @@ private:
 	//	class CTileMap*	m_pTileMap;
 	class CStaticMeshComponent*	m_pMesh;
 	CStaticMeshComponent*	m_BackImage;
+	class CCameraComponent*		m_pCamera;
+	class CAnimation2D*			m_pAnimation;
 
 public:
 	virtual bool Init();

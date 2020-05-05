@@ -1621,5 +1621,7 @@ e:\200425_ver\engine\include\component\tilemap.h(32): warning C4251: 'CTileMap::
           [
               _Ty=ImageFrame
           ]
-  코드를 생성하고 있습니다...
+  코드를 생성하고 있습니다.
+  All 959 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+  코드를 생성했습니다.
   GameEditorTest.vcxproj -> E:\200425_ver\GameEditorTest\Include\../Bin/GameEditorTest.exe

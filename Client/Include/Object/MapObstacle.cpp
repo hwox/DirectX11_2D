@@ -109,6 +109,8 @@ void CMapObstacle::SetObstacleProfileType(int type)
 	case 2:
 		ObstacleCollider->SetCollisionProfile("Map");
 		break;
+	case 3:
+		ObstacleCollider->SetCollisionProfile("MapBlock");
 	}
 }
 float CMapObstacle::GetYPosition()

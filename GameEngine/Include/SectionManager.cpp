@@ -139,7 +139,7 @@ void CSectionManager::Collision(float fTime)
 {
 	for (int i = 0; i < m_iSectionCount; ++i)
 	{
-		m_ppSectionArray[i]->Collision(fTime);
+   		m_ppSectionArray[i]->Collision(fTime);
 	}
 }
 
