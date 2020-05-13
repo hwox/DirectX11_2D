@@ -74,7 +74,7 @@ bool CStage1Map::Init()
 	m_BackImage->SetRelativeScale(10000.f, 1200.f, 1.f);
 
 
-	CMagicMirror*  pMirror  = m_pScene->SpawnObject<CMagicMirror>(Vector3(7670.f, 230.f, 0.f));
+	CMagicMirror*  pMirror = m_pScene->SpawnObject<CMagicMirror>(Vector3(7670.f, 230.f, 0.f));
 	pMirror->SetStageMode(1);
 	SAFE_RELEASE(pMirror);
 
@@ -189,7 +189,7 @@ void CStage1Map::MakeMapObstacle()
 	CMapObstacle*	Obstacle5 = m_pScene->SpawnObject<CMapObstacle>();
 
 	Obstacle5->SetObstaclePosition(5250.f, 220.f, 1.f);
-	Obstacle5->SetObstacleColliderExtent(200.f,300.f);
+	Obstacle5->SetObstacleColliderExtent(200.f, 300.f);
 	Obstacle5->SetObstacleColliderPivot(0.5f, 0.f, 0.f);
 	Obstacle5->SetObstacleProfileType(1);
 	m_MapObstacleList.push_back(Obstacle5);
@@ -210,7 +210,7 @@ void CStage1Map::MakeMapObstacle()
 	CMapObstacle*	DrainObstacle = m_pScene->SpawnObject<CMapObstacle>();
 
 	DrainObstacle->SetObstaclePosition(4800.f, 580.f, 1.f);
-	DrainObstacle->SetObstacleColliderExtent(200.f,800.f);
+	DrainObstacle->SetObstacleColliderExtent(200.f, 800.f);
 	DrainObstacle->SetObstacleColliderPivot(0.5f, 0.f, 0.f);
 	DrainObstacle->SetObstacleProfileType(1);
 	m_MapObstacleList.push_back(DrainObstacle);
@@ -272,6 +272,7 @@ void CStage1Map::MakeMapObstacle()
 	Obstacle8->SetObstacleProfileType(1);
 	m_MapObstacleList.push_back(Obstacle8);
 	SAFE_RELEASE(Obstacle8);
+
 
 
 	CMapObstacle*	Floor = m_pScene->SpawnObject<CMapObstacle>();

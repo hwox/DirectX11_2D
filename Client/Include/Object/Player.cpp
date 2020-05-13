@@ -906,6 +906,8 @@ void CPlayer::WalkStateAnimation()
 	default:
 		OutputDebugString(TEXT("State : Something wrong"));
 	}
+
+	m_pNowEating = false;
 }
 
 void CPlayer::MonsterWalkStateAnimation()
@@ -926,6 +928,8 @@ void CPlayer::MonsterWalkStateAnimation()
 	default:
 		OutputDebugString(TEXT("State : Something wrong"));
 	}
+
+	m_pNowEating = false;
 }
 
 void CPlayer::IdleStateAnimation()
@@ -1192,12 +1196,12 @@ void CPlayer::BlockedByObstacleBegin(CColliderBase * pSrc, CColliderBase * pDest
 {
 	if (pDest == nullptr)
 		return;
-	if (pDest->GetCollisionProfile()->strName == "MapObject")
+	if (pDest->GetCollisionProfile()->strName == "MapObject"
+		|| pDest->GetCollisionProfile()->strName == "MapBlock")
 	{
 		if (!m_pCantGo) {
 			m_pCantGo = true;
 		}
-
 		return;
 	}
 
@@ -1205,9 +1209,10 @@ void CPlayer::BlockedByObstacleBegin(CColliderBase * pSrc, CColliderBase * pDest
 
 void CPlayer::BlockedByObstacleEnd(CColliderBase * pSrc, CColliderBase * pDest, float fTime)
 {
-	if (pDest == nullptr)
+	if (pDest == nullptr || pDest->IsActive() == false)
 		return;
-	if (pDest->GetCollisionProfile()->strName == "MapObject")
+	if (pDest->GetCollisionProfile()->strName == "MapObject" ||
+		pDest->GetCollisionProfile()->strName == "MapBlock")
 	{
 		m_pCantGo = false;
 	}
@@ -1216,12 +1221,20 @@ void CPlayer::BlockedByObstacleEnd(CColliderBase * pSrc, CColliderBase * pDest, 
 void CPlayer::StruckedByMonster(CColliderBase * pSrc, CColliderBase * pDest, float fTime)
 {
 
-	if (pDest == nullptr)
+	if (pDest == nullptr || pDest->IsActive() == false) 
 		return;
 
-	if (pDest->GetCollisionProfile()->strName == "MapObject")
+	if (pDest->GetCollisionProfile()->strName == "MapObject"||
+		pDest->GetCollisionProfile()->strName == "MapBlock")
 	{
 		return;
+	}
+
+	if (pDest->GetName() == "MapBlockBody")
+	{
+		// Star 먹은걸로... setting 
+
+		return; 
 	}
 
 	if (m_pIsAttack)
@@ -1266,6 +1279,8 @@ void CPlayer::StruckedByMonster(CColliderBase * pSrc, CColliderBase * pDest, flo
 		// 함수 호출 !빨아들이는!
 		EatMonsterSuccess();
 		// eat_skill 전달
+
+		OutputDebugString(TEXT("Collision With Monster \n"));
 	}
 	else if (!m_pNowEating)
 	{
@@ -1303,6 +1318,18 @@ void CPlayer::NotOnTheMap(CColliderBase * pSrc, CColliderBase * pDest, float fTi
 	m_pIsJumping = true;
 	m_pIsFootOnFloor = false;
 
+	if (!JumpUp)
+	{
+		JumpDown = true; 
+		if (!m_pHasMonster && !m_pHasAir)
+		{
+			JumpDownStateAnimation();
+		}
+		else if (m_pHasMonster)
+		{
+			MonsterJumpDownStateAnimation();
+		}
+	}
 }
 
 void CPlayer::OnTheMap(CColliderBase * pSrc, CColliderBase * pDest, float fTime)

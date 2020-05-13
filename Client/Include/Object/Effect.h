@@ -29,6 +29,7 @@ public:
 	void Effect_BulletEffect();
 	void Effect_SplitAir();
 	void Effect_JumpEffect();
+	void Effect_MapBlockBomb();
 
 	void SetEffectRotationY(float value);
 
@@ -37,5 +38,6 @@ public:
 	void PlayEnd(float fTime);
 
 	void CreateNotifyLift();
+
 };
 

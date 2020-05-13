@@ -158,6 +158,9 @@ void CBullet::SetRelativeRotationY(float value)
 }
 void CBullet::OnBlock(CColliderBase * pSrc, CColliderBase * pDest, float fTime)
 {
+	if (pDest == nullptr || pDest->IsActive() == false)
+		return;
+
 
 	// 몬스터는 좀더 뒤에서 터져야 되는데 얘가 그냥 그 앞에서 터져버려서 {} 안에 따로 만들었음ㅠ
 	if (pDest->GetName() == "MapObstacleBody")
@@ -177,17 +180,19 @@ void CBullet::OnBlock(CColliderBase * pSrc, CColliderBase * pDest, float fTime)
 		// 몬스터
 		CMonster*	pMonster = (CMonster*)(pDest->GetOwner());
 		pMonster->SetAttackedByStar(true);
-		OutputDebugString(TEXT("Map Obstacle \n"));
+		OutputDebugString(TEXT("Monster Body \n"));
 		SAFE_RELEASE(pEffect);
 		//SAFE_RELEASE(pMonster);
 	}
 
-	else
-	{
-
-	}
-
-
+	//else if(pDest->GetName() == "MapBlockBody")
+	//{
+	//	CEffect*	pEffect = m_pScene->SpawnObject<CEffect>(GetWorldPos() +,
+	//		Vector3(0.f, 0.f, GetRelativeRot().z));
+	//	pEffect->Effect_MapBlockBomb();
+	//	OutputDebugString(TEXT("Map Block Obstacle \n"));
+	//	SAFE_RELEASE(pEffect);
+	//}
 
 	Kill();
 }

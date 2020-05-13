@@ -46,6 +46,9 @@
     <Filter Include="01. GameMode\Title">
       <UniqueIdentifier>{743d82d4-2df2-4e67-9498-36405cdf23b0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="04. Sound">
+      <UniqueIdentifier>{e961c8d6-c57d-4b0a-b7b7-92cd093a299a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -55,9 +58,6 @@
       <Filter>02. Object</Filter>
     </ClCompile>
     <ClCompile Include="Object\Title.cpp">
-      <Filter>02. Object</Filter>
-    </ClCompile>
-    <ClCompile Include="Object\BGMObj.cpp">
       <Filter>02. Object</Filter>
     </ClCompile>
     <ClCompile Include="Object\TestObject.cpp">
@@ -117,23 +117,11 @@
     <ClCompile Include="Object\MapObstacle.cpp">
       <Filter>02. Object\Map</Filter>
     </ClCompile>
-    <ClCompile Include="Object\Effect.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="Object\MagicMirror.cpp">
-      <Filter>02. Object</Filter>
-    </ClCompile>
-    <ClCompile Include="GameMode\BossStage.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
     <ClCompile Include="Object\Leap.cpp">
       <Filter>02. Object\Monster</Filter>
     </ClCompile>
     <ClCompile Include="GameMode\Stage2Mode.cpp">
       <Filter>01. GameMode\Stage</Filter>
-    </ClCompile>
-    <ClCompile Include="Object\EffectSoundObj.cpp">
-      <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="Object\Stage2Map.cpp">
       <Filter>02. Object\Map</Filter>
@@ -147,6 +135,21 @@
     <ClCompile Include="GameMode\MenuMode.cpp">
       <Filter>01. GameMode\Stage</Filter>
     </ClCompile>
+    <ClCompile Include="Object\MagicMirror.cpp">
+      <Filter>02. Object\Map</Filter>
+    </ClCompile>
+    <ClCompile Include="Object\Effect.cpp">
+      <Filter>02. Object\Effect</Filter>
+    </ClCompile>
+    <ClCompile Include="Object\EffectSoundObj.cpp">
+      <Filter>04. Sound</Filter>
+    </ClCompile>
+    <ClCompile Include="Object\MapBlock.cpp">
+      <Filter>02. Object\Map</Filter>
+    </ClCompile>
+    <ClCompile Include="Object\BGMObj.cpp">
+      <Filter>04. Sound</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -159,9 +162,6 @@
       <Filter>02. Object</Filter>
     </ClInclude>
     <ClInclude Include="Object\Title.h">
-      <Filter>02. Object</Filter>
-    </ClInclude>
-    <ClInclude Include="Object\BGMObj.h">
       <Filter>02. Object</Filter>
     </ClInclude>
     <ClInclude Include="Object\TestPixelCollision.h">
@@ -218,23 +218,11 @@
     <ClInclude Include="Object\MapObstacle.h">
       <Filter>02. Object\Map</Filter>
     </ClInclude>
-    <ClInclude Include="Object\Effect.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="Object\MagicMirror.h">
-      <Filter>02. Object</Filter>
-    </ClInclude>
-    <ClInclude Include="GameMode\BossStage.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="Object\Leap.h">
       <Filter>02. Object\Monster</Filter>
     </ClInclude>
     <ClInclude Include="GameMode\Stage2Mode.h">
       <Filter>01. GameMode\Stage</Filter>
-    </ClInclude>
-    <ClInclude Include="Object\EffectSoundObj.h">
-      <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="Object\Stage2Map.h">
       <Filter>02. Object\Map</Filter>
@@ -250,6 +238,21 @@
     </ClInclude>
     <ClInclude Include="GameMode\MenuMode.h">
       <Filter>01. GameMode\Stage</Filter>
+    </ClInclude>
+    <ClInclude Include="Object\MagicMirror.h">
+      <Filter>02. Object\Map</Filter>
+    </ClInclude>
+    <ClInclude Include="Object\Effect.h">
+      <Filter>02. Object\Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="Object\EffectSoundObj.h">
+      <Filter>04. Sound</Filter>
+    </ClInclude>
+    <ClInclude Include="Object\MapBlock.h">
+      <Filter>02. Object\Map</Filter>
+    </ClInclude>
+    <ClInclude Include="Object\BGMObj.h">
+      <Filter>04. Sound</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -22,6 +22,7 @@
 #include "..\Object\WaddleDee.h"
 #include "../Object/Title.h"
 #include "..\Object\Leap.h"
+#include "..\Object\MapBlock.h"
 
 #define STAGE1_MINX		0
 #define STAGE1_MAXX		9500
@@ -34,6 +35,7 @@ CStage3Mode::CStage3Mode()
 
 CStage3Mode::~CStage3Mode()
 {
+
 }
 
 bool CStage3Mode::Init()
@@ -51,7 +53,7 @@ bool CStage3Mode::Init()
 	SAFE_RELEASE(pMap);
 
 
-	CPlayer*	pObj = m_pScene->SpawnObject<CPlayer>();
+	CPlayer*	pObj = m_pScene->SpawnObject<CPlayer>(Vector3(800.f, 600.f, 0.f));
 	pObj->SetStageMinMax(STAGE1_MINX, STAGE1_MAXX, STAGE1_MINY, STAGE1_MAXY);
 	SetPlayer(pObj);
 
@@ -72,7 +74,8 @@ bool CStage3Mode::Init()
 
 	SAFE_RELEASE(pPlayerPhone);
 
-	SpawnMonster();
+
+	//SpawnMonster();
 
 
 	return true;
@@ -93,6 +96,13 @@ void CStage3Mode::SpawnMonster()
 
 	CLeap*	pLeap = m_pScene->SpawnObject<CLeap>(Vector3(6300.f, 500.f, 0.f));
 	SAFE_RELEASE(pLeap);
+
+
+	//CMapBlock*	block = m_pScene->SpawnObject<CMapBlock>(Vector3(1700.f, 400.f, 0.f));
+	////m_MapObstacleList.push_back(block);
+	//SAFE_RELEASE(block);
+
+
 }
 
 void CStage3Mode::SetCollidrProfile()

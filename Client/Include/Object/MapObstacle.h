@@ -5,6 +5,8 @@
 class CMapObstacle :
 	public CGameObject
 {
+	GAMEOBJECT_DEFAULT()
+
 public:
 	CMapObstacle();
 	~CMapObstacle();
@@ -15,6 +17,7 @@ private:
 	class CProjectileMovementComponent*	m_pMovement;
 
 	float m_pY;
+	int m_Type;
 protected:
 
 public:

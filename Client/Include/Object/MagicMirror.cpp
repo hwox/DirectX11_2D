@@ -102,6 +102,9 @@ void CMagicMirror::OnBlock(CColliderBase * pSrc, CColliderBase * pDest, float fT
 	}
 		break;
 	case 2:
+
+
+
 		break;
 	case 3:
 		break;

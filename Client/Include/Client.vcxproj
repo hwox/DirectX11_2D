@@ -166,7 +166,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="GameMode\BossStage.cpp" />
     <ClCompile Include="GameMode\MenuMode.cpp" />
     <ClCompile Include="GameMode\Stage1Mode.cpp" />
     <ClCompile Include="GameMode\Stage2Mode.cpp" />
@@ -181,6 +180,7 @@
     <ClCompile Include="Object\Leap.cpp" />
     <ClCompile Include="Object\MagicMirror.cpp" />
     <ClCompile Include="Object\MainMap.cpp" />
+    <ClCompile Include="Object\MapBlock.cpp" />
     <ClCompile Include="Object\MapObstacle.cpp" />
     <ClCompile Include="Object\Minion.cpp" />
     <ClCompile Include="Object\Monster.cpp" />
@@ -202,7 +202,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h" />
-    <ClInclude Include="GameMode\BossStage.h" />
     <ClInclude Include="GameMode\MenuMode.h" />
     <ClInclude Include="GameMode\Stage1Mode.h" />
     <ClInclude Include="GameMode\Stage2Mode.h" />
@@ -216,6 +215,7 @@
     <ClInclude Include="Object\Leap.h" />
     <ClInclude Include="Object\MagicMirror.h" />
     <ClInclude Include="Object\MainMap.h" />
+    <ClInclude Include="Object\MapBlock.h" />
     <ClInclude Include="Object\MapObstacle.h" />
     <ClInclude Include="Object\Minion.h" />
     <ClInclude Include="Object\Monster.h" />

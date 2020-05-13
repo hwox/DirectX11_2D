@@ -22,6 +22,8 @@
 #include "..\Object\WaddleDee.h"
 #include "../Object/Title.h"
 #include "..\Object\Leap.h"
+#include "..\Object\MapBlock.h"
+
 
 #define STAGE1_MINX		0
 #define STAGE1_MAXX		9500
@@ -91,6 +93,11 @@ void CStage1Mode::SpawnMonster()
 
 	CLeap*	pLeap = m_pScene->SpawnObject<CLeap>(Vector3(6300.f, 500.f, 0.f));
 	SAFE_RELEASE(pLeap);
+
+	CMapBlock*	block = m_pScene->SpawnObject<CMapBlock>(Vector3(4760.f, 500.f, 0.f));
+	SAFE_RELEASE(block);
+	CMapBlock*	block2 = m_pScene->SpawnObject<CMapBlock>(Vector3(4860.f, 500.f, 0.f));
+	SAFE_RELEASE(block2);
 }
 
 void CStage1Mode::SetCollidrProfile()
@@ -168,6 +175,7 @@ void CStage1Mode::SetCollidrProfile()
 
 	GET_SINGLE(CCollisionManager)->CreateProfile("MapBlock", "MapBlock");
 	GET_SINGLE(CCollisionManager)->UpdateProfileChannel("MapBlock", "Map", CT_IGNORE);
+	GET_SINGLE(CCollisionManager)->UpdateProfileChannel("MapBlock", "MapBlock", CT_IGNORE);
 	GET_SINGLE(CCollisionManager)->UpdateProfileChannel("MapBlock", "MapObject", CT_IGNORE);
 	//GET_SINGLE(CCollisionManager)->UpdateProfileChannel("MapObject", "Player", CT_IGNORE);
 	GET_SINGLE(CCollisionManager)->UpdateProfileChannel("MapBlock", "SceneChange", CT_IGNORE);

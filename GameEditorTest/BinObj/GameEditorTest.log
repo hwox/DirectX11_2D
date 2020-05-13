@@ -1,56 +1,4 @@
-﻿  pch.cpp
-  GameEditorTest.cpp
-e:\200425_ver\engine\include\matrix.h(7): warning C4251: '_tagMatrix::m': struct 'DirectX::XMMATRIX'에서는 union '_tagMatrix'의 클라이언트에서 DLL 인터페이스를 사용하도록 지정해야 합니다.
-  c:\program files (x86)\windows kits\10\include\10.0.18362.0\um\directxmath.h(432): note: 'DirectX::XMMATRIX' 선언을 참조하십시오.
-e:\200425_ver\engine\include\ref.h(13): warning C4251: 'CRef::m_strName': class 'std::basic_string<char,std::char_traits<char>,std::allocator<char>>'에서는 class 'CRef'의 클라이언트에서 DLL 인터페이스를 사용하도록 지정해야 합니다.
-  c:\program files (x86)\microsoft visual studio\2017\community\vc\tools\msvc\14.16.27023\include\xstring(4373): note: 'std::basic_string<char,std::char_traits<char>,std::allocator<char>>' 선언을 참조하십시오.
-e:\200425_ver\engine\include\scene\scene.h(25): warning C4251: 'CScene::m_ObjList': class 'std::list<CGameObject *,std::allocator<_Ty>>'에서는 class 'CScene'의 클라이언트에서 DLL 인터페이스를 사용하도록 지정해야 합니다.
-          with
-          [
-              _Ty=CGameObject *
-          ]
-  e:\200425_ver\engine\include\scene\scene.h(25): note: 'std::list<CGameObject *,std::allocator<_Ty>>' 선언을 참조하십시오.
-          with
-          [
-              _Ty=CGameObject *
-          ]
-e:\200425_ver\engine\include\scene\scene.h(26): warning C4251: 'CScene::m_BeginList': class 'std::list<CGameObject *,std::allocator<_Ty>>'에서는 class 'CScene'의 클라이언트에서 DLL 인터페이스를 사용하도록 지정해야 합니다.
-          with
-          [
-              _Ty=CGameObject *
-          ]
-  e:\200425_ver\engine\include\scene\scene.h(25): note: 'std::list<CGameObject *,std::allocator<_Ty>>' 선언을 참조하십시오.
-          with
-          [
-              _Ty=CGameObject *
-          ]
-  GameEditorTestDoc.cpp
-  GameEditorTestView.cpp
-e:\200425_ver\engine\include\matrix.h(7): warning C4251: '_tagMatrix::m': struct 'DirectX::XMMATRIX'에서는 union '_tagMatrix'의 클라이언트에서 DLL 인터페이스를 사용하도록 지정해야 합니다.
-  c:\program files (x86)\windows kits\10\include\10.0.18362.0\um\directxmath.h(432): note: 'DirectX::XMMATRIX' 선언을 참조하십시오.
-e:\200425_ver\engine\include\ref.h(13): warning C4251: 'CRef::m_strName': class 'std::basic_string<char,std::char_traits<char>,std::allocator<char>>'에서는 class 'CRef'의 클라이언트에서 DLL 인터페이스를 사용하도록 지정해야 합니다.
-  c:\program files (x86)\microsoft visual studio\2017\community\vc\tools\msvc\14.16.27023\include\xstring(4373): note: 'std::basic_string<char,std::char_traits<char>,std::allocator<char>>' 선언을 참조하십시오.
-e:\200425_ver\engine\include\scene\scene.h(25): warning C4251: 'CScene::m_ObjList': class 'std::list<CGameObject *,std::allocator<_Ty>>'에서는 class 'CScene'의 클라이언트에서 DLL 인터페이스를 사용하도록 지정해야 합니다.
-          with
-          [
-              _Ty=CGameObject *
-          ]
-  e:\200425_ver\engine\include\scene\scene.h(25): note: 'std::list<CGameObject *,std::allocator<_Ty>>' 선언을 참조하십시오.
-          with
-          [
-              _Ty=CGameObject *
-          ]
-e:\200425_ver\engine\include\scene\scene.h(26): warning C4251: 'CScene::m_BeginList': class 'std::list<CGameObject *,std::allocator<_Ty>>'에서는 class 'CScene'의 클라이언트에서 DLL 인터페이스를 사용하도록 지정해야 합니다.
-          with
-          [
-              _Ty=CGameObject *
-          ]
-  e:\200425_ver\engine\include\scene\scene.h(25): note: 'std::list<CGameObject *,std::allocator<_Ty>>' 선언을 참조하십시오.
-          with
-          [
-              _Ty=CGameObject *
-          ]
-  EditGameMode.cpp
+﻿  EditGameMode.cpp
 e:\200425_ver\engine\include\matrix.h(7): warning C4251: '_tagMatrix::m': struct 'DirectX::XMMATRIX'에서는 union '_tagMatrix'의 클라이언트에서 DLL 인터페이스를 사용하도록 지정해야 합니다.
   c:\program files (x86)\windows kits\10\include\10.0.18362.0\um\directxmath.h(432): note: 'DirectX::XMMATRIX' 선언을 참조하십시오.
 e:\200425_ver\engine\include\ref.h(13): warning C4251: 'CRef::m_strName': class 'std::basic_string<char,std::char_traits<char>,std::allocator<char>>'에서는 class 'CRef'의 클라이언트에서 DLL 인터페이스를 사용하도록 지정해야 합니다.
@@ -353,9 +301,6 @@ e:\200425_ver\engine\include\resource\material.h(48): warning C4251: 'CMaterial:
               _Kty=size_t,
               _Ty=PCBufferNode
           ]
-  MainFrm.cpp
-e:\200425_ver\engine\include\matrix.h(7): warning C4251: '_tagMatrix::m': struct 'DirectX::XMMATRIX'에서는 union '_tagMatrix'의 클라이언트에서 DLL 인터페이스를 사용하도록 지정해야 합니다.
-  c:\program files (x86)\windows kits\10\include\10.0.18362.0\um\directxmath.h(432): note: 'DirectX::XMMATRIX' 선언을 참조하십시오.
   MaterialDlg.cpp
 e:\200425_ver\engine\include\matrix.h(7): warning C4251: '_tagMatrix::m': struct 'DirectX::XMMATRIX'에서는 union '_tagMatrix'의 클라이언트에서 DLL 인터페이스를 사용하도록 지정해야 합니다.
   c:\program files (x86)\windows kits\10\include\10.0.18362.0\um\directxmath.h(432): note: 'DirectX::XMMATRIX' 선언을 참조하십시오.
@@ -1621,7 +1566,5 @@ e:\200425_ver\engine\include\component\tilemap.h(32): warning C4251: 'CTileMap::
           [
               _Ty=ImageFrame
           ]
-  코드를 생성하고 있습니다.
-  All 959 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
-  코드를 생성했습니다.
+  코드를 생성하고 있습니다...
   GameEditorTest.vcxproj -> E:\200425_ver\GameEditorTest\Include\../Bin/GameEditorTest.exe

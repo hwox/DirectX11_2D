@@ -772,7 +772,7 @@ void CStartGameMode::Player_Skill_Cutter_Texture_Create()
 
 	////////////////////    Cutter Walk      ///////////////////////
 
-	GET_SINGLE(CResourceManager)->CreateAnimation2DSequence("CutterWalk", false, 1.f, 10);
+	GET_SINGLE(CResourceManager)->CreateAnimation2DSequence("CutterWalk", true, 1.f, 10);
 
 	for (int i = 0; i <= 9; ++i)
 	{
@@ -1152,6 +1152,27 @@ void CStartGameMode::Effect_Texture_Create()
 	///////////////////////////////////////////////////////////////////////////
 
 
+		//////////////////////    Block Bomb Effect   ///////////////////
+
+	GET_SINGLE(CResourceManager)->CreateAnimation2DSequence("BlockBombEffect", false, 0.25f, 6);
+
+	for (int i = 0; i <= 5; ++i)
+	{
+		TCHAR	strFileName[MAX_PATH] = {};
+
+		wsprintf(strFileName, TEXT("Effect/BlockBomb/BlockBomb_%d.png"), i);
+
+		char	strKey[256] = {};
+		sprintf_s(strKey, "BlockBombEffect%d", i - 1);
+
+		GET_SINGLE(CResourceManager)->AddAnimation2DSequenceTexture("BlockBombEffect", strKey, strFileName);
+	}
+
+	GET_SINGLE(CResourceManager)->SetAnimation2DSequenceFrameInfoAll("BlockBombEffect", Vector2(0.f, 0.f),
+		Vector2(20.f, 20.f));
+
+	///////////////////////////////////////////////////////////////////////////
+
 }
 
 void CStartGameMode::Else_Texture_Create()
@@ -1380,6 +1401,26 @@ bool CStartGameMode::CreateMaterial()
 	SAFE_RELEASE(pMaterial);
 
 
+	GET_SINGLE(CResourceManager)->CreateMaterial("ObstacleBlockMaterial");
+
+	pMaterial = GET_SINGLE(CResourceManager)->FindMaterial("ObstacleBlockMaterial");
+	pMaterial->SetSubsetShader(STANDARD_TEX_SHADER);
+	pMaterial->SetTexture(0, "ObstacleBlock", TEXT("Tile_Test_48.png"));
+	pMaterial->SetRenderState("AlphaBlend");
+	pMaterial->SetMaterialShaderStyle(MSS_ENVIRONMENT);
+
+	SAFE_RELEASE(pMaterial);
+
+
+	GET_SINGLE(CResourceManager)->CreateMaterial("BlockBombAnimMtrl");
+
+	pMaterial = GET_SINGLE(CResourceManager)->FindMaterial("BlockBombAnimMtrl");
+
+	pMaterial->SetSubsetShader(STANDARD_ANIM2D_SHADER);
+	pMaterial->SetRenderState("AlphaBlend");
+	pMaterial->SetMaterialShaderStyle(MSS_ALPHA);
+	pMaterial->AddRef();
+	SAFE_RELEASE(pMaterial);
 
 	return true;
 }

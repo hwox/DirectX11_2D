@@ -30,6 +30,7 @@ bool CEffect::Init()
 	m_pAnimation->AddAnimation2DSequence("StarBulletEffect");
 	m_pAnimation->AddAnimation2DSequence("JumpEffect");
 	m_pAnimation->AddAnimation2DSequence("SplitAirEffect");
+	m_pAnimation->AddAnimation2DSequence("BlockBombEffect");
 
 
 
@@ -111,6 +112,13 @@ void CEffect::Effect_JumpEffect()
 
 }
 
+void CEffect::Effect_MapBlockBomb()
+{
+	// Sound Ãß°¡ 
+	m_pAnimation->ChangeAnimation("BlockBombEffect");
+	m_pMesh->SetRelativeScale(150.f, 150.f, 1.f);
+}
+
 void CEffect::SetEffectRotationY(float value)
 {
 	m_pMesh->SetRelativeRotationY(value);
@@ -118,6 +126,7 @@ void CEffect::SetEffectRotationY(float value)
 
 void CEffect::JumpEffect_RandomRotation()
 {
+
 }
 
 void CEffect::PlayEnd(float fTime)
@@ -136,4 +145,7 @@ void CEffect::CreateNotifyLift()
 
 	m_pAnimation->CreateNotify("JumpEffect", "JumpEffectEnd", 3);
 	m_pAnimation->AddNotifyFunction<CEffect>("JumpEffect", "JumpEffectEnd", this, &CEffect::PlayEnd);
+
+	m_pAnimation->CreateNotify("BlockBombEffect", "BlockBombEffectEnd", 5);
+	m_pAnimation->AddNotifyFunction<CEffect>("BlockBombEffect", "BlockBombEffectEnd", this, &CEffect::PlayEnd);
 }

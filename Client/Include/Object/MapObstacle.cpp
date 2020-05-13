@@ -9,6 +9,8 @@ CMapObstacle::CMapObstacle()
 	ObstacleCollider = nullptr;
 	m_pMesh = nullptr;
 	m_pMovement = nullptr;
+
+	m_Type = 0;
 }
 
 CMapObstacle::~CMapObstacle()
@@ -25,6 +27,7 @@ bool CMapObstacle::Init()
 
 	m_pMesh = CGameObject::CreateComponent<CStaticMeshComponent>("Mesh");
 	ObstacleCollider = CreateComponent<CColliderRect>("MapObstacleBody");
+
 
 	CStaticMesh*	pMesh = (CStaticMesh*)GET_SINGLE(CResourceManager)->FindMesh("TexRect");
 	m_pMesh->SetStaticMesh(pMesh);
@@ -104,12 +107,17 @@ void CMapObstacle::SetObstacleProfileType(int type)
 	switch (type)
 	{
 	case 1:
+		m_Type = 1;
 		ObstacleCollider->SetCollisionProfile("MapObject");
 		break;
 	case 2:
+		m_Type = 2;
 		ObstacleCollider->SetCollisionProfile("Map");
 		break;
 	case 3:
+		m_Type = 3;
+
+
 		ObstacleCollider->SetCollisionProfile("MapBlock");
 	}
 }
@@ -133,6 +141,11 @@ void CMapObstacle::OnBlock(class CColliderBase* pSrc, class CColliderBase* pDest
 	if (pDest == nullptr)
 		return;
 
+	if (m_Type == 3)
+	{
+		// MapBlock 
+
+	}
 
 }
 
