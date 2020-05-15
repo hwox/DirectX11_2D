@@ -225,11 +225,8 @@ void CWaddleDee::OnBlock(class CColliderBase* pSrc, class CColliderBase* pDest, 
 	{
 		if (IsEating || EatingEnd)
 		{
-			OutputDebugString(TEXT("있어서는 안될 상황 ^ㅁ^;; \n"));
 			return;
 		}
-		/*	m_pAnimation->ChangeAnimation("WaddleDeeDamage");
-			GET_SINGLE(CScheduler)->AddSchedule<CWaddleDee>("AttackedByStar", false, 0.2f, this, &CWaddleDee::AfterCollisionWithAirZone);*/
 		//AfterCollisionWithAirZone();
 		m_pBody->Kill();
 		Enable(false);

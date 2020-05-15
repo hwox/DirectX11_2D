@@ -21,6 +21,7 @@ bool CPlayerHpBar::Init()
 
 	m_pBar = CGameObject::CreateComponent<CUIBar>("PlayerInfo_HPBar");
 	m_pBack = CGameObject::CreateComponent<CUIImage>("PlayerInfo_HPBack");
+	m_pBack = CGameObject::CreateComponent<CUIImage>("u_pSkillTypeImage");
 
 	SetRoot(m_pBack);
 

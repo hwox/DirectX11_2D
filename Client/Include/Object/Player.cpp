@@ -21,6 +21,7 @@
 #include "EffectSoundObj.h"
 
 
+
 #define STAND_SCALE				130.f
 #define JUMP_SCALE				200.f
 #define MONSTERSPLIT_SCALE		350.f
@@ -45,10 +46,9 @@ CPlayer::CPlayer()
 	m_pChild1Mesh = nullptr;
 	m_pMesh = nullptr;
 	m_pMovement = nullptr;
-	m_pLifeBar = nullptr;
+	u_pLifeBar = nullptr;
 	BackImage = nullptr;
 	m_pMapBody = nullptr;
-	//m_pEffect = nullptr;
 	m_KirbyState = 0;
 	m_pEatMonster = nullptr;
 	m_SaveState = 0;
@@ -79,7 +79,7 @@ CPlayer::~CPlayer()
 	//SAFE_RELEASE(m_pEffect);
 	SAFE_RELEASE(m_pEatMonster);
 	SAFE_RELEASE(BackImage);
-	SAFE_RELEASE(m_pLifeBar);
+	SAFE_RELEASE(u_pLifeBar);
 	SAFE_RELEASE(m_pMapBody);
 	SAFE_RELEASE(m_pBody);
 	SAFE_RELEASE(m_pAnimation);
@@ -105,7 +105,7 @@ bool CPlayer::Init()
 	//m_pEffect = CreateComponent<CEffectComponent>("PlayerEffect");
 
 	m_pAnimation = CAnimation2D::CreateAnimation2D<CAnimation2D>();
-	m_pLifeBar = m_pScene->SpawnObject<CPlayerLife>();
+	u_pLifeBar = m_pScene->SpawnObject<CPlayerLife>();
 
 
 	SetPlayerAnimation();
@@ -180,6 +180,8 @@ bool CPlayer::Init()
 void CPlayer::Begin()
 {
 	CGameObject::Begin();
+
+	u_pLifeBar->SetSkillTitle(m_KirbyState);
 }
 
 void CPlayer::Update(float fTime)
@@ -825,6 +827,8 @@ void CPlayer::DigestMonster(float fScale, float fTime)
 			m_SaveState = 0;
 			m_pNowEating = false;
 			m_IsMove = false;
+
+			u_pLifeBar->SetSkillTitle(m_KirbyState);
 		}
 	}
 }
@@ -1150,6 +1154,8 @@ void CPlayer::DigestionStateAnimation()
 	default:
 		OutputDebugString(TEXT("State : Something wrong"));
 	}
+
+
 }
 
 void CPlayer::EnablePlayAnimation(float fTime)
@@ -1237,6 +1243,27 @@ void CPlayer::StruckedByMonster(CColliderBase * pSrc, CColliderBase * pDest, flo
 		return; 
 	}
 
+	if (pDest->GetCollisionProfile()->strName == "Item")
+	{
+		// 아이템 먹은거
+
+		// effect 
+		m_pHP += 100;
+
+		if (m_pHP > 0 && m_pHP < MAX_HP) {
+			u_pLifeBar->SetHP(m_pHP);
+		}
+		else if(m_pHP >= MAX_HP)
+		{
+			m_pHP = 100;
+			u_pLifeBar->SetHP(m_pHP);
+			u_pLifeBar->SetLifeCount(++m_pLifeCount);
+		}
+
+		pDest->GetOwner()->Kill();
+		return; 
+	}
+
 	if (m_pIsAttack)
 	{
 		// 주거라 ㅡㅡ 
@@ -1260,9 +1287,6 @@ void CPlayer::StruckedByMonster(CColliderBase * pSrc, CColliderBase * pDest, flo
 			// 들어와서 충돌됨 
 			m_pEatMonster->Enable(false);
 			m_pHasMonster = true;
-
-			//m_pAnimation->CreateNotify("KirbyDigestMonster", "ChangeToMonsterIdle", 7);
-			//m_pAnimation->AddNotifyFunction<CPlayer>("KirbyDigestMonster", "ChangeToMonsterIdle", this, &CPlayer::ReturnToMonsterIdle);
 			DigestionStateAnimation();
 
 			m_SaveState = m_pEatMonster->GetSkillType();
@@ -1287,13 +1311,13 @@ void CPlayer::StruckedByMonster(CColliderBase * pSrc, CColliderBase * pDest, flo
 		m_pHP -= 100;
 
 		if (m_pHP > 0) {
-			m_pLifeBar->SetHP(m_pHP);
+			u_pLifeBar->SetHP(m_pHP);
 		}
 		else
 		{
 			m_pHP = MAX_HP;
-			m_pLifeBar->SetHP(m_pHP);
-			m_pLifeBar->SetLifeCount(m_pLifeCount--);
+			u_pLifeBar->SetHP(m_pHP);
+			u_pLifeBar->SetLifeCount(m_pLifeCount--);
 		}
 		DisableMove(fTime);
 

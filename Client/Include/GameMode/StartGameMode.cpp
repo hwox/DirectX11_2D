@@ -1173,6 +1173,28 @@ void CStartGameMode::Effect_Texture_Create()
 
 	///////////////////////////////////////////////////////////////////////////
 
+
+			//////////////////////    Item Back Effect   ///////////////////
+
+	GET_SINGLE(CResourceManager)->CreateAnimation2DSequence("ItemBackEffect", true, 1.2f, 4);
+
+	for (int i = 0; i <= 3; ++i)
+	{
+		TCHAR	strFileName[MAX_PATH] = {};
+
+		wsprintf(strFileName, TEXT("Item/item_back/item_back_%d.png"), i);
+
+		char	strKey[256] = {};
+		sprintf_s(strKey, "ItemBackEffect%d", i - 1);
+
+		GET_SINGLE(CResourceManager)->AddAnimation2DSequenceTexture("ItemBackEffect", strKey, strFileName);
+	}
+
+	GET_SINGLE(CResourceManager)->SetAnimation2DSequenceFrameInfoAll("ItemBackEffect", Vector2(0.f, 0.f),
+		Vector2(50.f, 50.f));
+
+	///////////////////////////////////////////////////////////////////////////
+
 }
 
 void CStartGameMode::Else_Texture_Create()
@@ -1238,6 +1260,8 @@ bool CStartGameMode::CreateMaterial()
 	pMaterial->SetMaterialShaderStyle(MSS_ALPHA);
 
 	SAFE_RELEASE(pMaterial);
+
+
 
 	GET_SINGLE(CResourceManager)->CreateMaterial("TitleAnimMtrl");
 
@@ -1342,6 +1366,20 @@ bool CStartGameMode::CreateMaterial()
 	SAFE_RELEASE(pMaterial);
 
 
+
+	GET_SINGLE(CResourceManager)->CreateMaterial("ItemMtrl");
+
+	pMaterial = GET_SINGLE(CResourceManager)->FindMaterial("ItemMtrl");
+
+	pMaterial->SetSubsetShader(STANDARD_TEX_SHADER);
+	pMaterial->SetTexture(0, "Item", TEXT("Item\\item_0.png"));
+	pMaterial->SetRenderState("AlphaBlend");
+	pMaterial->SetMaterialShaderStyle(MSS_ALPHA);
+
+	SAFE_RELEASE(pMaterial);
+
+
+
 	GET_SINGLE(CResourceManager)->CreateMaterial("StageBackMaterial");
 
 	pMaterial = GET_SINGLE(CResourceManager)->FindMaterial("StageBackMaterial");
@@ -1419,6 +1457,16 @@ bool CStartGameMode::CreateMaterial()
 	pMaterial->SetSubsetShader(STANDARD_ANIM2D_SHADER);
 	pMaterial->SetRenderState("AlphaBlend");
 	pMaterial->SetMaterialShaderStyle(MSS_ALPHA);
+	pMaterial->AddRef();
+	SAFE_RELEASE(pMaterial);
+
+	GET_SINGLE(CResourceManager)->CreateMaterial("ItemBackAnimMtrl");
+
+	pMaterial = GET_SINGLE(CResourceManager)->FindMaterial("ItemBackAnimMtrl");
+
+	pMaterial->SetSubsetShader(STANDARD_ANIM2D_SHADER);
+	pMaterial->SetRenderState("AlphaBlend");
+	pMaterial->SetMaterialShaderStyle(MSS_ENVIRONMENT);
 	pMaterial->AddRef();
 	SAFE_RELEASE(pMaterial);
 

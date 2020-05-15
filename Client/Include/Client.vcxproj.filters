@@ -49,6 +49,9 @@
     <Filter Include="04. Sound">
       <UniqueIdentifier>{e961c8d6-c57d-4b0a-b7b7-92cd093a299a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02. Object\Item">
+      <UniqueIdentifier>{e18d94b5-e15e-4a01-bb76-6b73ce892ec4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -150,11 +153,11 @@
     <ClCompile Include="Object\BGMObj.cpp">
       <Filter>04. Sound</Filter>
     </ClCompile>
+    <ClCompile Include="Object\CItem.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Client.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="resource.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
@@ -253,6 +256,12 @@
     </ClInclude>
     <ClInclude Include="Object\BGMObj.h">
       <Filter>04. Sound</Filter>
+    </ClInclude>
+    <ClInclude Include="Client.h">
+      <Filter>02. Object\Item</Filter>
+    </ClInclude>
+    <ClInclude Include="Object\CItem.h">
+      <Filter>02. Object\Item</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

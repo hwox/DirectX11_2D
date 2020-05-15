@@ -26,6 +26,7 @@ private:
 	CUIImage*	m_NumberCount;
 	CUIImage*	m_NumberCount_zero;
 	CUIImage*	m_ImageX;
+	CUIImage*	u_pSkillTypeImage;
 
 	class CPlayerHpBar*	m_pHPBar;
 
@@ -46,6 +47,9 @@ public:
 	void SetKirbyState(int state);
 	void SetHP(float hp);
 	float GetHP();
-
+	void SetSkillTitle_Normal();
+	void SetSkillTitle_Cutter();
+	void SetSkillTitle_Beam();
+	void SetSkillTitle(int KirbyState);
 };
 

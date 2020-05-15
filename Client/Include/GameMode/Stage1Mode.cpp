@@ -24,6 +24,7 @@
 #include "..\Object\Leap.h"
 #include "..\Object\MapBlock.h"
 
+#include "..\Object\CItem.h"
 
 #define STAGE1_MINX		0
 #define STAGE1_MAXX		9500
@@ -98,6 +99,11 @@ void CStage1Mode::SpawnMonster()
 	SAFE_RELEASE(block);
 	CMapBlock*	block2 = m_pScene->SpawnObject<CMapBlock>(Vector3(4860.f, 500.f, 0.f));
 	SAFE_RELEASE(block2);
+
+	CItem*		mItem1 = m_pScene->SpawnObject<CItem>(Vector3(200.f, 500.f, 0.f));
+	mItem1->SetItemKind(2);
+	SAFE_RELEASE(block);
+
 }
 
 void CStage1Mode::SetCollidrProfile()
@@ -111,6 +117,7 @@ void CStage1Mode::SetCollidrProfile()
 	GET_SINGLE(CCollisionManager)->CreateChannel("MapObject", CT_BLOCK);
 	GET_SINGLE(CCollisionManager)->CreateChannel("SceneChange", CT_BLOCK);
 	GET_SINGLE(CCollisionManager)->CreateChannel("MapBlock", CT_BLOCK);
+	GET_SINGLE(CCollisionManager)->CreateChannel("Item", CT_BLOCK);
 
 
 
@@ -131,6 +138,7 @@ void CStage1Mode::SetCollidrProfile()
 	GET_SINGLE(CCollisionManager)->UpdateProfileChannel("Monster", "PlayerMap", CT_IGNORE);
 	GET_SINGLE(CCollisionManager)->UpdateProfileChannel("Monster", "SceneChange", CT_IGNORE);
 	GET_SINGLE(CCollisionManager)->UpdateProfileChannel("Monster", "MapBlock", CT_IGNORE);
+	GET_SINGLE(CCollisionManager)->UpdateProfileChannel("Monster", "Item", CT_IGNORE);
 
 
 
@@ -141,6 +149,7 @@ void CStage1Mode::SetCollidrProfile()
 	GET_SINGLE(CCollisionManager)->UpdateProfileChannel("PlayerProjectile", "PlayerMap", CT_IGNORE);
 	GET_SINGLE(CCollisionManager)->UpdateProfileChannel("PlayerProjectile", "Map", CT_IGNORE);
 	GET_SINGLE(CCollisionManager)->UpdateProfileChannel("PlayerProjectile", "SceneChange", CT_IGNORE);
+	GET_SINGLE(CCollisionManager)->UpdateProfileChannel("PlayerProjectile", "Item", CT_IGNORE);
 
 
 
@@ -151,6 +160,7 @@ void CStage1Mode::SetCollidrProfile()
 	GET_SINGLE(CCollisionManager)->UpdateProfileChannel("MonsterProjectile", "PlayerMap", CT_IGNORE);
 	GET_SINGLE(CCollisionManager)->UpdateProfileChannel("MonsterProjectile", "SceneChange", CT_IGNORE);
 	GET_SINGLE(CCollisionManager)->UpdateProfileChannel("MonsterProjectile", "MapBlock", CT_IGNORE);
+	GET_SINGLE(CCollisionManager)->UpdateProfileChannel("MonsterProjectile", "Item", CT_IGNORE);
 
 
 
@@ -162,6 +172,7 @@ void CStage1Mode::SetCollidrProfile()
 	GET_SINGLE(CCollisionManager)->UpdateProfileChannel("Map", "PlayerProjectile", CT_IGNORE);
 	GET_SINGLE(CCollisionManager)->UpdateProfileChannel("Map", "SceneChange", CT_IGNORE);
 	GET_SINGLE(CCollisionManager)->UpdateProfileChannel("Map", "MapBlock", CT_IGNORE);
+	GET_SINGLE(CCollisionManager)->UpdateProfileChannel("Map", "Item", CT_IGNORE);
 
 
 	GET_SINGLE(CCollisionManager)->CreateProfile("MapObject", "MapObject");
@@ -170,6 +181,7 @@ void CStage1Mode::SetCollidrProfile()
 	//GET_SINGLE(CCollisionManager)->UpdateProfileChannel("MapObject", "Player", CT_IGNORE);
 	GET_SINGLE(CCollisionManager)->UpdateProfileChannel("MapObject", "SceneChange", CT_IGNORE);
 	GET_SINGLE(CCollisionManager)->UpdateProfileChannel("MapObject", "MapBlock", CT_IGNORE);
+	GET_SINGLE(CCollisionManager)->UpdateProfileChannel("MapObject", "Item", CT_IGNORE);
 	//GET_SINGLE(CCollisionManager)->UpdateProfileChannel("MapObject", "Map", CT_IGNORE);
 
 
@@ -181,6 +193,7 @@ void CStage1Mode::SetCollidrProfile()
 	GET_SINGLE(CCollisionManager)->UpdateProfileChannel("MapBlock", "SceneChange", CT_IGNORE);
 	GET_SINGLE(CCollisionManager)->UpdateProfileChannel("MapBlock", "Monster", CT_IGNORE);
 	GET_SINGLE(CCollisionManager)->UpdateProfileChannel("MapBlock", "MonsterProjectile", CT_IGNORE);
+	GET_SINGLE(CCollisionManager)->UpdateProfileChannel("MapBlock", "Item", CT_IGNORE);
 	//GET_SINGLE(CCollisionManager)->UpdateProfileChannel("MapObject", "Map", CT_IGNORE);
 
 
@@ -190,6 +203,7 @@ void CStage1Mode::SetCollidrProfile()
 	GET_SINGLE(CCollisionManager)->UpdateProfileChannel("PlayerMap", "PlayerProjectile", CT_IGNORE);
 	GET_SINGLE(CCollisionManager)->UpdateProfileChannel("PlayerMap", "Monster", CT_IGNORE);
 	GET_SINGLE(CCollisionManager)->UpdateProfileChannel("PlayerMap", "SceneChange", CT_IGNORE);
+	GET_SINGLE(CCollisionManager)->UpdateProfileChannel("PlayerMap", "Item", CT_IGNORE);
 
 
 	GET_SINGLE(CCollisionManager)->CreateProfile("SceneChange", "SceneChange");
@@ -199,8 +213,21 @@ void CStage1Mode::SetCollidrProfile()
 	GET_SINGLE(CCollisionManager)->UpdateProfileChannel("SceneChange", "SceneChange", CT_IGNORE);
 	GET_SINGLE(CCollisionManager)->UpdateProfileChannel("SceneChange", "PlayerProjectile", CT_IGNORE);
 	GET_SINGLE(CCollisionManager)->UpdateProfileChannel("SceneChange", "MonsterProjectile", CT_IGNORE);
-	GET_SINGLE(CCollisionManager)->UpdateProfileChannel("SceneChange", "MonsterProjectile", CT_IGNORE);
 	GET_SINGLE(CCollisionManager)->UpdateProfileChannel("SceneChange", "MapBlock", CT_IGNORE);
+	GET_SINGLE(CCollisionManager)->UpdateProfileChannel("SceneChange", "Item", CT_IGNORE);
+
+
+
+	GET_SINGLE(CCollisionManager)->CreateProfile("Item", "Item");
+	GET_SINGLE(CCollisionManager)->UpdateProfileChannel("Item", "MonsterProjectile", CT_IGNORE);
+	GET_SINGLE(CCollisionManager)->UpdateProfileChannel("Item", "PlayerProjectile", CT_IGNORE);
+	GET_SINGLE(CCollisionManager)->UpdateProfileChannel("Item", "Monster", CT_IGNORE);
+	GET_SINGLE(CCollisionManager)->UpdateProfileChannel("Item", "MapBlock", CT_IGNORE);
+	GET_SINGLE(CCollisionManager)->UpdateProfileChannel("Item", "Map", CT_IGNORE);
+	GET_SINGLE(CCollisionManager)->UpdateProfileChannel("Item", "SceneChange", CT_IGNORE);
+	GET_SINGLE(CCollisionManager)->UpdateProfileChannel("Item", "PlayerMap", CT_IGNORE);
+	GET_SINGLE(CCollisionManager)->UpdateProfileChannel("Item", "MapObject", CT_IGNORE);
+
 
 }
 bool CStage1Mode::CreateMaterial()

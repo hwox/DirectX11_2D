@@ -13,6 +13,7 @@ public:
 private:
 	class CUIBar*	m_pBar;
 	class CUIImage*	m_pBack;
+
 	float m_fHP;
 	float m_fHPMax;
 

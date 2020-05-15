@@ -6,6 +6,7 @@
 class CEffect :
 	public CGameObject
 {
+	GAMEOBJECT_DEFAULT()
 public:
 
 	CEffect();

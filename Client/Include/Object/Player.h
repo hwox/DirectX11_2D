@@ -71,7 +71,7 @@ private:
 	class CAnimation2D*			m_pAnimation;
 	class CColliderRect*		m_pBody;
 	class CColliderRect*		m_pMapBody;  // ¸Ê¿ë Ãæµ¹Ã¼
-	class CPlayerLife*			m_pLifeBar;
+	class CPlayerLife*			u_pLifeBar;
 
 	class CMonster*				m_pEatMonster;
 	class CStaticMeshComponent*	BackImage;
