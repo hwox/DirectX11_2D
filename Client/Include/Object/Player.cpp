@@ -19,6 +19,7 @@
 #include "Effect.h"
 #include "MapObstacle.h"
 #include "EffectSoundObj.h"
+#include "..\InformationSave.h"
 
 
 
@@ -64,14 +65,13 @@ CPlayer::CPlayer()
 	jump_time = 0.1f;
 	press_time = 0.f;
 
-
-
 	m_pHasMonster = false;
 	m_pHasAir = false;
 	m_pIsJumping = false;
 	m_pNowEating = false;
 	m_pCantGo = false;
 	JumpAnimationChangeOnce = false;
+	m_pInfo = nullptr;
 }
 
 CPlayer::~CPlayer()
@@ -88,7 +88,7 @@ CPlayer::~CPlayer()
 	SAFE_RELEASE(m_pRotPivot);
 	SAFE_RELEASE(m_pChild1Mesh);
 	SAFE_RELEASE(m_pMesh);
-
+	SAFE_RELEASE(m_pInfo);
 }
 
 bool CPlayer::Init()
@@ -103,7 +103,7 @@ bool CPlayer::Init()
 	m_pBody = CreateComponent<CColliderRect>("PlayerBody");
 	m_pMapBody = CreateComponent<CColliderRect>("PlayerMapBody");
 	//m_pEffect = CreateComponent<CEffectComponent>("PlayerEffect");
-
+	m_pInfo = CreateComponent<CInformationSave>("Info");
 	m_pAnimation = CAnimation2D::CreateAnimation2D<CAnimation2D>();
 	u_pLifeBar = m_pScene->SpawnObject<CPlayerLife>();
 
@@ -174,12 +174,30 @@ bool CPlayer::Init()
 	m_pMovement->SetMoveSpeed(STAND_SPEED);
 
 	CreateNotifyList();
+
+
+
 	return true;
 }
 
 void CPlayer::Begin()
 {
 	CGameObject::Begin();
+
+
+	if (!m_pInfo->GetInformationFromTXT(m_KirbyState, m_pHP, m_pLifeCount))
+	{
+		/*m_KirbyState = 0;
+		m_pHP = 1000.f;
+		m_pLifeCount = 3;*/
+	}
+	else
+	{
+		m_pAnimation->ChangeAnimation("KirbyDigest");
+		u_pLifeBar->SetSkillTitle(m_KirbyState);
+		u_pLifeBar->SetHP(m_pHP);
+		u_pLifeBar->SetLifeCount(m_pLifeCount);
+	}
 
 	u_pLifeBar->SetSkillTitle(m_KirbyState);
 }
@@ -1264,73 +1282,75 @@ void CPlayer::StruckedByMonster(CColliderBase * pSrc, CColliderBase * pDest, flo
 		return; 
 	}
 
-	if (m_pIsAttack)
-	{
-		// 주거라 ㅡㅡ 
-		CMonster*	pMonster = (CMonster*)(pDest->GetOwner());
-		pMonster->SetAttackedBySkill(true);
-		OutputDebugString(TEXT("Map Obstacle \n"));
-	//	SAFE_RELEASE(pMonster);
-
-		return;
-	}
-
-	if (m_pNowEating)
-	{
-
-		m_pBody->SetExtent(STAND_SCALE, STAND_SCALE);
-		// 그리고 그 함수에서 animation 실행
-
-		//SAFE_RELEASE(m_pEat);
-		if (m_pFishingMonster)
+	if (pDest->GetCollisionProfile()->strName == "Monster") {
+		if (m_pIsAttack)
 		{
-			// 들어와서 충돌됨 
-			m_pEatMonster->Enable(false);
-			m_pHasMonster = true;
-			DigestionStateAnimation();
+			// 주거라 ㅡㅡ 
+			CMonster*	pMonster = (CMonster*)(pDest->GetOwner());
+			pMonster->SetAttackedBySkill(true);
+			OutputDebugString(TEXT("Map Obstacle \n"));
+			//	SAFE_RELEASE(pMonster);
 
-			m_SaveState = m_pEatMonster->GetSkillType();
-
-			m_pFishingMonster = false;
-			m_pEatMonster->SetEatingEnd(true);
-			//m_pNowEating = false; 
 			return;
 		}
-		m_pEatMonster = (CMonster*)(pDest->GetOwner());
-		m_pEatMonster->SetIsEating(true);
 
-
-		// 함수 호출 !빨아들이는!
-		EatMonsterSuccess();
-		// eat_skill 전달
-
-		OutputDebugString(TEXT("Collision With Monster \n"));
-	}
-	else if (!m_pNowEating)
-	{
-		m_pHP -= 100;
-
-		if (m_pHP > 0) {
-			u_pLifeBar->SetHP(m_pHP);
-		}
-		else
+		if (m_pNowEating)
 		{
-			m_pHP = MAX_HP;
-			u_pLifeBar->SetHP(m_pHP);
-			u_pLifeBar->SetLifeCount(m_pLifeCount--);
+
+			m_pBody->SetExtent(STAND_SCALE, STAND_SCALE);
+			// 그리고 그 함수에서 animation 실행
+
+			//SAFE_RELEASE(m_pEat);
+			if (m_pFishingMonster)
+			{
+				// 들어와서 충돌됨 
+				m_pEatMonster->Enable(false);
+				m_pHasMonster = true;
+				DigestionStateAnimation();
+
+				m_SaveState = m_pEatMonster->GetSkillType();
+
+				m_pFishingMonster = false;
+				m_pEatMonster->SetEatingEnd(true);
+				//m_pNowEating = false; 
+				return;
+			}
+			m_pEatMonster = (CMonster*)(pDest->GetOwner());
+			m_pEatMonster->SetIsEating(true);
+
+
+			// 함수 호출 !빨아들이는!
+			EatMonsterSuccess();
+			// eat_skill 전달
+
+			OutputDebugString(TEXT("Collision With Monster \n"));
 		}
-		DisableMove(fTime);
+		else if (!m_pNowEating)
+		{
+			m_pHP -= 100;
 
-		CEffectSoundObj*	pFireSound = m_pScene->SpawnObject<CEffectSoundObj>(GetWorldPos(),
-			Vector3(0.f, 0.f, GetRelativeRot().z));
+			if (m_pHP > 0) {
+				u_pLifeBar->SetHP(m_pHP);
+			}
+			else
+			{
+				m_pHP = MAX_HP;
+				u_pLifeBar->SetHP(m_pHP);
+				u_pLifeBar->SetLifeCount(m_pLifeCount--);
+			}
+			DisableMove(fTime);
 
-		pFireSound->SetSound("DamagedByMonster", "Effect\\Real_Damaged.wav");
+			CEffectSoundObj*	pFireSound = m_pScene->SpawnObject<CEffectSoundObj>(GetWorldPos(),
+				Vector3(0.f, 0.f, GetRelativeRot().z));
 
-		SAFE_RELEASE(pFireSound);
+			pFireSound->SetSound("DamagedByMonster", "Effect\\Real_Damaged.wav");
 
-		DamageStateAnimation();
+			SAFE_RELEASE(pFireSound);
 
-		m_pMovement->BackStep(GetWorldAxis(AXIS_X));
+			DamageStateAnimation();
+
+			m_pMovement->BackStep(GetWorldAxis(AXIS_X));
+		}
 	}
 }
 
@@ -1418,5 +1438,11 @@ void CPlayer::CreateNotifyList()
 float CPlayer::Lerp(float value1, float value2, float amount)
 {
 	return float((1 - amount)*value1 + amount * value2);
+}
+
+void CPlayer::SetPlayerInfo()
+{
+	m_pInfo->GetPlayerInformation(m_KirbyState, m_pHP, m_pLifeCount);
+	m_pInfo->SetInformationToTXT();
 }
 

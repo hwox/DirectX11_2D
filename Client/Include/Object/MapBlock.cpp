@@ -74,6 +74,8 @@ void CMapBlock::Render(float fTime)
 
 void CMapBlock::OnBlock(CColliderBase * pSrc, CColliderBase * pDest, float fTime)
 {
+	if (pDest == nullptr)
+		return;
 
 	// Èì 
 	if (pDest->GetName() == "BulletBody")

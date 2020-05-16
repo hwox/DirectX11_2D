@@ -1,7 +1,6 @@
 #pragma once
 #include "Object/GameObject.h"
 //#include "E:\200425_ver\Engine\Include\Object\GameObject.h"
-//#include "E:\200425_ver\Engine\Include\Object\GameObject.h"
 
 
 enum Kirby_State
@@ -76,6 +75,7 @@ private:
 	class CMonster*				m_pEatMonster;
 	class CStaticMeshComponent*	BackImage;
 
+	class CInformationSave*			m_pInfo;
 	//class CEffectSoundObj*		m_pJPSound;
 //	class CEffectSoundObj*		m_pPlayerEffect;
 
@@ -163,6 +163,8 @@ public:
 public:
 	float Lerp(float value1, float value2, float amount);
 
+public:
+	void SetPlayerInfo();
 };
 
 //if (/*jump_time > 0.f*/ JumpIng)

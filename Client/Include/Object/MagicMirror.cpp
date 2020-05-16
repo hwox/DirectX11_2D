@@ -10,12 +10,16 @@
 #include "..\GameMode\Stage1Mode.h"
 #include "..\GameMode\Stage3Mode.h"
 
+#include "..\Object\Player.h"
+#include "..\InformationSave.h"
 
 CMagicMirror::CMagicMirror()
 {
 	m_pMesh = nullptr;
 	m_pAnimation = nullptr;
 	m_pBody = nullptr;
+	m_pInfo = nullptr;
+	m_pPlayer = nullptr;
 }
 
 CMagicMirror::~CMagicMirror()
@@ -23,6 +27,8 @@ CMagicMirror::~CMagicMirror()
 	SAFE_RELEASE(m_pMesh);
 	SAFE_RELEASE(m_pAnimation);
 	SAFE_RELEASE(m_pBody);
+	SAFE_RELEASE(m_pInfo);
+	SAFE_RELEASE(m_pPlayer);
 }
 
 bool CMagicMirror::Init()
@@ -57,13 +63,15 @@ bool CMagicMirror::Init()
 	m_pBody->SetCollisionProfile("SceneChange");
 	m_pBody->AddBlockCallback<CMagicMirror>(this, &CMagicMirror::OnBlock);
 
-
+	
 	return true;
 }
 
 void CMagicMirror::Begin()
 {
 	CGameObject::Begin();
+
+	m_pPlayer = (CPlayer*)m_pScene->GetGameMode()->GetPlayer();
 }
 
 void CMagicMirror::Update(float fTime)
@@ -88,6 +96,8 @@ int CMagicMirror::GetStageMode()
 
 void CMagicMirror::OnBlock(CColliderBase * pSrc, CColliderBase * pDest, float fTime)
 {
+	m_pPlayer->SetPlayerInfo();
+
 
 	switch (StageMode)
 	{
@@ -97,8 +107,9 @@ void CMagicMirror::OnBlock(CColliderBase * pSrc, CColliderBase * pDest, float fT
 
 		pNextScene->SetGameMode<CStage3Mode>();
 
-
-		//SAFE_RELEASE(pNextScene);
+		//CPlayer* temp = (CPlayer*)m_pScene->GetGameMode()->GetPlayer();
+		//temp->SetPlayerInfo();
+		//SAFE_RELEASE(temp);
 	}
 		break;
 	case 2:

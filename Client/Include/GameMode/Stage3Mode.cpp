@@ -24,6 +24,7 @@
 #include "..\Object\Leap.h"
 #include "..\Object\MapBlock.h"
 
+
 #define STAGE1_MINX		0
 #define STAGE1_MAXX		9500
 #define STAGE1_MINY		50

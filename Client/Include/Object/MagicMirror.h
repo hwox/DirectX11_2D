@@ -14,7 +14,8 @@ private:
 	class CAnimation2D*			m_pAnimation;
 	class CColliderRect*		m_pBody;
 
-
+	class CInformationSave*			m_pInfo;
+	class CPlayer*					m_pPlayer;
 	int StageMode;
 protected:
 

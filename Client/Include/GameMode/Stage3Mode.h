@@ -15,11 +15,11 @@ public:
 public:
 	virtual bool Init();
 
-
 private:
 	void SpawnMonster();
 	void SetCollidrProfile();
 	bool CreateMaterial();
+
 	//void CreateAnimation2DSequence();
 	//void Player_Jump_Texture_Create();
 	//void Monster_Texture_Create();
