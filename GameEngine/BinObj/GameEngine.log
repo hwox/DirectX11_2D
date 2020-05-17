@@ -1,28 +1,8 @@
-﻿  Scene.cpp
+﻿  ColliderRect.cpp
 e:\200425_ver\gameengine\include\matrix.h(7): warning C4251: '_tagMatrix::m': struct 'DirectX::XMMATRIX'에서는 union '_tagMatrix'의 클라이언트에서 DLL 인터페이스를 사용하도록 지정해야 합니다.
   c:\program files (x86)\windows kits\10\include\10.0.18362.0\um\directxmath.h(432): note: 'DirectX::XMMATRIX' 선언을 참조하십시오.
 e:\200425_ver\gameengine\include\ref.h(13): warning C4251: 'CRef::m_strName': class 'std::basic_string<char,std::char_traits<char>,std::allocator<char>>'에서는 class 'CRef'의 클라이언트에서 DLL 인터페이스를 사용하도록 지정해야 합니다.
   c:\program files (x86)\microsoft visual studio\2017\community\vc\tools\msvc\14.16.27023\include\xstring(4373): note: 'std::basic_string<char,std::char_traits<char>,std::allocator<char>>' 선언을 참조하십시오.
-e:\200425_ver\gameengine\include\scene\scene.h(25): warning C4251: 'CScene::m_ObjList': class 'std::list<CGameObject *,std::allocator<_Ty>>'에서는 class 'CScene'의 클라이언트에서 DLL 인터페이스를 사용하도록 지정해야 합니다.
-          with
-          [
-              _Ty=CGameObject *
-          ]
-  e:\200425_ver\gameengine\include\scene\scene.h(25): note: 'std::list<CGameObject *,std::allocator<_Ty>>' 선언을 참조하십시오.
-          with
-          [
-              _Ty=CGameObject *
-          ]
-e:\200425_ver\gameengine\include\scene\scene.h(26): warning C4251: 'CScene::m_BeginList': class 'std::list<CGameObject *,std::allocator<_Ty>>'에서는 class 'CScene'의 클라이언트에서 DLL 인터페이스를 사용하도록 지정해야 합니다.
-          with
-          [
-              _Ty=CGameObject *
-          ]
-  e:\200425_ver\gameengine\include\scene\scene.h(25): note: 'std::list<CGameObject *,std::allocator<_Ty>>' 선언을 참조하십시오.
-          with
-          [
-              _Ty=CGameObject *
-          ]
 e:\200425_ver\gameengine\include\component\scenecomponent.h(15): warning C4251: 'CSceneComponent::m_vecChild': class 'std::vector<CSceneComponent *,std::allocator<_Ty>>'에서는 class 'CSceneComponent'의 클라이언트에서 DLL 인터페이스를 사용하도록 지정해야 합니다.
           with
           [
@@ -33,125 +13,75 @@ e:\200425_ver\gameengine\include\component\scenecomponent.h(15): warning C4251: 
           [
               _Ty=CSceneComponent *
           ]
-e:\200425_ver\gameengine\include\object\gameobject.h(19): warning C4251: 'CGameObject::m_vecObjComponent': class 'std::vector<CObjectComponent *,std::allocator<_Ty>>'에서는 class 'CGameObject'의 클라이언트에서 DLL 인터페이스를 사용하도록 지정해야 합니다.
+e:\200425_ver\gameengine\include\component\colliderbase.h(23): warning C4251: 'CColliderBase::m_vecBlockCallback': class 'std::vector<std::function<void (CColliderBase *,CColliderBase *,float)>,std::allocator<_Ty>>'에서는 class 'CColliderBase'의 클라이언트에서 DLL 인터페이스를 사용하도록 지정해야 합니다.
           with
           [
-              _Ty=CObjectComponent *
+              _Ty=std::function<void (CColliderBase *,CColliderBase *,float)>
           ]
-  e:\200425_ver\gameengine\include\object\gameobject.h(19): note: 'std::vector<CObjectComponent *,std::allocator<_Ty>>' 선언을 참조하십시오.
+  e:\200425_ver\gameengine\include\component\colliderbase.h(23): note: 'std::vector<std::function<void (CColliderBase *,CColliderBase *,float)>,std::allocator<_Ty>>' 선언을 참조하십시오.
           with
           [
-              _Ty=CObjectComponent *
+              _Ty=std::function<void (CColliderBase *,CColliderBase *,float)>
           ]
-e:\200425_ver\gameengine\include\object\gameobject.h(20): warning C4251: 'CGameObject::m_vecChild': class 'std::vector<CGameObject *,std::allocator<_Ty>>'에서는 class 'CGameObject'의 클라이언트에서 DLL 인터페이스를 사용하도록 지정해야 합니다.
+e:\200425_ver\gameengine\include\component\colliderbase.h(24): warning C4251: 'CColliderBase::m_vecBeginOverlapCallback': class 'std::vector<std::function<void (CColliderBase *,CColliderBase *,float)>,std::allocator<_Ty>>'에서는 class 'CColliderBase'의 클라이언트에서 DLL 인터페이스를 사용하도록 지정해야 합니다.
           with
           [
-              _Ty=CGameObject *
+              _Ty=std::function<void (CColliderBase *,CColliderBase *,float)>
           ]
-  e:\200425_ver\gameengine\include\object\gameobject.h(20): note: 'std::vector<CGameObject *,std::allocator<_Ty>>' 선언을 참조하십시오.
+  e:\200425_ver\gameengine\include\component\colliderbase.h(23): note: 'std::vector<std::function<void (CColliderBase *,CColliderBase *,float)>,std::allocator<_Ty>>' 선언을 참조하십시오.
           with
           [
-              _Ty=CGameObject *
+              _Ty=std::function<void (CColliderBase *,CColliderBase *,float)>
           ]
-e:\200425_ver\gameengine\include\object\gameobject.h(22): warning C4251: 'CGameObject::m_BeginList': class 'std::list<CComponent *,std::allocator<_Ty>>'에서는 class 'CGameObject'의 클라이언트에서 DLL 인터페이스를 사용하도록 지정해야 합니다.
+e:\200425_ver\gameengine\include\component\colliderbase.h(25): warning C4251: 'CColliderBase::m_vecEndOverlapCallback': class 'std::vector<std::function<void (CColliderBase *,CColliderBase *,float)>,std::allocator<_Ty>>'에서는 class 'CColliderBase'의 클라이언트에서 DLL 인터페이스를 사용하도록 지정해야 합니다.
           with
           [
-              _Ty=CComponent *
+              _Ty=std::function<void (CColliderBase *,CColliderBase *,float)>
           ]
-  e:\200425_ver\gameengine\include\object\gameobject.h(22): note: 'std::list<CComponent *,std::allocator<_Ty>>' 선언을 참조하십시오.
+  e:\200425_ver\gameengine\include\component\colliderbase.h(23): note: 'std::vector<std::function<void (CColliderBase *,CColliderBase *,float)>,std::allocator<_Ty>>' 선언을 참조하십시오.
           with
           [
-              _Ty=CComponent *
+              _Ty=std::function<void (CColliderBase *,CColliderBase *,float)>
           ]
-e:\200425_ver\gameengine\include\cameramanager.h(14): warning C4251: 'CCameraManager::m_CameraList': class 'std::list<CCameraComponent *,std::allocator<_Ty>>'에서는 class 'CCameraManager'의 클라이언트에서 DLL 인터페이스를 사용하도록 지정해야 합니다.
+e:\200425_ver\gameengine\include\component\colliderbase.h(28): warning C4251: 'CColliderBase::m_CurrentFrameCollision': class 'std::list<CColliderBase *,std::allocator<_Ty>>'에서는 class 'CColliderBase'의 클라이언트에서 DLL 인터페이스를 사용하도록 지정해야 합니다.
           with
           [
-              _Ty=CCameraComponent *
+              _Ty=CColliderBase *
           ]
-  e:\200425_ver\gameengine\include\cameramanager.h(14): note: 'std::list<CCameraComponent *,std::allocator<_Ty>>' 선언을 참조하십시오.
+  e:\200425_ver\gameengine\include\component\colliderbase.h(28): note: 'std::list<CColliderBase *,std::allocator<_Ty>>' 선언을 참조하십시오.
           with
           [
-              _Ty=CCameraComponent *
+              _Ty=CColliderBase *
           ]
-e:\200425_ver\gameengine\include\scene\navigation2d.h(16): warning C4251: 'CNavigation2D::m_PathList': class 'std::list<Vector3,std::allocator<_Ty>>'에서는 class 'CNavigation2D'의 클라이언트에서 DLL 인터페이스를 사용하도록 지정해야 합니다.
+e:\200425_ver\gameengine\include\component\colliderbase.h(29): warning C4251: 'CColliderBase::m_CollisionList': class 'std::list<CColliderBase *,std::allocator<_Ty>>'에서는 class 'CColliderBase'의 클라이언트에서 DLL 인터페이스를 사용하도록 지정해야 합니다.
           with
           [
-              _Ty=Vector3
+              _Ty=CColliderBase *
           ]
-  e:\200425_ver\gameengine\include\scene\navigation2d.h(16): note: 'std::list<Vector3,std::allocator<_Ty>>' 선언을 참조하십시오.
+  e:\200425_ver\gameengine\include\component\colliderbase.h(28): note: 'std::list<CColliderBase *,std::allocator<_Ty>>' 선언을 참조하십시오.
           with
           [
-              _Ty=Vector3
+              _Ty=CColliderBase *
           ]
-e:\200425_ver\gameengine\include\scene\navigation2d.h(17): warning C4251: 'CNavigation2D::m_vecOpen': class 'std::vector<CTile *,std::allocator<_Ty>>'에서는 class 'CNavigation2D'의 클라이언트에서 DLL 인터페이스를 사용하도록 지정해야 합니다.
+e:\200425_ver\gameengine\include\component\colliderbase.h(30): warning C4251: 'CColliderBase::m_vecSectionIndex': class 'std::vector<unsigned int,std::allocator<_Ty>>'에서는 class 'CColliderBase'의 클라이언트에서 DLL 인터페이스를 사용하도록 지정해야 합니다.
           with
           [
-              _Ty=CTile *
+              _Ty=unsigned int
           ]
-  e:\200425_ver\gameengine\include\scene\navigation2d.h(17): note: 'std::vector<CTile *,std::allocator<_Ty>>' 선언을 참조하십시오.
+  e:\200425_ver\gameengine\include\component\colliderbase.h(30): note: 'std::vector<unsigned int,std::allocator<_Ty>>' 선언을 참조하십시오.
           with
           [
-              _Ty=CTile *
+              _Ty=unsigned int
           ]
-e:\200425_ver\gameengine\include\scene\navigation2d.h(18): warning C4251: 'CNavigation2D::m_vecUse': class 'std::vector<CTile *,std::allocator<_Ty>>'에서는 class 'CNavigation2D'의 클라이언트에서 DLL 인터페이스를 사용하도록 지정해야 합니다.
+e:\200425_ver\gameengine\include\component\transform.h(16): warning C4251: 'CTransform::m_vecChild': class 'std::vector<CTransform *,std::allocator<_Ty>>'에서는 class 'CTransform'의 클라이언트에서 DLL 인터페이스를 사용하도록 지정해야 합니다.
           with
           [
-              _Ty=CTile *
+              _Ty=CTransform *
           ]
-  e:\200425_ver\gameengine\include\scene\navigation2d.h(17): note: 'std::vector<CTile *,std::allocator<_Ty>>' 선언을 참조하십시오.
+  e:\200425_ver\gameengine\include\component\transform.h(16): note: 'std::vector<CTransform *,std::allocator<_Ty>>' 선언을 참조하십시오.
           with
           [
-              _Ty=CTile *
-          ]
-e:\200425_ver\gameengine\include\render\rendermanager.h(17): warning C4251: 'CRenderManager::m_vecRender': class 'std::vector<CSceneComponent *,std::allocator<_Ty>>'에서는 class 'CRenderManager'의 클라이언트에서 DLL 인터페이스를 사용하도록 지정해야 합니다.
-          with
-          [
-              _Ty=CSceneComponent *
-          ]
-  e:\200425_ver\gameengine\include\component\scenecomponent.h(15): note: 'std::vector<CSceneComponent *,std::allocator<_Ty>>' 선언을 참조하십시오.
-          with
-          [
-              _Ty=CSceneComponent *
-          ]
-e:\200425_ver\gameengine\include\render\rendermanager.h(22): warning C4251: 'CRenderManager::m_vecInstancing': class 'std::vector<InstancingList,std::allocator<_Ty>>'에서는 class 'CRenderManager'의 클라이언트에서 DLL 인터페이스를 사용하도록 지정해야 합니다.
-          with
-          [
-              _Ty=InstancingList
-          ]
-  e:\200425_ver\gameengine\include\render\rendermanager.h(22): note: 'std::vector<InstancingList,std::allocator<_Ty>>' 선언을 참조하십시오.
-          with
-          [
-              _Ty=InstancingList
-          ]
-e:\200425_ver\gameengine\include\render\rendermanager.h(23): warning C4251: 'CRenderManager::m_vecStaticData': class 'std::vector<PStaticInstancingData,std::allocator<_Ty>>'에서는 class 'CRenderManager'의 클라이언트에서 DLL 인터페이스를 사용하도록 지정해야 합니다.
-          with
-          [
-              _Ty=PStaticInstancingData
-          ]
-  e:\200425_ver\gameengine\include\render\rendermanager.h(23): note: 'std::vector<PStaticInstancingData,std::allocator<_Ty>>' 선언을 참조하십시오.
-          with
-          [
-              _Ty=PStaticInstancingData
-          ]
-e:\200425_ver\gameengine\include\render\rendermanager.h(25): warning C4251: 'CRenderManager::m_vecAnim2DInstancing': class 'std::vector<InstancingList,std::allocator<_Ty>>'에서는 class 'CRenderManager'의 클라이언트에서 DLL 인터페이스를 사용하도록 지정해야 합니다.
-          with
-          [
-              _Ty=InstancingList
-          ]
-  e:\200425_ver\gameengine\include\render\rendermanager.h(22): note: 'std::vector<InstancingList,std::allocator<_Ty>>' 선언을 참조하십시오.
-          with
-          [
-              _Ty=InstancingList
-          ]
-e:\200425_ver\gameengine\include\render\rendermanager.h(27): warning C4251: 'CRenderManager::m_vecAnim2DData': class 'std::vector<PAnim2DInstancingData,std::allocator<_Ty>>'에서는 class 'CRenderManager'의 클라이언트에서 DLL 인터페이스를 사용하도록 지정해야 합니다.
-          with
-          [
-              _Ty=PAnim2DInstancingData
-          ]
-  e:\200425_ver\gameengine\include\render\rendermanager.h(27): note: 'std::vector<PAnim2DInstancingData,std::allocator<_Ty>>' 선언을 참조하십시오.
-          with
-          [
-              _Ty=PAnim2DInstancingData
+              _Ty=CTransform *
           ]
   GameEngine.vcxproj -> E:\200425_ver\GameEngine\Include\../Bin/GameEngine_Debug.dll
   0개 파일이 복사되었습니다.

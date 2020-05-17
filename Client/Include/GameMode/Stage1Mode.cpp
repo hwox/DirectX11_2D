@@ -97,12 +97,18 @@ void CStage1Mode::SpawnMonster()
 
 	CMapBlock*	block = m_pScene->SpawnObject<CMapBlock>(Vector3(4760.f, 500.f, 0.f));
 	SAFE_RELEASE(block);
+
 	CMapBlock*	block2 = m_pScene->SpawnObject<CMapBlock>(Vector3(4860.f, 500.f, 0.f));
 	SAFE_RELEASE(block2);
 
-	CItem*		mItem1 = m_pScene->SpawnObject<CItem>(Vector3(200.f, 500.f, 0.f));
+	CItem*		mItem1 = m_pScene->SpawnObject<CItem>(Vector3(3800.f, 900.f, 0.f));
 	mItem1->SetItemKind(2);
-	SAFE_RELEASE(block);
+	SAFE_RELEASE(mItem1);
+
+
+	CItem*		mItem2 = m_pScene->SpawnObject<CItem>(Vector3(5950.f, 800.f, 0.f));
+	mItem2->SetItemKind(0);
+	SAFE_RELEASE(mItem2);
 
 }
 

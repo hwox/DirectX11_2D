@@ -37,6 +37,9 @@
 #define BEAM_ATTACK_X			300.f
 #define BEAM_ATTACK_Y			600.f
 
+#define CUTTER_ATTACK_X			180.f
+#define CUTTER_ATTACK_Y			180.f
+
 
 CPlayer::CPlayer()
 {
@@ -478,7 +481,7 @@ void CPlayer::Attack(float fTime)
 			break;
 		case Cutter:
 			m_pAnimation->ChangeAnimation("CutterAttack");
-			m_pMesh->SetRelativeScale(STAND_SCALE, STAND_SCALE, 1.f);
+			m_pMesh->SetRelativeScale(CUTTER_ATTACK_X, CUTTER_ATTACK_Y, 1.f);
 
 
 			CBullet*	pBullet = m_pScene->SpawnObject<CBullet>(GetWorldPos() + GetWorldAxis(AXIS_Y) * 150.f,
@@ -1201,7 +1204,7 @@ void CPlayer::AfterCutterAttack(float fTime)
 {
 	OutputDebugString(TEXT("Cutter Attack"));
 	IdleStateAnimation();
-
+	m_pMesh->SetRelativeScale(STAND_SCALE, STAND_SCALE, 1.f);
 	m_pIsAttack = false;
 
 }

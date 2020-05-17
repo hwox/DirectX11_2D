@@ -15,6 +15,7 @@ public:
 protected:
 	class CStaticMeshComponent*	itemMesh;
 	class CColliderRect*		itemBody;
+	class CCharacterMovementComponent*	m_pMovement;
 
 	// ItemBackEffect
 	// µÞ ¹è°æ 
@@ -23,7 +24,7 @@ protected:
 
 private:
 	int ItemKind;
-	
+	float WingTime;
 
 public:
 	virtual bool Init();

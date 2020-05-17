@@ -1219,7 +1219,7 @@ void CStartGameMode::Else_Texture_Create()
 
 	////////////////////////////////////////////////////////////////////////////
 
-	GET_SINGLE(CResourceManager)->CreateAnimation2DSequence("MagicMirror", true, 1.0f, 4);
+	GET_SINGLE(CResourceManager)->CreateAnimation2DSequence("MagicMirror", true, 0.6f, 4);
 
 	for (int i = 0; i <= 3; ++i)
 	{

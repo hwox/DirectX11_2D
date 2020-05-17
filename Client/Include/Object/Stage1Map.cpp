@@ -10,9 +10,8 @@ CStage1Map::CStage1Map()
 {
 	m_pMesh = nullptr;
 	m_BackImage = nullptr;
-	//FloorCollider = nullptr;
-	//FloorPivot = nullptr;
 	ObstaclePivot = nullptr;
+	m_RotPivot = nullptr;
 }
 
 CStage1Map::~CStage1Map()
@@ -21,9 +20,7 @@ CStage1Map::~CStage1Map()
 	SAFE_RELEASE(m_pMesh);
 	SAFE_RELEASE(m_BackImage);
 	SAFE_RELEASE(ObstaclePivot);
-	//SAFE_RELEASE(FloorCollider);
-	//SAFE_RELEASE(FloorPivot);
-
+	SAFE_RELEASE(m_RotPivot);
 	SAFE_RELEASE_VECLIST(m_MapObstacleList);
 	SAFE_RELEASE_VECLIST(m_ActiveObstacleList);
 	SAFE_RELEASE_VECLIST(m_MapSlopeList);
@@ -38,6 +35,8 @@ bool CStage1Map::Init()
 	m_pMesh = CreateComponent<CStaticMeshComponent>("Mesh");
 	m_BackImage = CreateComponent<CStaticMeshComponent>("Mesh");
 	ObstaclePivot = CreateComponent<CSceneComponent>("MapPivot");
+	m_RotPivot = CreateComponent<CSceneComponent>("MapPivot");
+
 
 	CStaticMesh*	pMesh = (CStaticMesh*)GET_SINGLE(CResourceManager)->FindMesh("TexRect");
 
@@ -56,23 +55,25 @@ bool CStage1Map::Init()
 	pMaterial = GET_SINGLE(CResourceManager)->FindMaterial("StageBackMaterial");
 
 	m_BackImage->SetMaterial(pMaterial);
-
+	
 	SAFE_RELEASE(pMaterial);
 
-	SetRoot(m_BackImage);
+	SetRoot(m_RotPivot);
+	//SetRoot(m_BackImage);
+	m_RotPivot->AddChild(m_BackImage, TR_POS | TR_ROT);
 	m_pMesh->AddChild(ObstaclePivot, TR_POS | TR_ROT);
-
-
-
-	m_BackImage->AddChild(m_pMesh, TR_POS);
+	
+	m_RotPivot->AddChild(m_pMesh, TR_POS);
 	//MakeFloorCollider();
+
+	m_RotPivot->SetRelativePos(0.f, 0.f, 0.f);
 
 	m_pMesh->SetRelativePos(0.f, 10.f, 0.f);
 	m_pMesh->SetRelativeScale(8700.f, 1080.f, 1.f);
 
-	m_BackImage->SetRelativePos(0.f, 0.f, 0.f);
-	m_BackImage->SetRelativeScale(10000.f, 1200.f, 1.f);
-
+	m_BackImage->SetRelativePos(-500.f, 0.f, 0.f);
+	m_BackImage->SetRelativeScale(5000.f, 1300.f, 1.f);
+	
 
 	CMagicMirror*  pMirror = m_pScene->SpawnObject<CMagicMirror>(Vector3(7670.f, 230.f, 0.f));
 	pMirror->SetStageMode(1);
@@ -92,6 +93,11 @@ void CStage1Map::Update(float fTime)
 {
 	CGameObject::Update(fTime);
 	//FloorCollider;
+
+	float XPos = GetScene()->GetGameMode()->GetPlayer()->GetWorldPos().x;
+	float XRelativePos = XPos / StageSizeMaxX*0.5f;
+
+	m_BackImage->SetRelativePos(-500.f+StageSizeMaxX * XRelativePos, 0.f, 0.f);
 }
 
 void CStage1Map::Render(float fTime)
@@ -273,6 +279,30 @@ void CStage1Map::MakeMapObstacle()
 	m_MapObstacleList.push_back(Obstacle8);
 	SAFE_RELEASE(Obstacle8);
 
+
+
+
+	CMapObstacle*	Obstacle_Up1 = m_pScene->SpawnObject<CMapObstacle>();
+
+	Obstacle_Up1->SetObstaclePosition(3775.f, 800.f, 1.f);
+	Obstacle_Up1->SetObstacleColliderExtent(500.f, 20.f);
+	Obstacle_Up1->SetObstacleColliderPivot(0.5f, 0.f, 0.f);
+	Obstacle_Up1->SetObstacleProfileType(2);
+	Obstacle_Up1->SetYPosition(580.f);
+	m_MapObstacleList.push_back(Obstacle_Up1);
+	SAFE_RELEASE(Obstacle_Up1);
+
+
+
+	CMapObstacle*	Obstacle_Up2 = m_pScene->SpawnObject<CMapObstacle>();
+
+	Obstacle_Up2->SetObstaclePosition(6035.f, 700.f, 1.f);
+	Obstacle_Up2->SetObstacleColliderExtent(530.f, 20.f);
+	Obstacle_Up2->SetObstacleColliderPivot(0.5f, 0.f, 0.f);
+	Obstacle_Up2->SetObstacleProfileType(2);
+	Obstacle_Up2->SetYPosition(580.f);
+	m_MapObstacleList.push_back(Obstacle_Up2);
+	SAFE_RELEASE(Obstacle_Up2);
 
 
 	CMapObstacle*	Floor = m_pScene->SpawnObject<CMapObstacle>();

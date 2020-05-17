@@ -10,6 +10,7 @@
 
 CItem::CItem()
 {
+	m_pMovement = nullptr;
 	itemMesh = nullptr;
 	itemBody = nullptr;
 	itemBackMesh = nullptr;
@@ -23,6 +24,7 @@ CItem::~CItem()
 	SAFE_RELEASE(itemBody);
 	SAFE_RELEASE(itemBackMesh);
 	SAFE_RELEASE(itemBackAnim);
+	SAFE_RELEASE(m_pMovement);
 }
 
 bool CItem::Init()
@@ -61,7 +63,18 @@ bool CItem::Init()
 	////
 
 	SetRoot(itemMesh);
-	//itemMesh->AddChild(itemBackMesh, TR_POS);
+
+
+	//////////////////////////////////////////////////////////////////
+
+	m_pMovement = CGameObject::CreateComponent<CCharacterMovementComponent>("ItemMovement");
+	m_pMovement->SetUpdateComponent(itemMesh);
+
+	m_pMovement->SetMoveSpeed(10.f);
+
+	//////////////////////////////////////////////////////////////////
+
+
 	itemMesh->AddChild(itemBody, TR_POS);
 
 	itemBody->SetExtent(50.f, 70.f);
@@ -90,7 +103,16 @@ void CItem::Begin()
 void CItem::Update(float fTime)
 {
 	CGameObject::Update(fTime);
+	WingTime += fTime;
 
+	if ((int)WingTime % 2 == 0)
+	{
+		m_pMovement->AddMovement(GetWorldAxis(AXIS_Y) * 0.01f);
+	}
+	else
+	{
+		m_pMovement->AddMovement(GetWorldAxis(AXIS_Y) * -0.01f);
+	}
 }
 
 void CItem::Render(float fTime)

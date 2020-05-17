@@ -24,6 +24,7 @@
 #include "..\Object\Leap.h"
 #include "..\Object\MapBlock.h"
 
+#include "..\Object\CItem.h"
 
 #define STAGE1_MINX		0
 #define STAGE1_MAXX		9500
@@ -58,11 +59,11 @@ bool CStage3Mode::Init()
 	pObj->SetStageMinMax(STAGE1_MINX, STAGE1_MAXX, STAGE1_MINY, STAGE1_MAXY);
 	SetPlayer(pObj);
 
-	//CBGMObj*	pBGMObj = m_pScene->SpawnObject<CBGMObj>("BGMObj");
+	/*CBGMObj*	pBGMObj = m_pScene->SpawnObject<CBGMObj>("BGMObj3");
 
-	//pObj->AddChild(pBGMObj, TR_ROT | TR_POS);
+	pObj->AddChild(pBGMObj, TR_ROT | TR_POS);
 
-	//SAFE_RELEASE(pBGMObj);
+	SAFE_RELEASE(pBGMObj);*/
 
 	SAFE_RELEASE(pObj);
 
@@ -76,7 +77,7 @@ bool CStage3Mode::Init()
 	SAFE_RELEASE(pPlayerPhone);
 
 
-	//SpawnMonster();
+	SpawnMonster();
 
 
 	return true;
@@ -85,25 +86,32 @@ bool CStage3Mode::Init()
 void CStage3Mode::SpawnMonster()
 {
 
-	CWaddleDee*	pMinion = m_pScene->SpawnObject<CWaddleDee>(Vector3(3900.f, 230.f, 0.f));
+	//CWaddleDee*	pMinion = m_pScene->SpawnObject<CWaddleDee>(Vector3(3900.f, 230.f, 0.f));
 
-	SAFE_RELEASE(pMinion);
-
-
-	CWaddleDee*	pMinion2 = m_pScene->SpawnObject<CWaddleDee>(Vector3(2500.f, 230.f, 0.f));
-
-	SAFE_RELEASE(pMinion2);
+	//SAFE_RELEASE(pMinion);
 
 
-	CLeap*	pLeap = m_pScene->SpawnObject<CLeap>(Vector3(6300.f, 500.f, 0.f));
-	SAFE_RELEASE(pLeap);
+	//CWaddleDee*	pMinion2 = m_pScene->SpawnObject<CWaddleDee>(Vector3(2500.f, 230.f, 0.f));
+
+	//SAFE_RELEASE(pMinion2);
+
+
+	//CLeap*	pLeap = m_pScene->SpawnObject<CLeap>(Vector3(6300.f, 500.f, 0.f));
+	//SAFE_RELEASE(pLeap);
 
 
 	//CMapBlock*	block = m_pScene->SpawnObject<CMapBlock>(Vector3(1700.f, 400.f, 0.f));
 	////m_MapObstacleList.push_back(block);
 	//SAFE_RELEASE(block);
 
+	CItem*		mItem1 = m_pScene->SpawnObject<CItem>(Vector3(3800.f, 700.f, 0.f));
+	mItem1->SetItemKind(3);
+	SAFE_RELEASE(mItem1);
 
+
+	CItem*		mItem2 = m_pScene->SpawnObject<CItem>(Vector3(6000.f, 750.f, 0.f));
+	mItem2->SetItemKind(1);
+	SAFE_RELEASE(mItem2);
 }
 
 void CStage3Mode::SetCollidrProfile()

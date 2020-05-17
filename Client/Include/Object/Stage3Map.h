@@ -18,6 +18,7 @@ public:
 private:
 	//	class CTileMap*	m_pTileMap;
 	class CStaticMeshComponent*	m_pMesh;
+	class CSceneComponent*	m_RotPivot;
 	CStaticMeshComponent*	m_BackImage;
 
 

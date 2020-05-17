@@ -55,7 +55,7 @@ bool CMagicMirror::Init()
 	SetRoot(m_pMesh);
 
 //	m_pMesh->SetRelativePos(7500.f, 400.f, 0.f);
-	m_pMesh->SetRelativeScale(150.f, 220.f, 1.f);
+	m_pMesh->SetRelativeScale(250.f, 320.f, 1.f);
 	m_pMesh->SetPivot(0.5f, 0.f, 0.f);
 
 	m_pBody->SetExtent(50.f, 250.f);
